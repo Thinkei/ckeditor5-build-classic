@@ -22,6 +22,7 @@ import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import BoldEditing from './plugins/bold';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -42,7 +43,8 @@ ClassicEditor.builtinPlugins = [
 	ImageUpload,
 	Link,
 	List,
-	Paragraph
+	Paragraph,
+	BoldEditing
 ];
 
 // Editor configuration.
@@ -59,7 +61,8 @@ ClassicEditor.defaultConfig = {
 			'imageUpload',
 			'blockQuote',
 			'undo',
-			'redo'
+			'redo',
+			'boldEditing'
 		]
 	},
 	image: {
