@@ -7,8 +7,10 @@ import { variableSignaturePadSchema } from './variableSignaturePad';
 import { variableSelectSchema } from './variableSelect';
 import { textSchema } from './text';
 import { paragraphSchema } from './paragraph';
+import { tableSchema } from './table';
 
 export const defineSchema = editor => {
+	paragraphSchema(editor);
 	contractSectionSchema(editor);
 	contractBlockSchema(editor);
 	variableImageSchema(editor);
@@ -17,5 +19,5 @@ export const defineSchema = editor => {
 	variableSignaturePadSchema(editor);
 	variableSelectSchema(editor);
 	textSchema(editor);
-	paragraphSchema(editor);
+	tableSchema(editor);
 };
