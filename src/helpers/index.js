@@ -5,6 +5,7 @@ import { variableImageConverterHelper } from './variable_image';
 import { variableDateConverterHelper } from './variable_date';
 import { variableSignaturePadConverterHelper } from './variable_signature_pad';
 import { variableSelectConverterHelper } from './variable_select';
+import { tableConverterHelper } from './table';
 
 export const addConverterHelpers = editor => {
 	contractSectionConverterHelper(editor);
@@ -14,4 +15,5 @@ export const addConverterHelpers = editor => {
 	variableDateConverterHelper(editor);
 	variableSignaturePadConverterHelper(editor);
 	variableSelectConverterHelper(editor);
+	tableConverterHelper(editor);
 };
