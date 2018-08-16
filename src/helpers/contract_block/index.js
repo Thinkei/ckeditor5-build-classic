@@ -1,7 +1,5 @@
-import { contractBlockUpcast } from './contractBlockUpcast';
-import { contractBlockDowncast } from './contractBlockDowncast';
+import { converterHelperTemplate } from '../converter_template';
 
 export const contractBlockConverterHelper = editor => {
-	contractBlockUpcast(editor);
-	contractBlockDowncast(editor);
+	converterHelperTemplate(editor, 'contract_block');
 };

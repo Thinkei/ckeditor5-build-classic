@@ -1,7 +1,5 @@
-import { variableStringUpcast } from './variableStringUpcast';
-import { variableStringDowncast } from './variableStringDowncast';
+import { converterHelperTemplate } from '../converter_template';
 
 export const variableStringConverterHelper = editor => {
-	variableStringUpcast(editor);
-	variableStringDowncast(editor);
+	converterHelperTemplate(editor, 'variable_string');
 };

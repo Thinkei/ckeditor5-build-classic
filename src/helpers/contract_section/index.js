@@ -1,7 +1,5 @@
-import { contractSectionUpcast } from './contractSectionUpcast';
-import { contractSectionDowncast } from './contractSectionDowncast';
+import { converterHelperTemplate } from '../converter_template';
 
 export const contractSectionConverterHelper = editor => {
-	contractSectionUpcast(editor);
-	contractSectionDowncast(editor);
+	converterHelperTemplate(editor, 'contract_section');
 };
