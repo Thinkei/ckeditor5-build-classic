@@ -8,7 +8,11 @@ const mapModelToHTML = {
 	variable_image: 'span',
 	variable_date: 'span',
 	variable_signature_pad: 'span',
-	variable_select: 'span'
+	variable_select: 'span',
+	table: 'table',
+	tbody: 'tbody',
+	tr: 'tr',
+	td: 'td'
 };
 
 export const converterHelperTemplate = (editor, htmlTagName) => {
