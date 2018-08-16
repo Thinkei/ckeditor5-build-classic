@@ -1,5 +1,4 @@
 export const paragraphSchema = editor => {
-	editor.model.schema.extend('paragrapn', {
-		allowIn: ['contract_block']
-	});
+	const paragraphSchema = editor.model.schema.getDefinition('paragraph');
+	paragraphSchema.allowIn[0] = 'contract_block';
 };

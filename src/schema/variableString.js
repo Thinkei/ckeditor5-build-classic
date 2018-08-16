@@ -1,6 +1,6 @@
 export const variableStringSchema = editor => {
 	editor.model.schema.register('variable_string', {
-		allowIn: 'contract_block',
+		allowIn: ['paragraph', 'contract_block'],
 		allowAttributes: [
 			'auto_populate',
 			'block_options',

@@ -1,6 +1,6 @@
 export const variableDateSchema = editor => {
 	editor.model.schema.register('variable_date', {
-		allowIn: 'contract_block',
+		allowIn: ['paragraph', 'contract_block'],
 		allowAttributes: [
 			'auto_populate',
 			'block_options',

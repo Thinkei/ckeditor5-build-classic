@@ -1,8 +1,8 @@
 export const textSchema = editor => {
 	editor.model.schema.extend('$text', {
 		allowIn: [
-			'contract_block',
 			'contract_section',
+			'contract_block',
 			'variable_string',
 			'variable_date',
 			'variable_image',
