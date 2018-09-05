@@ -58,7 +58,8 @@ ClassicEditor.defaultConfig = {
 			'imageUpload',
 			'blockQuote',
 			'undo',
-			'redo'
+			'redo',
+			'addBlock'
 		]
 	},
 	image: {
@@ -168,6 +169,11 @@ ClassicEditor.create(document.querySelector('#editor'))
 					id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
 			</p>
 				</contract_block>
+			</contract_section>
+			<contract_section hide_title="true" hide_title_in_document="false" id="818206" is_show="true" optional="false" premium="false"
+			title="Logo">
+
+
 			</contract_section>
 			`
 		);
