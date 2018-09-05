@@ -8,7 +8,7 @@ const getSelection = (editor, flag) => {
 	}
 };
 
-const isBlockElement = (node, flag) => {
+export const isBlockElement = (node, flag) => {
 	if (flag === 'view') {
 		return (
 			node.is('containerElement', 'section') &&
@@ -62,4 +62,12 @@ export const changeViewElement = (
 
 	viewWriter.removeClass(option.class.remove, viewElement);
 	viewWriter.addClass(option.class.add, viewElement);
+};
+
+export const blockElementAttribute = {
+	block_group: '',
+	id: Math.random(),
+	optional: false,
+	probation: false,
+	visible: true
 };
