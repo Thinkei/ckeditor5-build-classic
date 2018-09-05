@@ -2,6 +2,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { contractBlockConverterHelper } from '../../helpers/contract_block';
 import { contractBlockSchema } from '../../schema/contractBlock';
 import ToggleCommand from './contractblockcommand';
+import { getSelectedBlockElement } from './utils';
 
 const BLOCK_FOCUSED_CLASS_NAME = 'contract-block_focused';
 const BLOCK_ELEMENT = 'blockElement';
@@ -24,7 +25,10 @@ export default class BlockEditing extends Plugin {
 		const highlightedBlocks = new Set();
 		// post-fixers allow to update view tree just before rendering to the DOM
 		view.document.registerPostFixer(writer => {
-			const currentSelectedBlockElement = this.getSelectedBlockElement();
+			const currentSelectedBlockElement = getSelectedBlockElement(
+				editor,
+				'model'
+			);
 			if (currentSelectedBlockElement && view.document.isFocused) {
 				this.addHighLightClass(writer, highlightedBlocks);
 			}
@@ -60,7 +64,10 @@ export default class BlockEditing extends Plugin {
 	}
 
 	addHighLightClass(writer, highlightedBlocks) {
-		let currentSelectedBlockElement = this.getSelectedBlockElement();
+		let currentSelectedBlockElement = getSelectedBlockElement(
+			editor,
+			'model'
+		);
 		if (currentSelectedBlockElement) {
 			// map Model Element to View Element
 			const viewElement = editor.editing.mapper.toViewElement(
@@ -81,22 +88,5 @@ export default class BlockEditing extends Plugin {
 			writer.removeClass(BLOCK_FOCUSED_CLASS_NAME, item);
 			highlightedBlocks.delete(item);
 		}
-	}
-
-	getSelectedBlockElement() {
-		const selection = this.editor.model.document.selection;
-		return this.findSelectionAncestor(selection.getFirstPosition());
-	}
-
-	findSelectionAncestor(position) {
-		return position
-			.getAncestors()
-			.reverse()
-			.find(ancestor => this.isBlockElement(ancestor));
-	}
-
-	// check if this node is block element (Model Document)
-	isBlockElement(node) {
-		return node.is('element', 'contract_block');
 	}
 }

@@ -1,13 +1,11 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
-import ToolbarView from '@ckeditor/ckeditor5-ui/src/toolbar/toolbarview';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 
 import ToggleCommand from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
-
-const BLOCK_ELEMENT = 'blockElement';
+import { getSelectedBlockElement } from './utils';
 
 export default class BlockUI extends Plugin {
 	static get requires() {
@@ -25,10 +23,14 @@ export default class BlockUI extends Plugin {
 	}
 
 	enableUserBallonInteractions() {
-		const viewDocument = this.editor.editing.view.document;
+		const editor = this.editor;
+		const viewDocument = editor.editing.view.document;
 		// BlockUI listen to 'click' event of View Document
 		this.listenTo(viewDocument, 'click', () => {
-			const selectedBlockElement = this.getSelectedBlockElement();
+			const selectedBlockElement = getSelectedBlockElement(
+				editor,
+				'view'
+			);
 
 			// show toolbar
 			if (selectedBlockElement) {
@@ -51,39 +53,6 @@ export default class BlockUI extends Plugin {
 		});
 	}
 
-	getSelectedBlockElement() {
-		const selection = this.editor.editing.view.document.selection;
-		// start position = end position
-		if (selection.isCollapsed) {
-			return this.findSelectionAncestor(selection.getFirstPosition());
-		} else {
-			// start position != end position
-			const range = selection.getFirstRange().getTrimmed();
-			const startBlock = this.findSelectionAncestor(range.start);
-			const endBlock = this.findSelectionAncestor(range.end);
-
-			if (!startBlock || startBlock != endBlock) {
-				return null;
-			}
-
-			return startBlock;
-		}
-	}
-	// check if this node is block element (View Document)
-	isBlockElement(node) {
-		return (
-			node.is('containerElement', 'section') &&
-			!!node.getCustomProperty(BLOCK_ELEMENT)
-		);
-	}
-
-	findSelectionAncestor(position) {
-		return position
-			.getAncestors()
-			.reverse()
-			.find(ancestor => this.isBlockElement(ancestor));
-	}
-
 	// create actions view
 	createActionsView() {
 		const editor = this.editor;
@@ -101,7 +70,7 @@ export default class BlockUI extends Plugin {
 	// show Toolbar
 	showToolbar() {
 		// no block selected then returns
-		if (!this.getSelectedBlockElement()) {
+		if (!getSelectedBlockElement(this.editor, 'view')) {
 			return null;
 		} else {
 			// add toolbar when there is a selected block
@@ -130,10 +99,10 @@ export default class BlockUI extends Plugin {
 	startUpdatingUI() {
 		const editor = this.editor;
 
-		let prevSelectedBlock = this.getSelectedBlockElement();
+		let prevSelectedBlock = getSelectedBlockElement(editor, 'view');
 
 		this.listenTo(editor.ui, 'update', () => {
-			const selectedBlock = this.getSelectedBlockElement();
+			const selectedBlock = getSelectedBlockElement(editor, 'view');
 
 			if (prevSelectedBlock && !selectedBlock) {
 				this.hideToolbar();
@@ -161,7 +130,7 @@ export default class BlockUI extends Plugin {
 	// get position for inserting toolbar by mapping selected block from View to DOM
 	getBalloonPositionData() {
 		const view = this.editor.editing.view;
-		const targetBlock = this.getSelectedBlockElement();
+		const targetBlock = getSelectedBlockElement(editor, 'view');
 
 		const target = targetBlock
 			? view.domConverter.mapViewToDom(targetBlock)
