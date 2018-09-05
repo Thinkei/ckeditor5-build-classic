@@ -1,5 +1,4 @@
 import { contractSectionConverterHelper } from './contract_section';
-import { contractBlockConverterHelper } from './contract_block';
 import { variableStringConverterHelper } from './variable_string';
 import { variableImageConverterHelper } from './variable_image';
 import { variableDateConverterHelper } from './variable_date';
@@ -9,7 +8,6 @@ import { tableConverterHelper } from './table';
 
 export const addConverterHelpers = editor => {
 	contractSectionConverterHelper(editor);
-	contractBlockConverterHelper(editor);
 	variableStringConverterHelper(editor);
 	variableImageConverterHelper(editor);
 	variableDateConverterHelper(editor);
