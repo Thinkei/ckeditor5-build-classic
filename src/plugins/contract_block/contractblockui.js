@@ -2,8 +2,10 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
 
-import ToggleCommand from './contractblockcommand';
+import { ToggleCommand } from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
 import { getSelectedBlockElement } from './utils';
 
@@ -16,6 +18,7 @@ export default class BlockUI extends Plugin {
 
 		this.balloon = editor.plugins.get(ContextualBalloon);
 		this.actionsView = this.createActionsView();
+		this.createToolbarBlockButton();
 
 		editor.editing.view.addObserver(ClickObserver);
 
@@ -65,6 +68,31 @@ export default class BlockUI extends Plugin {
 		});
 
 		return blockActionView;
+	}
+
+	// create Block button on toolbar
+	createToolbarBlockButton() {
+		const editor = this.editor;
+		const addBlockCommand = editor.commands.get('addBlock');
+		const t = editor.t;
+
+		editor.ui.componentFactory.add('addBlock', locale => {
+			const button = new ButtonView(locale);
+
+			button.isEnabled = true;
+			button.label = t('Add Block');
+			button.icon = unlinkIcon;
+
+			// Bind button to the command
+			button.bind('isEnabled').to(addBlockCommand, 'isEnabled');
+
+			// TODO: define callback function
+			this.listenTo(button, 'execute', () => {
+				editor.execute('addBlock');
+			});
+
+			return button;
+		});
 	}
 
 	// show Toolbar
