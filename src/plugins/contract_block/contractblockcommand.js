@@ -1,10 +1,16 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 
-import { getSelectedBlockElement, toBool, changeViewElement } from './utils';
+import {
+	getSelectedBlockElement,
+	toBool,
+	changeViewElement,
+	blockElementAttribute,
+	isBlockElement
+} from './utils';
 
 const BLOCK_ELEMENT = 'blockElement';
 
-export default class ToggleCommand extends Command {
+export class ToggleCommand extends Command {
 	refresh() {
 		this.isEnabled = true;
 	}
@@ -75,5 +81,42 @@ export default class ToggleCommand extends Command {
 				);
 			}
 		});
+	}
+}
+
+export class AddBlockCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute() {
+		const editor = this.editor;
+		const model = editor.model;
+		// model element
+		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
+		if (selectedBlockElement) {
+			if (isBlockElement(selectedBlockElement.parent, 'model')) {
+				return;
+			}
+			model.change(modelWriter => {
+				const selection = editor.model.document.selection;
+				const position = selection.getFirstPosition();
+				const blockElement = modelWriter.createElement(
+					'contract_block',
+					blockElementAttribute
+				);
+				modelWriter.insert(blockElement, position);
+			});
+		} else {
+			model.change(modelWriter => {
+				const selection = editor.model.document.selection;
+				const position = selection.getFirstPosition();
+				const blockElement = modelWriter.createElement(
+					'contract_block',
+					blockElementAttribute
+				);
+				modelWriter.insert(blockElement, position);
+			});
+		}
 	}
 }
