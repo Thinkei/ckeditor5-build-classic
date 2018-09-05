@@ -15,6 +15,22 @@ const mapModelToHTML = {
 	td: 'td'
 };
 
+const blockElementSymbol = 'blockElement';
+
+const createBlockElement = (viewWriter, modelElement, htmlTagName) => {
+	const blockElement = viewWriter.createContainerElement(
+		mapModelToHTML[htmlTagName],
+		modelElement._attrs
+	);
+
+	viewWriter.setCustomProperty(blockElementSymbol, true, blockElement);
+	if (blockElement.getAttribute('optional') === 'true')
+		viewWriter.addClass('contract-block', blockElement);
+	else viewWriter.addClass('contract-block-dotted', blockElement);
+
+	return blockElement;
+};
+
 export const converterHelperTemplate = (editor, htmlTagName) => {
 	// upcast helper
 	editor.conversion.for('upcast').add(
@@ -35,8 +51,8 @@ export const converterHelperTemplate = (editor, htmlTagName) => {
 			}
 		})
 	);
-	// downcast helper
-	editor.conversion.for('downcast').add(
+	// dataDowncast helper
+	editor.conversion.for('dataDowncast').add(
 		downcastElementToElement({
 			model: htmlTagName,
 			view: (modelElement, viewWriter) => {
@@ -44,6 +60,28 @@ export const converterHelperTemplate = (editor, htmlTagName) => {
 					mapModelToHTML[htmlTagName],
 					modelElement._attrs
 				);
+			}
+		})
+	);
+	// edittingDowncast helper
+	editor.conversion.for('editingDowncast').add(
+		downcastElementToElement({
+			model: htmlTagName,
+			view: (modelElement, viewWriter) => {
+				switch (modelElement.name) {
+					case 'contract_block': {
+						return createBlockElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
+					default:
+						return viewWriter.createContainerElement(
+							mapModelToHTML[htmlTagName],
+							modelElement._attrs
+						);
+				}
 			}
 		})
 	);
