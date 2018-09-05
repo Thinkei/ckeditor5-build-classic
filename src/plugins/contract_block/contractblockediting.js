@@ -1,7 +1,7 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { contractBlockConverterHelper } from '../../helpers/contract_block';
 import { contractBlockSchema } from '../../schema/contractBlock';
-import ToggleCommand from './contractblockcommand';
+import { ToggleCommand, AddBlockCommand } from './contractblockcommand';
 import { getSelectedBlockElement } from './utils';
 
 const BLOCK_FOCUSED_CLASS_NAME = 'contract-block_focused';
@@ -15,6 +15,7 @@ export default class BlockEditing extends Plugin {
 
 		// create block commands
 		editor.commands.add('toggle', new ToggleCommand(editor));
+		editor.commands.add('addBlock', new AddBlockCommand(editor));
 
 		this.setupBlockHighlight();
 	}
