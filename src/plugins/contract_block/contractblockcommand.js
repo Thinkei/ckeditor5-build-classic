@@ -1,4 +1,5 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
+import ModelPosition from '@ckeditor/ckeditor5-engine/src/model/position';
 
 import {
 	getSelectedBlockElement,
@@ -91,32 +92,44 @@ export class AddBlockCommand extends Command {
 
 	execute() {
 		const editor = this.editor;
-		const model = editor.model;
-		// model element
 		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
 		if (selectedBlockElement) {
 			if (isBlockElement(selectedBlockElement.parent, 'model')) {
 				return;
 			}
-			model.change(modelWriter => {
-				const selection = editor.model.document.selection;
-				const position = selection.getFirstPosition();
-				const blockElement = modelWriter.createElement(
-					'contract_block',
-					blockElementAttribute
-				);
-				modelWriter.insert(blockElement, position);
-			});
+			this.insertContractBlockElement();
 		} else {
-			model.change(modelWriter => {
-				const selection = editor.model.document.selection;
+			this.insertContractBlockElement();
+		}
+	}
+
+	insertContractBlockElement() {
+		const editor = this.editor;
+		const model = editor.model;
+		model.change(modelWriter => {
+			const selection = editor.model.document.selection;
+			if (selection.isCollapsed) {
 				const position = selection.getFirstPosition();
 				const blockElement = modelWriter.createElement(
 					'contract_block',
 					blockElementAttribute
 				);
 				modelWriter.insert(blockElement, position);
-			});
-		}
+			} else {
+				const range = selection.getFirstRange();
+				const commonAncestor = range.getCommonAncestor();
+				const blockElement = modelWriter.createElement(
+					'contract_block',
+					blockElementAttribute
+				);
+				const position = ModelPosition.createAt(
+					commonAncestor,
+					'before'
+				);
+				modelWriter.remove(range.getCommonAncestor());
+				modelWriter.insert(blockElement, position);
+				modelWriter.append(commonAncestor, blockElement);
+			}
+		});
 	}
 }
