@@ -13,7 +13,7 @@ export default class BlockEditing extends Plugin {
 		contractBlockConverterHelper(editor);
 		contractBlockSchema(editor);
 
-		// create block commands
+		// create commands for block
 		editor.commands.add('toggle', new ToggleCommand(editor));
 		editor.commands.add('addBlock', new AddBlockCommand(editor));
 

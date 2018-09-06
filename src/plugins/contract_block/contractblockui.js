@@ -86,7 +86,6 @@ export default class BlockUI extends Plugin {
 			// Bind button to the command
 			button.bind('isEnabled').to(addBlockCommand, 'isEnabled');
 
-			// TODO: define callback function
 			this.listenTo(button, 'execute', () => {
 				editor.execute('addBlock');
 			});

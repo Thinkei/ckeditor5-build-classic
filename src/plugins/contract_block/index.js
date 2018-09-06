@@ -9,6 +9,6 @@ export default class ContractBlock extends Plugin {
 	}
 
 	static get pluginName() {
-		return 'BlockPlugin';
+		return 'ContractBlock';
 	}
 }
