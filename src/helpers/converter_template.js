@@ -20,6 +20,7 @@ const mapModelToHTML = {
 const blockElementSymbol = 'blockElement';
 const sectionElementSymbol = 'sectionElement';
 
+// TODO: handle this for editing downcast later
 const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
 	const sectionElement = viewWriter.createContainerElement(
 		mapModelToHTML[htmlTagName],
@@ -31,7 +32,14 @@ const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
 		!toBool(sectionElement.getAttribute('hide_title')) &&
 		!toBool(sectionElement.getAttribute('hide_title_in_document'))
 	) {
-		viewWriter.addClass('contract-section', sectionElement);
+		const p = modelWriter.createContainerElement('paragraph', {
+			id: sectionElement.getAttribute('id')
+		});
+		modelWriter.append(
+			modelWriter.createText(sectionElement.getAttribute('title')),
+			p
+		);
+		modelWriter.insert(p, sectionElement, 'before');
 	}
 
 	return sectionElement;
@@ -96,13 +104,13 @@ export const converterHelperTemplate = (editor, htmlTagName) => {
 							htmlTagName
 						);
 					}
-					case 'contract_section': {
-						return createSectionElement(
-							viewWriter,
-							modelElement,
-							htmlTagName
-						);
-					}
+					// case 'contract_section': {
+					// 	return createSectionElement(
+					// 		viewWriter,
+					// 		modelElement,
+					// 		htmlTagName
+					// 	);
+					// }
 					default:
 						return viewWriter.createContainerElement(
 							mapModelToHTML[htmlTagName],
