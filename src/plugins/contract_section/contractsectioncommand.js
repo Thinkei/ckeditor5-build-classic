@@ -4,6 +4,11 @@ import { toBool } from '../contract_block/utils';
 const sectionElementSymbol = 'sectionElement';
 
 export class HideTitleCommand extends Command {
+	constructor(editor) {
+		super(editor);
+		this.insertedNodes = new Set();
+	}
+
 	refresh() {
 		this.isEnabled = true;
 	}
@@ -11,13 +16,13 @@ export class HideTitleCommand extends Command {
 	execute() {
 		// view side
 		const editor = this.editor;
-		const selection = editor.editing.view.document.selection;
+		const selection = editor.model.document.selection;
 		const selectedSectionElement = this.getSelectedSectionElement(
 			selection.getFirstPosition()
 		);
 
 		if (selectedSectionElement) {
-			editor.editing.view.change(viewWriter => {
+			editor.model.change(modelWriter => {
 				if (
 					toBool(selectedSectionElement.getAttribute('hide_title')) ||
 					toBool(
@@ -27,38 +32,20 @@ export class HideTitleCommand extends Command {
 					)
 				) {
 					this.toggleHideTitle(
-						viewWriter,
+						modelWriter,
 						{
-							attributes: [
-								{
-									name: 'hide_title',
-									value: 'false'
-								},
-								{
-									name: 'hide_title_in_document',
-									value: 'false'
-								}
-							],
-							className: 'contract-section'
+							hide_title: 'false',
+							hide_title_in_document: 'false'
 						},
 						selectedSectionElement,
 						false
 					);
 				} else {
 					this.toggleHideTitle(
-						viewWriter,
+						modelWriter,
 						{
-							attributes: [
-								{
-									name: 'hide_title',
-									value: 'true'
-								},
-								{
-									name: 'hide_title_in_document',
-									value: 'true'
-								}
-							],
-							className: 'contract-section'
+							hide_title: 'true',
+							hide_title_in_document: 'true'
 						},
 						selectedSectionElement,
 						true
@@ -68,15 +55,33 @@ export class HideTitleCommand extends Command {
 		}
 	}
 
-	toggleHideTitle(viewWriter, option, element, isHide) {
-		if (option.attributes.length) {
-			option.attributes.forEach(attr => {
-				viewWriter.setAttribute(attr.name, attr.value, element);
-			});
-		}
+	toggleHideTitle(modelWriter, attributes, element, isHide) {
+		modelWriter.setAttributes(attributes, element);
 		isHide
-			? viewWriter.removeClass(option.className, element)
-			: viewWriter.addClass(option.className, element);
+			? this.insertTitleNode(modelWriter, element)
+			: this.removeTitleNode(modelWriter, element);
+	}
+
+	// TODO: implement this function
+	insertTitleNode(modelWriter, sectionElement) {
+		const p = modelWriter.createElement('paragraph', {
+			id: sectionElement.getAttribute('id')
+		});
+		modelWriter.append(
+			modelWriter.createText(sectionElement.getAttribute('title')),
+			p
+		);
+		modelWriter.insert(p, sectionElement, 'before');
+		this.insertedNodes.add(p);
+	}
+
+	removeTitleNode(modelWriter, sectionElement) {
+		for (const node of this.insertedNodes) {
+			if (node.getAttribute('id') === sectionElement.getAttribute('id')) {
+				modelWriter.remove(node);
+				this.insertedNodes.delete(node);
+			}
+		}
 	}
 
 	getSelectedSectionElement(position) {
@@ -91,9 +96,6 @@ export class HideTitleCommand extends Command {
 	}
 
 	isSectionElement(node) {
-		return (
-			node.is('containerElement', 'section') &&
-			node.getCustomProperty(sectionElementSymbol)
-		);
+		return node.is('element', 'contract_section');
 	}
 }
