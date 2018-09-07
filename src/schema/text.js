@@ -9,7 +9,8 @@ export const textSchema = editor => {
 			'variable_date',
 			'variable_image',
 			'variable_signature_pad',
-			'variable_select'
+			'variable_select',
+			'section_title'
 		]
 	});
 };

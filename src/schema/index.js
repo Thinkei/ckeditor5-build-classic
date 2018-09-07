@@ -7,6 +7,7 @@ import { variableSelectSchema } from './variableSelect';
 import { textSchema } from './text';
 import { paragraphSchema } from './paragraph';
 import { tableSchema } from './table';
+import { sectionTitleSchema } from './sectionTitle';
 
 export const defineSchema = editor => {
 	paragraphSchema(editor);
@@ -18,4 +19,5 @@ export const defineSchema = editor => {
 	variableSelectSchema(editor);
 	textSchema(editor);
 	tableSchema(editor);
+	sectionTitleSchema(editor);
 };

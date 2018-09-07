@@ -6,6 +6,7 @@ import { toBool } from '../plugins/contract_block/utils';
 const mapModelToHTML = {
 	contract_section: 'section',
 	contract_block: 'section',
+	section_title: 'p',
 	variable_string: 'span',
 	variable_image: 'span',
 	variable_date: 'span',
@@ -18,32 +19,7 @@ const mapModelToHTML = {
 };
 
 const blockElementSymbol = 'blockElement';
-const sectionElementSymbol = 'sectionElement';
-
-// TODO: handle this for editing downcast later
-const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
-	const sectionElement = viewWriter.createContainerElement(
-		mapModelToHTML[htmlTagName],
-		modelElement._attrs
-	);
-
-	viewWriter.setCustomProperty(sectionElementSymbol, true, sectionElement);
-	if (
-		!toBool(sectionElement.getAttribute('hide_title')) &&
-		!toBool(sectionElement.getAttribute('hide_title_in_document'))
-	) {
-		const p = modelWriter.createContainerElement('paragraph', {
-			id: sectionElement.getAttribute('id')
-		});
-		modelWriter.append(
-			modelWriter.createText(sectionElement.getAttribute('title')),
-			p
-		);
-		modelWriter.insert(p, sectionElement, 'before');
-	}
-
-	return sectionElement;
-};
+const sectionTitle = 'sectionTitle';
 
 const createBlockElement = (viewWriter, modelElement, htmlTagName) => {
 	const blockElement = viewWriter.createContainerElement(
@@ -57,6 +33,16 @@ const createBlockElement = (viewWriter, modelElement, htmlTagName) => {
 	else viewWriter.addClass('contract-block-dotted', blockElement);
 
 	return blockElement;
+};
+
+const createSectionTitleElement = (viewWriter, modelElement, htmlTagName) => {
+	const sectionTitleElement = viewWriter.createContainerElement(
+		mapModelToHTML[htmlTagName],
+		modelElement._attrs
+	);
+
+	viewWriter.setCustomProperty(sectionTitle, true, sectionTitleElement);
+	return sectionTitleElement;
 };
 
 export const converterHelperTemplate = (editor, htmlTagName) => {
@@ -104,20 +90,22 @@ export const converterHelperTemplate = (editor, htmlTagName) => {
 							htmlTagName
 						);
 					}
-					// case 'contract_section': {
-					// 	return createSectionElement(
-					// 		viewWriter,
-					// 		modelElement,
-					// 		htmlTagName
-					// 	);
-					// }
-					default:
+					case 'section_title': {
+						return createSectionTitleElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
+					default: {
 						return viewWriter.createContainerElement(
 							mapModelToHTML[htmlTagName],
 							modelElement._attrs
 						);
+					}
 				}
-			}
+			},
+			converterPriority: 'highest'
 		})
 	);
 };
