@@ -1,6 +1,6 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
-import { HideTitleCommand } from './contractsectioncommand';
+import { HideTitleCommand, ChangeTitleCommand } from './contractsectioncommand';
 
 export default class SectionEditing extends Plugin {
 	init() {
@@ -8,5 +8,6 @@ export default class SectionEditing extends Plugin {
 
 		// create commads for section
 		editor.commands.add('hideTitle', new HideTitleCommand(editor));
+		editor.commands.add('changeTitle', new ChangeTitleCommand(editor));
 	}
 }
