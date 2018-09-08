@@ -66,7 +66,6 @@ export class HideTitleCommand extends Command {
 			: this.removeTitleNode(modelWriter, element);
 	}
 
-	// TODO: replace with our own custom node (section_title)
 	insertTitleNode(modelWriter, sectionElement) {
 		const titleHTMLTag = modelWriter.createElement('section_title', {
 			id: sectionElement.getAttribute('id'),
@@ -104,39 +103,52 @@ export class ChangeTitleCommand extends Command {
 		// model side
 		const model = this.editor.model;
 		const selection = model.document.selection;
-		// const selectedSectionElement = getSelectedSectionElement(
-		// 	selection.getFirstPosition()
-		// );
-		const selectedSectionTitle = getSelectedSectionTitle(
+		const selectedSectionTitle = this.getSelectedSectionTitle(
 			selection.getFirstPosition()
 		);
+		const contractSectionList = [];
+
 		const root = model.document.getRoot();
 		const children = root.getChildren();
-		const sectionElement = children.forEach(node => {
+		for (const node of children) {
 			if (
-				selectedSectionTitle.getAttribute('id') ===
-				node.is('element', 'contract_section')
-					? node.getAttribute('id')
-					: null
+				node.is('element', 'contract_section') &&
+				node.getAttribute('id') ===
+					selectedSectionTitle.getAttribute('id')
 			) {
-				return node;
+				contractSectionList.push(node);
 			}
-		});
+		}
 
-		model.change(modelWriter => {
-			modelWriter.setAttribute('title', titleFormValue, sectionElement);
-		});
+		contractSectionList.forEach(section => {
+			const viewElement = this.editor.editing.mapper.toViewElement(
+				section
+			);
 
-		const getSelectedSectionTitle = position => {
-			return position
-				.getAncestors()
-				.reverse()
-				.find(ancestor => {
-					return (
-						ancestor.is('element', 'paragraph') &&
-						ancestor.getAttribute('id')
-					);
-				});
-		};
+			model.change(modelWriter => {
+				modelWriter.setAttribute('title', titleFormValue, section);
+			});
+
+			this.editor.editing.view.change(viewWriter => {
+				viewWriter.setAttribute('title', titleFormValue, viewElement);
+			});
+		});
+	}
+
+	getSelectedSectionTitle(position) {
+		return this.findSelectionAncestor(position);
+	}
+
+	findSelectionAncestor(position) {
+		return position
+			.getAncestors()
+			.reverse()
+			.find(ancestor => {
+				return this.isSectionTitle(ancestor);
+			});
+	}
+
+	isSectionTitle(node) {
+		return node.is('element', 'section_title');
 	}
 }
