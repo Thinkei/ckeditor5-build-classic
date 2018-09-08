@@ -29,9 +29,9 @@ export default class FormView extends View {
 		);
 
 		this.setTemplate({
-			tag: 'div',
+			tag: 'form',
 			attributes: {
-				class: ['ck', 'ck-link-actions'],
+				class: ['ck', 'ck-link-form'],
 				tabindex: '-1'
 			},
 			children: [
