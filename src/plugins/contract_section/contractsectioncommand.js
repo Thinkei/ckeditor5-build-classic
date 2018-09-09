@@ -73,7 +73,9 @@ export class HideTitleCommand extends Command {
 		});
 
 		modelWriter.append(
-			modelWriter.createText(sectionElement.getAttribute('title')),
+			modelWriter.createText(sectionElement.getAttribute('title'), {
+				section_title_value: true
+			}),
 			titleHTMLTag
 		);
 		modelWriter.insert(titleHTMLTag, sectionElement, 'before');
@@ -91,14 +93,42 @@ export class HideTitleCommand extends Command {
 }
 
 export class ChangeTitleCommand extends Command {
+	constructor(editor) {
+		super(editor);
+
+		this.titleTextNode = null;
+		this.titleSectionChildrenNode = null;
+	}
+
+	// TODO: update value of title element to this.value
 	refresh() {
-		// TODO: set data attribute for $text title node
-		this.value = this.editor.model.document.selection.getAttribute(
-			'sectionTitleValue'
-		);
+		// model side
+		const selection = this.editor.model.document.selection;
+		if (selection) {
+			const selectedSectionElement = selection
+				.getFirstPosition()
+				.getAncestors()
+				.reverse()
+				.find(ancestor => {
+					return ancestor.is('element', 'section_title');
+				});
+
+			if (selectedSectionElement) {
+				this.titleSectionChildrenNode = selectedSectionElement.getChildren();
+				for (const node of this.titleSectionChildrenNode) {
+					if (
+						node.is('text') &&
+						node.getAttribute('section_title_value')
+					) {
+						this.value = node.getAttribute('section_title_value');
+					}
+				}
+			}
+		}
 		this.isEnabled = true;
 	}
 
+	// TODO: update value of title element
 	execute(titleFormValue) {
 		// model side
 		const model = this.editor.model;
@@ -121,16 +151,26 @@ export class ChangeTitleCommand extends Command {
 		}
 
 		contractSectionList.forEach(section => {
-			const viewElement = this.editor.editing.mapper.toViewElement(
+			const viewSectionElement = this.editor.editing.mapper.toViewElement(
 				section
+			);
+			const viewTitleElement = this.editor.editing.mapper.toViewElement(
+				selectedSectionTitle
 			);
 
 			model.change(modelWriter => {
 				modelWriter.setAttribute('title', titleFormValue, section);
+				selectedSectionTitle.getChild(0)._data = titleFormValue;
 			});
 
 			this.editor.editing.view.change(viewWriter => {
-				viewWriter.setAttribute('title', titleFormValue, viewElement);
+				viewWriter.setAttribute(
+					'title',
+					titleFormValue,
+					viewSectionElement
+				);
+
+				viewTitleElement.getChild(0)._data = titleFormValue;
 			});
 		});
 	}
