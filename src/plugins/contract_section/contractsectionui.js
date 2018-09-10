@@ -5,14 +5,17 @@ import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobs
 import linkIcon from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
 
 import FormView from './ui/formview';
+import ActionView from './ui/actionsview';
 
 export default class SectionUI extends Plugin {
 	static get requires() {
 		return [ContextualBalloon];
 	}
+
 	init() {
 		const editor = this.editor;
 		this.formView = this.createFormView();
+		this.actionView = this.createActionView();
 		this.balloon = editor.plugins.get(ContextualBalloon);
 		editor.editing.view.addObserver(ClickObserver);
 
@@ -20,7 +23,6 @@ export default class SectionUI extends Plugin {
 		this.createToolbarSectionButton();
 	}
 
-	// TODO: handle this
 	enableEditingSectionTitle() {
 		const editor = this.editor;
 		const viewDocument = editor.editing.view.document;
@@ -35,10 +37,7 @@ export default class SectionUI extends Plugin {
 	}
 
 	showUI() {
-		const editor = this.editor;
-		const changeTitleCommand = editor.commands.get('changeTitle');
-
-		this.addFormView();
+		this.addActionView();
 	}
 
 	getSelectedSectionTitle() {
@@ -85,6 +84,18 @@ export default class SectionUI extends Plugin {
 		});
 	}
 
+	createActionView() {
+		const editor = this.editor;
+		const actionView = new ActionView(editor.locale);
+
+		// TODO: define callback execute showing change title form
+		this.listenTo(actionView, 'editTitle', () => {
+			this.addFormView();
+		});
+
+		return actionView;
+	}
+
 	createFormView() {
 		const editor = this.editor;
 		const formView = new FormView(editor.locale);
@@ -102,6 +113,10 @@ export default class SectionUI extends Plugin {
 			);
 			this.removeFormView();
 		});
+
+		// this.listenTo(formView, 'cancel', () => {
+
+		// })
 
 		return formView;
 	}
@@ -128,6 +143,17 @@ export default class SectionUI extends Plugin {
 		this.formView.titleInputView.select();
 		this.formView.titleInputView.element.value =
 			changeTitleCommand.value || '';
+	}
+
+	addActionView() {
+		if (this.balloon.hasView(this.actionView)) {
+			return;
+		}
+		console.log('add action');
+		this.balloon.add({
+			view: this.actionView,
+			position: this.getBalloonPositionData()
+		});
 	}
 
 	getBalloonPositionData() {
