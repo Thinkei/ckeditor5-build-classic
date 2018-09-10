@@ -1,27 +1,110 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
+import SectionContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import linkIcon from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
 
 import FormView from './ui/formview';
-import ActionView from './ui/actionsview';
+import ActionView, { SectionActionView } from './ui/actionsview';
 
 export default class SectionUI extends Plugin {
 	static get requires() {
-		return [ContextualBalloon];
+		return [SectionContextualBalloon];
 	}
 
 	init() {
 		const editor = this.editor;
 		this.formView = this.createFormView();
 		this.actionView = this.createActionView();
+		this.sectionActionView = this.createSectionActionView();
 		this.balloon = editor.plugins.get(ContextualBalloon);
+		this.section_balloon = editor.plugins.get(SectionContextualBalloon);
 		editor.editing.view.addObserver(ClickObserver);
 
+		// this.enableUserSectionInteraction();
 		this.enableEditingSectionTitle();
 		this.createToolbarSectionButton();
+	}
+
+	enableUserSectionInteraction() {
+		const editor = this.editor;
+		const viewDocument = editor.editing.view.document;
+
+		this.listenTo(viewDocument, 'click', () => {
+			const selectedSectionElelemt = this.getSelectedSectionElement();
+
+			if (selectedSectionElelemt) {
+				this.showSectionUI();
+			}
+		});
+	}
+
+	getSelectedSectionElement() {
+		const selection = this.editor.editing.view.document.selection;
+		return this.findSectionElement(selection.getFirstPosition());
+	}
+
+	findSectionElement(position) {
+		return position
+			.getAncestors()
+			.reverse()
+			.find(ancestor => {
+				return this.isSectionElement(ancestor);
+			});
+	}
+
+	isSectionElement(node) {
+		return (
+			node.is('containerElement', 'section') &&
+			node.getCustomProperty('sectionElement')
+		);
+	}
+
+	showSectionUI() {
+		this.addSectionActionView();
+		// this.startUpdatingSectionUI();
+	}
+
+	addSectionActionView() {
+		if (this.section_balloon.hasView(this.sectionActionView)) {
+			return;
+		}
+
+		this.section_balloon.add({
+			view: this.sectionActionView,
+			position: this.getSectionBalloonPositionData()
+		});
+	}
+
+	getSectionBalloonPositionData() {
+		const view = this.editor.editing.view;
+		const targetSection = this.getSelectedSectionElement();
+
+		const target = targetSection
+			? view.domConverter.mapViewToDom(targetSection)
+			: null;
+
+		return {
+			target
+		};
+	}
+
+	createSectionActionView() {
+		const editor = this.editor;
+		const sectionActionView = new SectionActionView(editor.locale);
+		const toggleTitleCommand = editor.commands.get('hideTitle');
+
+		sectionActionView.hideTitleButtonView
+			.bind('isEnabled')
+			.to(toggleTitleCommand, 'isEnabled');
+
+		this.listenTo(sectionActionView, 'toggle', () => {
+			editor.execute('hideTitle');
+		});
+
+		return sectionActionView;
 	}
 
 	enableEditingSectionTitle() {
@@ -53,6 +136,7 @@ export default class SectionUI extends Plugin {
 
 	showUI() {
 		this.addActionView();
+		// this.startUpdatingSectionUI();
 	}
 
 	hideUI() {
@@ -66,7 +150,9 @@ export default class SectionUI extends Plugin {
 
 		this.removeFormView();
 
-		this.balloon.remove(this.actionView);
+		if (this.balloon.hasView(this.actionView)) {
+			this.balloon.remove(this.actionView);
+		}
 
 		editor.editing.view.focus();
 	}
@@ -101,7 +187,8 @@ export default class SectionUI extends Plugin {
 			button.set({
 				isEnabled: true,
 				label: t('Hide Title'),
-				icon: linkIcon
+				icon: linkIcon,
+				tooltip: true
 			});
 
 			// bind button state to command
@@ -119,7 +206,6 @@ export default class SectionUI extends Plugin {
 		const editor = this.editor;
 		const actionView = new ActionView(editor.locale);
 
-		// TODO: define callback execute showing change title form
 		this.listenTo(actionView, 'editTitle', () => {
 			this.addFormView();
 		});
@@ -225,5 +311,23 @@ export default class SectionUI extends Plugin {
 
 	areActionsVisible() {
 		return this.balloon.visibleView === this.actionView;
+	}
+
+	startUpdatingSectionUI() {
+		const editor = this.editor;
+		let prevSelectedSection = this.getSelectedSectionElement();
+
+		// TODO: define callbacks
+		this.listenTo(editor.ui, 'update', () => {
+			const selectedSectionElelemt = this.getSelectedSectionElement();
+
+			if (prevSelectedSection && !selectedSectionElelemt) {
+				this.hideSectionUI();
+			} else {
+				this.balloon.updatePosition(
+					this.getSectionBalloonPositionData()
+				);
+			}
+		});
 	}
 }
