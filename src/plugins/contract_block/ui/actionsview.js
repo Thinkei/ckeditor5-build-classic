@@ -28,7 +28,8 @@ export default class BlockActionView extends View {
 
 		button.set({
 			label,
-			icon
+			icon,
+			tooltip: true
 		});
 
 		button.delegate('execute').to(this, eventName);

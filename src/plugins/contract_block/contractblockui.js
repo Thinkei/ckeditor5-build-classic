@@ -17,6 +17,7 @@ export default class BlockUI extends Plugin {
 		const editor = this.editor;
 
 		this.balloon = editor.plugins.get(ContextualBalloon);
+
 		this.actionsView = this.createActionsView();
 		this.createToolbarBlockButton();
 
@@ -82,6 +83,7 @@ export default class BlockUI extends Plugin {
 			button.isEnabled = true;
 			button.label = t('Add Block');
 			button.icon = unlinkIcon;
+			button.tooltip = true;
 
 			// Bind button to the command
 			button.bind('isEnabled').to(addBlockCommand, 'isEnabled');
