@@ -1,10 +1,7 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
-import ViewPosition from '@ckeditor/ckeditor5-engine/src/view/position';
 
 import { toBool } from '../contract_block/utils';
 import { getSelectedSectionElement } from './utils';
-
-const sectionElementSymbol = 'sectionElement';
 
 export class HideTitleCommand extends Command {
 	constructor(editor) {
