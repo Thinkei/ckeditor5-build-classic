@@ -1,0 +1,20 @@
+.contract-block {
+	border: 2px solid black;
+	border-radius: 5px;
+}
+
+.contract-block-dotted {
+	border: 2px solid black;
+	border-radius: 5px;
+	border-style: dotted;
+}
+
+.contract-block_focused {
+	border: 2px solid teal;
+	border-radius: 5px;
+	border-style: dotted;
+}
+
+.contract-section:before {
+	content: attr(title);
+}
