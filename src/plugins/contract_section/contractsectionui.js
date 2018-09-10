@@ -2,6 +2,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
+import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import linkIcon from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
 
 import FormView from './ui/formview';
@@ -34,10 +35,40 @@ export default class SectionUI extends Plugin {
 				this.showUI();
 			}
 		});
+
+		this.editor.keystrokes.set('Esc', cancel => {
+			if (this.areUIsVisible) {
+				this.hideUI();
+				cancel();
+			}
+		});
+
+		clickOutsideHandler({
+			emitter: this.formView,
+			activator: () => this.areUIsVisible,
+			contextElements: [this.balloon.view.element],
+			callback: () => this.hideUI()
+		});
 	}
 
 	showUI() {
 		this.addActionView();
+	}
+
+	hideUI() {
+		if (!this.areUIsInPanel) {
+			return;
+		}
+
+		const editor = this.editor;
+
+		this.stopListening(editor.ui, 'update');
+
+		this.removeFormView();
+
+		this.balloon.remove(this.actionView);
+
+		editor.editing.view.focus();
 	}
 
 	getSelectedSectionTitle() {
@@ -111,25 +142,30 @@ export default class SectionUI extends Plugin {
 				'changeTitle',
 				formView.titleInputView.inputView.element.value
 			);
-			this.removeFormView();
+			this.hideUI();
 		});
 
-		// this.listenTo(formView, 'cancel', () => {
+		this.listenTo(formView, 'cancel', () => {
+			this.hideUI();
+		});
 
-		// })
+		formView.keystrokes.set('Esc', cancel => {
+			this.hideUI();
+			cancel();
+		});
 
 		return formView;
 	}
 
 	removeFormView() {
-		if (this.balloon.hasView(this.formView)) {
+		if (this.isFormInPanel()) {
 			this.balloon.remove(this.formView);
 			this.editor.editing.view.focus();
 		}
 	}
 
 	addFormView() {
-		if (this.balloon.hasView(this.formView)) {
+		if (this.isFormInPanel()) {
 			return;
 		}
 		const editor = this.editor;
@@ -149,7 +185,7 @@ export default class SectionUI extends Plugin {
 		if (this.balloon.hasView(this.actionView)) {
 			return;
 		}
-		console.log('add action');
+
 		this.balloon.add({
 			view: this.actionView,
 			position: this.getBalloonPositionData()
@@ -167,5 +203,27 @@ export default class SectionUI extends Plugin {
 		return {
 			target
 		};
+	}
+
+	areUIsInPanel() {
+		return this.isFormInPanel || this.areActionsInPanel;
+	}
+
+	isFormInPanel() {
+		return this.balloon.hasView(this.formView);
+	}
+
+	areActionsInPanel() {
+		return this.balloon.hasView(this.actionView);
+	}
+
+	areUIsVisible() {
+		const visibleView = this.balloon.visibleView;
+
+		return visibleView == this.formView || this.areActionsVisible;
+	}
+
+	areActionsVisible() {
+		return this.balloon.visibleView === this.actionView;
 	}
 }
