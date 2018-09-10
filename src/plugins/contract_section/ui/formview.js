@@ -3,6 +3,7 @@ import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import LabeledInputView from '@ckeditor/ckeditor5-ui/src/labeledinput/labeledinputview';
 import InputTextView from '@ckeditor/ckeditor5-ui/src/inputtext/inputtextview';
 import submitHandler from '@ckeditor/ckeditor5-ui/src/bindings/submithandler';
+import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 import checkIcon from '@ckeditor/ckeditor5-core/theme/icons/check.svg';
 import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
 
@@ -39,6 +40,8 @@ export default class FormView extends View {
 				this.cancelButtonView
 			]
 		});
+
+		this.keystrokes = new KeystrokeHandler();
 	}
 
 	render() {
@@ -47,6 +50,8 @@ export default class FormView extends View {
 		submitHandler({
 			view: this
 		});
+
+		this.keystrokes.listenTo(this.element);
 	}
 
 	createTitleInput() {
