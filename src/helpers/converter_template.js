@@ -19,7 +19,8 @@ const mapModelToHTML = {
 };
 
 const blockElementSymbol = 'blockElement';
-const sectionTitle = 'sectionTitle';
+const SECTION_TITLE = 'sectionTitle';
+const SECTION_ELEMENT = 'sectionElement';
 
 const createBlockElement = (viewWriter, modelElement, htmlTagName) => {
 	const blockElement = viewWriter.createContainerElement(
@@ -41,8 +42,18 @@ const createSectionTitleElement = (viewWriter, modelElement, htmlTagName) => {
 		modelElement._attrs
 	);
 
-	viewWriter.setCustomProperty(sectionTitle, true, sectionTitleElement);
+	viewWriter.setCustomProperty(SECTION_TITLE, true, sectionTitleElement);
 	return sectionTitleElement;
+};
+
+const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
+	const sectionElement = viewWriter.createContainerElement(
+		mapModelToHTML[htmlTagName],
+		modelElement._attrs
+	);
+
+	viewWriter.setCustomProperty(SECTION_ELEMENT, true, sectionElement);
+	return sectionElement;
 };
 
 export const converterHelperTemplate = (editor, htmlTagName) => {
@@ -92,6 +103,13 @@ export const converterHelperTemplate = (editor, htmlTagName) => {
 					}
 					case 'section_title': {
 						return createSectionTitleElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
+					case 'contract_section': {
+						return createSectionElement(
 							viewWriter,
 							modelElement,
 							htmlTagName
