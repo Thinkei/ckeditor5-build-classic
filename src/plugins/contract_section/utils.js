@@ -12,3 +12,7 @@ const findSelectionAncestor = position => {
 const isSectionElement = node => {
 	return node.is('element', 'contract_section');
 };
+
+export const toBool = value => {
+	return value === 'true';
+};
