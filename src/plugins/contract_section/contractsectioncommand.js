@@ -64,6 +64,7 @@ export class HideTitleCommand extends Command {
 	}
 
 	insertTitleNode(modelWriter, sectionElement) {
+		console.log('title', sectionElement.getAttribute('title'));
 		const titleHTMLTag = modelWriter.createElement('section_title', {
 			id: sectionElement.getAttribute('id'),
 			section_title: true
@@ -145,33 +146,57 @@ export class ChangeTitleCommand extends Command {
 			}
 		}
 
-		contractSectionList.forEach(sectionTitle => {
-			const viewSectionElement = this.editor.editing.mapper.toViewElement(
-				selectedSection
-			);
-			const viewTitleElement = this.editor.editing.mapper.toViewElement(
-				sectionTitle
-			);
+		if (titleFormValue !== '') {
+			if (contractSectionList.length) {
+				contractSectionList.forEach(sectionTitle => {
+					const viewSectionElement = this.editor.editing.mapper.toViewElement(
+						selectedSection
+					);
+					const viewTitleElement = this.editor.editing.mapper.toViewElement(
+						sectionTitle
+					);
 
-			model.change(modelWriter => {
-				modelWriter.setAttribute(
-					'title',
-					titleFormValue,
+					model.change(modelWriter => {
+						modelWriter.setAttribute(
+							'title',
+							titleFormValue,
+							selectedSection
+						);
+						sectionTitle.getChild(0)._data = titleFormValue;
+					});
+
+					this.editor.editing.view.change(viewWriter => {
+						viewWriter.setAttribute(
+							'title',
+							titleFormValue,
+							viewSectionElement
+						);
+
+						viewTitleElement.getChild(0)._data = titleFormValue;
+					});
+				});
+			} else {
+				const viewSectionElement = this.editor.editing.mapper.toViewElement(
 					selectedSection
 				);
-				sectionTitle.getChild(0)._data = titleFormValue;
-			});
 
-			this.editor.editing.view.change(viewWriter => {
-				viewWriter.setAttribute(
-					'title',
-					titleFormValue,
-					viewSectionElement
-				);
+				model.change(modelWriter => {
+					modelWriter.setAttribute(
+						'title',
+						titleFormValue,
+						selectedSection
+					);
+				});
 
-				viewTitleElement.getChild(0)._data = titleFormValue;
-			});
-		});
+				this.editor.editing.view.change(viewWriter => {
+					viewWriter.setAttribute(
+						'title',
+						titleFormValue,
+						viewSectionElement
+					);
+				});
+			}
+		}
 	}
 
 	getSelectedSection(position) {
