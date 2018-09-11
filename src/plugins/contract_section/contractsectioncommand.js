@@ -1,6 +1,6 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 
-import { toBool } from '../contract_block/utils';
+import { toBool } from './utils';
 import { getSelectedSectionElement } from './utils';
 
 export class HideTitleCommand extends Command {
@@ -64,6 +64,7 @@ export class HideTitleCommand extends Command {
 	}
 
 	insertTitleNode(modelWriter, sectionElement) {
+		console.log('title', sectionElement.getAttribute('title'));
 		const titleHTMLTag = modelWriter.createElement('section_title', {
 			id: sectionElement.getAttribute('id'),
 			section_title: true
@@ -125,12 +126,11 @@ export class ChangeTitleCommand extends Command {
 		this.isEnabled = true;
 	}
 
-	// TODO: update value of title element
 	execute(titleFormValue) {
 		// model side
 		const model = this.editor.model;
 		const selection = model.document.selection;
-		const selectedSectionTitle = this.getSelectedSectionTitle(
+		const selectedSection = this.getSelectedSection(
 			selection.getFirstPosition()
 		);
 		const contractSectionList = [];
@@ -139,40 +139,67 @@ export class ChangeTitleCommand extends Command {
 		const children = root.getChildren();
 		for (const node of children) {
 			if (
-				node.is('element', 'contract_section') &&
-				node.getAttribute('id') ===
-					selectedSectionTitle.getAttribute('id')
+				node.is('element', 'section_title') &&
+				node.getAttribute('id') === selectedSection.getAttribute('id')
 			) {
 				contractSectionList.push(node);
 			}
 		}
 
-		contractSectionList.forEach(section => {
-			const viewSectionElement = this.editor.editing.mapper.toViewElement(
-				section
-			);
-			const viewTitleElement = this.editor.editing.mapper.toViewElement(
-				selectedSectionTitle
-			);
+		if (titleFormValue !== '') {
+			if (contractSectionList.length) {
+				contractSectionList.forEach(sectionTitle => {
+					const viewSectionElement = this.editor.editing.mapper.toViewElement(
+						selectedSection
+					);
+					const viewTitleElement = this.editor.editing.mapper.toViewElement(
+						sectionTitle
+					);
 
-			model.change(modelWriter => {
-				modelWriter.setAttribute('title', titleFormValue, section);
-				selectedSectionTitle.getChild(0)._data = titleFormValue;
-			});
+					model.change(modelWriter => {
+						modelWriter.setAttribute(
+							'title',
+							titleFormValue,
+							selectedSection
+						);
+						sectionTitle.getChild(0)._data = titleFormValue;
+					});
 
-			this.editor.editing.view.change(viewWriter => {
-				viewWriter.setAttribute(
-					'title',
-					titleFormValue,
-					viewSectionElement
+					this.editor.editing.view.change(viewWriter => {
+						viewWriter.setAttribute(
+							'title',
+							titleFormValue,
+							viewSectionElement
+						);
+
+						viewTitleElement.getChild(0)._data = titleFormValue;
+					});
+				});
+			} else {
+				const viewSectionElement = this.editor.editing.mapper.toViewElement(
+					selectedSection
 				);
 
-				viewTitleElement.getChild(0)._data = titleFormValue;
-			});
-		});
+				model.change(modelWriter => {
+					modelWriter.setAttribute(
+						'title',
+						titleFormValue,
+						selectedSection
+					);
+				});
+
+				this.editor.editing.view.change(viewWriter => {
+					viewWriter.setAttribute(
+						'title',
+						titleFormValue,
+						viewSectionElement
+					);
+				});
+			}
+		}
 	}
 
-	getSelectedSectionTitle(position) {
+	getSelectedSection(position) {
 		return this.findSelectionAncestor(position);
 	}
 
@@ -186,6 +213,91 @@ export class ChangeTitleCommand extends Command {
 	}
 
 	isSectionTitle(node) {
-		return node.is('element', 'section_title');
+		return node.is('element', 'contract_section');
+	}
+}
+
+export class ToggleOptionalCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute() {
+		// view side
+		const view = this.editor.editing.view;
+		const selectedSectionElement = this.getSelectedSectionElement();
+
+		if (!toBool(selectedSectionElement.getAttribute('optional'))) {
+			view.change(viewWriter => {
+				viewWriter.setAttribute(
+					'optional',
+					`${!toBool(
+						selectedSectionElement.getAttribute('optional')
+					)}`,
+					selectedSectionElement
+				);
+				viewWriter.addClass('contract-section', selectedSectionElement);
+			});
+
+			const modelElement = this.editor.editing.mapper.toModelElement(
+				selectedSectionElement
+			);
+			this.editor.model.change(modelWriter => {
+				modelWriter.setAttribute(
+					'optional',
+					`${!toBool(
+						selectedSectionElement.getAttribute('optional')
+					)}`,
+					modelElement
+				);
+			});
+		} else {
+			view.change(viewWriter => {
+				viewWriter.setAttribute(
+					'optional',
+					`${!toBool(
+						selectedSectionElement.getAttribute('optional')
+					)}`,
+					selectedSectionElement
+				);
+				viewWriter.removeClass(
+					'contract-section',
+					selectedSectionElement
+				);
+			});
+			const modelElement = this.editor.editing.mapper.toModelElement(
+				selectedSectionElement
+			);
+			this.editor.model.change(modelWriter => {
+				modelWriter.setAttribute(
+					'optional',
+					`${!toBool(
+						selectedSectionElement.getAttribute('optional')
+					)}`,
+					modelElement
+				);
+			});
+		}
+	}
+
+	getSelectedSectionElement() {
+		const selection = this.editor.editing.view.document.selection;
+		return this.findSectionElement(selection.getFirstPosition());
+	}
+
+	findSectionElement(position) {
+		return position
+			.getAncestors()
+			.reverse()
+			.find(ancestor => {
+				return this.isSectionElement(ancestor);
+			});
+	}
+
+	isSectionElement(node) {
+		return (
+			node.is('containerElement', 'section') &&
+			node.getCustomProperty('sectionElement')
+		);
 	}
 }

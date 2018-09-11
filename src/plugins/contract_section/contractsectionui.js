@@ -1,31 +1,28 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
-import SectionContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
+import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import linkIcon from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
 
 import FormView from './ui/formview';
-import ActionView, { SectionActionView } from './ui/actionsview';
+import { SectionActionView } from './ui/actionsview';
 
 export default class SectionUI extends Plugin {
 	static get requires() {
-		return [SectionContextualBalloon];
+		return [ContextualBalloon];
 	}
 
 	init() {
 		const editor = this.editor;
 		this.formView = this.createFormView();
-		this.actionView = this.createActionView();
 		this.sectionActionView = this.createSectionActionView();
+		this.panelView = new BalloonPanelView(editor.locale);
 		this.balloon = editor.plugins.get(ContextualBalloon);
-		this.section_balloon = editor.plugins.get(SectionContextualBalloon);
 		editor.editing.view.addObserver(ClickObserver);
 
-		// this.enableUserSectionInteraction();
-		this.enableEditingSectionTitle();
-		this.createToolbarSectionButton();
+		this.enableUserSectionInteraction();
 	}
 
 	enableUserSectionInteraction() {
@@ -38,6 +35,11 @@ export default class SectionUI extends Plugin {
 			if (selectedSectionElelemt) {
 				this.showSectionUI();
 			}
+		});
+
+		this.editor.keystrokes.set('Esc', (data, cancel) => {
+			this.hideSectionUI();
+			cancel();
 		});
 	}
 
@@ -64,153 +66,97 @@ export default class SectionUI extends Plugin {
 
 	showSectionUI() {
 		this.addSectionActionView();
-		// this.startUpdatingSectionUI();
 	}
 
+	hideSectionUI() {
+		this.panelView.content.clear();
+		this.panelView.hide();
+	}
+
+	// TODO: check if the panel is empty then add
 	addSectionActionView() {
-		if (this.section_balloon.hasView(this.sectionActionView)) {
-			return;
+		if (!this.isPanelInViewBody(this.panelView)) {
+			this.editor.ui.view.body.add(this.panelView);
+			this.editor.ui.focusTracker.add(this.panelView.element);
+
+			clickOutsideHandler({
+				emitter: this.sectionActionView,
+				activator: () => this.isViewInContent(this.sectionActionView),
+				contextElements: [this.panelView.element],
+				callback: () => this.hideSectionUI()
+			});
 		}
 
-		this.section_balloon.add({
-			view: this.sectionActionView,
-			position: this.getSectionBalloonPositionData()
-		});
+		this.isPanelEmpty(this.panelView.content) &&
+		!this.isViewInContent(this.sectionActionView)
+			? this.panelView.content.add(this.sectionActionView)
+			: null;
+
+		this.panelView.pin(this.getSectionBalloonPositionData());
+	}
+
+	isPanelInViewBody(panelView) {
+		return this.editor.ui.view.body.get(
+			this.editor.ui.view.body.getIndex(panelView)
+		);
+	}
+
+	isViewInContent(view) {
+		return this.panelView.content.get(
+			this.panelView.content.getIndex(view)
+		);
+	}
+
+	isPanelEmpty(viewCollection) {
+		return viewCollection.length === 0;
 	}
 
 	getSectionBalloonPositionData() {
 		const view = this.editor.editing.view;
 		const targetSection = this.getSelectedSectionElement();
+		const positions = BalloonPanelView.defaultPositions;
 
 		const target = targetSection
 			? view.domConverter.mapViewToDom(targetSection)
 			: null;
 
 		return {
-			target
+			target,
+			positions: [
+				positions.southEastArrowNorthWest,
+				positions.northEastArrowSouthEast
+			]
 		};
 	}
 
+	// TODO: handle 'esc' key press
 	createSectionActionView() {
 		const editor = this.editor;
 		const sectionActionView = new SectionActionView(editor.locale);
-		const toggleTitleCommand = editor.commands.get('hideTitle');
+		const hideTitleCommand = editor.commands.get('hideTitle');
+		const toggleOptionalCommand = editor.commands.get('toggleOptional');
 
 		sectionActionView.hideTitleButtonView
 			.bind('isEnabled')
-			.to(toggleTitleCommand, 'isEnabled');
+			.to(hideTitleCommand, 'isEnabled');
 
-		this.listenTo(sectionActionView, 'toggle', () => {
+		sectionActionView.toggleOptionalButtonView
+			.bind('isEnabled')
+			.to(toggleOptionalCommand, 'isEnabled');
+
+		this.listenTo(sectionActionView, 'hideTitle', () => {
 			editor.execute('hideTitle');
 		});
 
-		return sectionActionView;
-	}
-
-	enableEditingSectionTitle() {
-		const editor = this.editor;
-		const viewDocument = editor.editing.view.document;
-
-		this.listenTo(viewDocument, 'click', () => {
-			const selectedSectionTitle = this.getSelectedSectionTitle();
-
-			if (selectedSectionTitle) {
-				this.showUI();
-			}
+		this.listenTo(sectionActionView, 'toggleOptional', () => {
+			editor.execute('toggleOptional');
 		});
 
-		this.editor.keystrokes.set('Esc', cancel => {
-			if (this.areUIsVisible) {
-				this.hideUI();
-				cancel();
-			}
-		});
-
-		clickOutsideHandler({
-			emitter: this.formView,
-			activator: () => this.areUIsVisible,
-			contextElements: [this.balloon.view.element],
-			callback: () => this.hideUI()
-		});
-	}
-
-	showUI() {
-		this.addActionView();
-		// this.startUpdatingSectionUI();
-	}
-
-	hideUI() {
-		if (!this.areUIsInPanel) {
-			return;
-		}
-
-		const editor = this.editor;
-
-		this.stopListening(editor.ui, 'update');
-
-		this.removeFormView();
-
-		if (this.balloon.hasView(this.actionView)) {
-			this.balloon.remove(this.actionView);
-		}
-
-		editor.editing.view.focus();
-	}
-
-	getSelectedSectionTitle() {
-		const selection = this.editor.editing.view.document.selection;
-		return this.findSelectionAncestor(selection.getFirstPosition());
-	}
-
-	findSelectionAncestor(position) {
-		return position
-			.getAncestors()
-			.reverse()
-			.find(ancestor => this.isSectionTitle(ancestor));
-	}
-
-	isSectionTitle(node) {
-		return (
-			node.is('containerElement', 'p') &&
-			node.hasAttribute('section_title')
-		);
-	}
-
-	createToolbarSectionButton() {
-		const editor = this.editor;
-		const hideTitleCommand = editor.commands.get('hideTitle');
-		const t = editor.t;
-
-		editor.ui.componentFactory.add('hideTitle', locale => {
-			const button = new ButtonView(locale);
-
-			button.set({
-				isEnabled: true,
-				label: t('Hide Title'),
-				icon: linkIcon,
-				tooltip: true
-			});
-
-			// bind button state to command
-			button.bind('isEnabled').to(hideTitleCommand, 'isEnabled');
-
-			this.listenTo(button, 'execute', () => {
-				editor.execute('hideTitle');
-			});
-
-			return button;
-		});
-	}
-
-	createActionView() {
-		const editor = this.editor;
-		const actionView = new ActionView(editor.locale);
-
-		this.listenTo(actionView, 'editTitle', () => {
+		this.listenTo(sectionActionView, 'edit', () => {
 			this.addFormView();
 		});
 
-		return actionView;
+		return sectionActionView;
 	}
 
 	createFormView() {
@@ -228,19 +174,35 @@ export default class SectionUI extends Plugin {
 				'changeTitle',
 				formView.titleInputView.inputView.element.value
 			);
-			this.hideUI();
+			this.hideSectionUI();
 		});
 
 		this.listenTo(formView, 'cancel', () => {
-			this.hideUI();
+			this.hideSectionUI();
 		});
 
-		formView.keystrokes.set('Esc', cancel => {
-			this.hideUI();
+		formView.keystrokes.set('Esc', (data, cancel) => {
+			this.hideSectionUI();
 			cancel();
 		});
 
 		return formView;
+	}
+
+	// TODO: check if form in panel
+	addFormView() {
+		// if (this.isFormInPanel()) {
+		// 	return;
+		// }
+		const editor = this.editor;
+		const changeTitleCommand = editor.commands.get('changeTitle');
+
+		this.panelView.content.remove(this.sectionActionView);
+		this.panelView.content.add(this.formView);
+		this.panelView.pin(this.getSectionBalloonPositionData());
+		this.formView.titleInputView.select();
+		this.formView.titleInputView.element.value =
+			changeTitleCommand.value || '';
 	}
 
 	removeFormView() {
@@ -250,45 +212,21 @@ export default class SectionUI extends Plugin {
 		}
 	}
 
-	addFormView() {
-		if (this.isFormInPanel()) {
-			return;
-		}
+	startUpdatingSectionUI() {
 		const editor = this.editor;
-		const changeTitleCommand = editor.commands.get('changeTitle');
+		let prevSelectedSection = this.getSelectedSectionElement();
 
-		this.balloon.add({
-			view: this.formView,
-			position: this.getBalloonPositionData()
+		this.listenTo(editor.ui, 'update', () => {
+			const selectedSectionElelemt = this.getSelectedSectionElement();
+
+			if (prevSelectedSection && !selectedSectionElelemt) {
+				this.hideSectionUI();
+			} else {
+				this.balloon.updatePosition(
+					this.getSectionBalloonPositionData()
+				);
+			}
 		});
-
-		this.formView.titleInputView.select();
-		this.formView.titleInputView.element.value =
-			changeTitleCommand.value || '';
-	}
-
-	addActionView() {
-		if (this.balloon.hasView(this.actionView)) {
-			return;
-		}
-
-		this.balloon.add({
-			view: this.actionView,
-			position: this.getBalloonPositionData()
-		});
-	}
-
-	getBalloonPositionData() {
-		const view = this.editor.editing.view;
-		const targetBlock = this.getSelectedSectionTitle();
-
-		const target = targetBlock
-			? view.domConverter.mapViewToDom(targetBlock)
-			: null;
-
-		return {
-			target
-		};
 	}
 
 	areUIsInPanel() {
@@ -311,23 +249,5 @@ export default class SectionUI extends Plugin {
 
 	areActionsVisible() {
 		return this.balloon.visibleView === this.actionView;
-	}
-
-	startUpdatingSectionUI() {
-		const editor = this.editor;
-		let prevSelectedSection = this.getSelectedSectionElement();
-
-		// TODO: define callbacks
-		this.listenTo(editor.ui, 'update', () => {
-			const selectedSectionElelemt = this.getSelectedSectionElement();
-
-			if (prevSelectedSection && !selectedSectionElelemt) {
-				this.hideSectionUI();
-			} else {
-				this.balloon.updatePosition(
-					this.getSectionBalloonPositionData()
-				);
-			}
-		});
 	}
 }

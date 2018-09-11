@@ -15,6 +15,6 @@
 	border-style: dotted;
 }
 
-.contract-section:before {
-	content: attr(title);
+.contract-section {
+	border: 5px solid rebeccapurple;
 }

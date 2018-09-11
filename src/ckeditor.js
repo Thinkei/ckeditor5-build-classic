@@ -61,8 +61,8 @@ ClassicEditor.defaultConfig = {
 			'blockQuote',
 			'undo',
 			'redo',
-			'addBlock',
-			'hideTitle'
+			'addBlock'
+			// 'hideTitle'
 		]
 	},
 	image: {
@@ -175,7 +175,6 @@ ClassicEditor.create(document.querySelector('#editor'))
 			</contract_section>
 			<contract_section hide_title="false" hide_title_in_document="false" id="811996" is_show="true" optional="false" premium="false"
 			title="Early Bird">
-
 
 			</contract_section>
 			`

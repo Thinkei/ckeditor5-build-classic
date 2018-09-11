@@ -1,5 +1,6 @@
 import View from '@ckeditor/ckeditor5-ui/src/view';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
 
 export default class BlockActionView extends View {
@@ -21,6 +22,8 @@ export default class BlockActionView extends View {
 			},
 			children: [this.toggleButtonView]
 		});
+
+		this.keystrokes = new KeystrokeHandler();
 	}
 
 	createButton(label, icon, eventName) {

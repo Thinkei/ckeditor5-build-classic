@@ -41,8 +41,10 @@ export default class BlockUI extends Plugin {
 				this.showToolbar();
 			}
 		});
+
+		// TODO: handle this
 		// Close the panel on the Esc key press when the editable has focus and the balloon is visible.
-		this.editor.keystrokes.set('Esc', cancel => {
+		this.editor.keystrokes.set('Esc', (data, cancel) => {
 			if (this.isToolbarVisible) {
 				this.hideToolbar();
 				cancel();
