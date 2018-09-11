@@ -41,13 +41,6 @@ export default class SectionUI extends Plugin {
 			this.hideSectionUI();
 			cancel();
 		});
-
-		// clickOutsideHandler({
-		// 	emitter: this.sectionActionView,
-		// 	activator: () => this.isViewInContent(this.sectionActionView),
-		// 	contextElement: [this.panelView.content],
-		// 	callback: () => this.hideSectionUI()
-		// });
 	}
 
 	getSelectedSectionElement() {
@@ -85,10 +78,20 @@ export default class SectionUI extends Plugin {
 		if (!this.isPanelInViewBody(this.panelView)) {
 			this.editor.ui.view.body.add(this.panelView);
 			this.editor.ui.focusTracker.add(this.panelView.element);
+
+			clickOutsideHandler({
+				emitter: this.sectionActionView,
+				activator: () => this.isViewInContent(this.sectionActionView),
+				contextElements: [this.panelView.element],
+				callback: () => this.hideSectionUI()
+			});
 		}
-		if (!this.isViewInContent(this.sectionActionView)) {
-			this.panelView.content.add(this.sectionActionView);
-		}
+
+		this.isPanelEmpty(this.panelView.content) &&
+		!this.isViewInContent(this.sectionActionView)
+			? this.panelView.content.add(this.sectionActionView)
+			: null;
+
 		this.panelView.pin(this.getSectionBalloonPositionData());
 	}
 
@@ -104,15 +107,26 @@ export default class SectionUI extends Plugin {
 		);
 	}
 
+	isPanelEmpty(viewCollection) {
+		return viewCollection.length === 0;
+	}
+
 	getSectionBalloonPositionData() {
 		const view = this.editor.editing.view;
 		const targetSection = this.getSelectedSectionElement();
+		const positions = BalloonPanelView.defaultPositions;
 
 		const target = targetSection
 			? view.domConverter.mapViewToDom(targetSection)
 			: null;
 
-		return { target };
+		return {
+			target,
+			positions: [
+				positions.southEastArrowNorthWest,
+				positions.northEastArrowSouthEast
+			]
+		};
 	}
 
 	// TODO: handle 'esc' key press
