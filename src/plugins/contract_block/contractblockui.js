@@ -1,6 +1,7 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
+import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
@@ -210,13 +211,18 @@ export default class BlockUI extends Plugin {
 	getBalloonPositionData() {
 		const view = this.editor.editing.view;
 		const targetBlock = getSelectedBlockElement(editor, 'view');
+		const positions = BalloonPanelView.defaultPositions;
 
 		const target = targetBlock
 			? view.domConverter.mapViewToDom(targetBlock)
 			: null;
 
 		return {
-			target
+			target,
+			positions: [
+				positions.northWestArrowSouthWest,
+				positions.southWestArrowNorthWest
+			]
 		};
 	}
 
