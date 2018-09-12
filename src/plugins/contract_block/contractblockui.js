@@ -7,6 +7,7 @@ import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
 
 import { ToggleCommand } from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
+import BlockFormView from './ui/formview';
 import { getSelectedBlockElement } from './utils';
 
 export default class BlockUI extends Plugin {
@@ -19,6 +20,7 @@ export default class BlockUI extends Plugin {
 		this.balloon = editor.plugins.get(ContextualBalloon);
 
 		this.actionsView = this.createActionsView();
+		this.formView = this.createFormView();
 		this.createToolbarBlockButton();
 
 		editor.editing.view.addObserver(ClickObserver);
@@ -42,7 +44,6 @@ export default class BlockUI extends Plugin {
 			}
 		});
 
-		// TODO: handle this
 		// Close the panel on the Esc key press when the editable has focus and the balloon is visible.
 		this.editor.keystrokes.set('Esc', (data, cancel) => {
 			if (this.isToolbarVisible) {
@@ -57,6 +58,14 @@ export default class BlockUI extends Plugin {
 			contextElements: [this.balloon.view.element],
 			callback: () => this.hideToolbar()
 		});
+	}
+
+	// create form view
+	createFormView() {
+		const editor = this.editor;
+		// TODO: define edit block group command
+		const editBlockGroupCommand = new BlockGroupCommand(editor);
+		const blockFormView = new BlockFormView(editor.locale);
 	}
 
 	// create actions view
