@@ -140,6 +140,28 @@ export class BlockGroupCommand extends Command {
 	}
 
 	execute(blockGroupValue) {
-		console.log('value', blockGroupValue);
+		const editor = this.editor;
+		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
+
+		selectedBlockElement && blockGroupValue !== ''
+			? this.editBlockGroup(selectedBlockElement, blockGroupValue)
+			: null;
+	}
+
+	editBlockGroup(selectedBlockElement, blockGroupValue) {
+		editor.model.change(modelWriter => {
+			modelWriter.setAttribute(
+				'block_group',
+				blockGroupValue,
+				selectedBlockElement
+			);
+		});
+		editor.editing.view.change(viewWriter => {
+			viewWriter.setAttribute(
+				'block_group',
+				blockGroupValue,
+				this.editor.editing.mapper.toViewElement(selectedBlockElement)
+			);
+		});
 	}
 }
