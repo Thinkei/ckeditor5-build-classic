@@ -3,7 +3,7 @@ import VariableStringEditing from './variablestringediting';
 import VariableStringUI from './variablestringui';
 import './styles.css';
 
-export default class ContractBlock extends Plugin {
+export default class VariableString extends Plugin {
 	static get requires() {
 		return [VariableStringEditing, VariableStringUI];
 	}

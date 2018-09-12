@@ -21,6 +21,7 @@ import { defineSchema } from './schema';
 import { addConverterHelpers } from './helpers';
 import ContractBlock from './plugins/contract_block';
 import ContractSection from './plugins/contract_section';
+import VariableString from './plugins/variable_string';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -43,7 +44,8 @@ ClassicEditor.builtinPlugins = [
 	List,
 	Paragraph,
 	ContractBlock,
-	ContractSection
+	ContractSection,
+	VariableString
 ];
 
 // Editor configuration.
@@ -61,8 +63,8 @@ ClassicEditor.defaultConfig = {
 			'blockQuote',
 			'undo',
 			'redo',
-			'addBlock'
-			// 'hideTitle'
+			'addBlock',
+			'addVarString'
 		]
 	},
 	image: {
