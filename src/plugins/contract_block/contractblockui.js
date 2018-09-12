@@ -195,6 +195,8 @@ export default class BlockUI extends Plugin {
 			view: this.formView,
 			position: this.getBalloonPositionData()
 		});
+
+		this.formView.inputView.select();
 	}
 
 	// add toolbar to balloon's stack
