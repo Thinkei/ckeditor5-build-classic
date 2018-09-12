@@ -1,12 +1,14 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
+import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
 
-import { ToggleCommand } from './contractblockcommand';
+import { ToggleCommand, BlockGroupCommand } from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
+import BlockFormView from './ui/formview';
 import { getSelectedBlockElement } from './utils';
 
 export default class BlockUI extends Plugin {
@@ -15,10 +17,9 @@ export default class BlockUI extends Plugin {
 	}
 	init() {
 		const editor = this.editor;
-
 		this.balloon = editor.plugins.get(ContextualBalloon);
-
 		this.actionsView = this.createActionsView();
+		this.formView = this.createFormView();
 		this.createToolbarBlockButton();
 
 		editor.editing.view.addObserver(ClickObserver);
@@ -42,7 +43,6 @@ export default class BlockUI extends Plugin {
 			}
 		});
 
-		// TODO: handle this
 		// Close the panel on the Esc key press when the editable has focus and the balloon is visible.
 		this.editor.keystrokes.set('Esc', (data, cancel) => {
 			if (this.isToolbarVisible) {
@@ -59,6 +59,39 @@ export default class BlockUI extends Plugin {
 		});
 	}
 
+	// create form view
+	createFormView() {
+		const editor = this.editor;
+		const editBlockGroupCommand = editor.commands.get('editBlockGroup');
+		const blockFormView = new BlockFormView(editor.locale);
+
+		blockFormView.inputView
+			.bind('isReadOnly')
+			.to(editBlockGroupCommand, 'isEnabled', value => !value);
+		blockFormView.saveButtonView
+			.bind('isEnabled')
+			.to(editBlockGroupCommand, 'isEnabled');
+
+		this.listenTo(blockFormView, 'submit', () => {
+			editor.execute(
+				'editBlockGroup',
+				blockFormView.inputView.inputView.element.value
+			);
+			this.hideToolbar();
+		});
+
+		this.listenTo(blockFormView, 'cancel', () => {
+			this.hideToolbar();
+		});
+
+		blockFormView.keystrokes.set('Esc', (data, cancel) => {
+			this.hideToolbar();
+			cancel();
+		});
+
+		return blockFormView;
+	}
+
 	// create actions view
 	createActionsView() {
 		const editor = this.editor;
@@ -68,6 +101,10 @@ export default class BlockUI extends Plugin {
 
 		this.listenTo(blockActionView, 'toggle', () => {
 			editor.execute('toggle');
+		});
+
+		this.listenTo(blockActionView, 'editGroup', () => {
+			this.addFormView();
 		});
 
 		return blockActionView;
@@ -117,6 +154,9 @@ export default class BlockUI extends Plugin {
 		// update ui
 		this.stopListening(editor.ui, 'update');
 		// remove toolbars
+		if (this.balloon.hasView(this.formView)) {
+			this.balloon.remove(this.formView);
+		}
 		this.balloon.remove(this.actionsView);
 		// remove highlight class by executing PostFixers loop
 		view.change(writer => {
@@ -145,6 +185,20 @@ export default class BlockUI extends Plugin {
 		});
 	}
 
+	// add form view
+	addFormView() {
+		if (this.balloon.hasView(this.formView)) {
+			return;
+		}
+
+		this.balloon.add({
+			view: this.formView,
+			position: this.getBalloonPositionData()
+		});
+
+		this.formView.inputView.select();
+	}
+
 	// add toolbar to balloon's stack
 	addToolbars() {
 		// toolbar already exist then returns
@@ -162,13 +216,18 @@ export default class BlockUI extends Plugin {
 	getBalloonPositionData() {
 		const view = this.editor.editing.view;
 		const targetBlock = getSelectedBlockElement(editor, 'view');
+		const positions = BalloonPanelView.defaultPositions;
 
 		const target = targetBlock
 			? view.domConverter.mapViewToDom(targetBlock)
 			: null;
 
 		return {
-			target
+			target,
+			positions: [
+				positions.northWestArrowSouthWest,
+				positions.southWestArrowNorthWest
+			]
 		};
 	}
 

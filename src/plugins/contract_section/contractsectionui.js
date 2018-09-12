@@ -4,7 +4,6 @@ import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextu
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
-import linkIcon from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
 
 import FormView from './ui/formview';
 import { SectionActionView } from './ui/actionsview';
@@ -73,7 +72,6 @@ export default class SectionUI extends Plugin {
 		this.panelView.hide();
 	}
 
-	// TODO: check if the panel is empty then add
 	addSectionActionView() {
 		if (!this.isPanelInViewBody(this.panelView)) {
 			this.editor.ui.view.body.add(this.panelView);
@@ -81,34 +79,18 @@ export default class SectionUI extends Plugin {
 
 			clickOutsideHandler({
 				emitter: this.sectionActionView,
-				activator: () => this.isViewInContent(this.sectionActionView),
+				activator: () => this.isActionInContent(this.sectionActionView),
 				contextElements: [this.panelView.element],
 				callback: () => this.hideSectionUI()
 			});
 		}
 
 		this.isPanelEmpty(this.panelView.content) &&
-		!this.isViewInContent(this.sectionActionView)
+		!this.isActionInContent(this.sectionActionView)
 			? this.panelView.content.add(this.sectionActionView)
 			: null;
 
 		this.panelView.pin(this.getSectionBalloonPositionData());
-	}
-
-	isPanelInViewBody(panelView) {
-		return this.editor.ui.view.body.get(
-			this.editor.ui.view.body.getIndex(panelView)
-		);
-	}
-
-	isViewInContent(view) {
-		return this.panelView.content.get(
-			this.panelView.content.getIndex(view)
-		);
-	}
-
-	isPanelEmpty(viewCollection) {
-		return viewCollection.length === 0;
 	}
 
 	getSectionBalloonPositionData() {
@@ -129,7 +111,6 @@ export default class SectionUI extends Plugin {
 		};
 	}
 
-	// TODO: handle 'esc' key press
 	createSectionActionView() {
 		const editor = this.editor;
 		const sectionActionView = new SectionActionView(editor.locale);
@@ -189,11 +170,10 @@ export default class SectionUI extends Plugin {
 		return formView;
 	}
 
-	// TODO: check if form in panel
 	addFormView() {
-		// if (this.isFormInPanel()) {
-		// 	return;
-		// }
+		if (this.isFormInContent(this.formView)) {
+			return;
+		}
 		const editor = this.editor;
 		const changeTitleCommand = editor.commands.get('changeTitle');
 
@@ -203,13 +183,6 @@ export default class SectionUI extends Plugin {
 		this.formView.titleInputView.select();
 		this.formView.titleInputView.element.value =
 			changeTitleCommand.value || '';
-	}
-
-	removeFormView() {
-		if (this.isFormInPanel()) {
-			this.balloon.remove(this.formView);
-			this.editor.editing.view.focus();
-		}
 	}
 
 	startUpdatingSectionUI() {
@@ -229,25 +202,25 @@ export default class SectionUI extends Plugin {
 		});
 	}
 
-	areUIsInPanel() {
-		return this.isFormInPanel || this.areActionsInPanel;
+	isPanelInViewBody(panelView) {
+		return this.editor.ui.view.body.get(
+			this.editor.ui.view.body.getIndex(panelView)
+		);
 	}
 
-	isFormInPanel() {
-		return this.balloon.hasView(this.formView);
+	isActionInContent(view) {
+		return this.panelView.content.get(
+			this.panelView.content.getIndex(view)
+		);
 	}
 
-	areActionsInPanel() {
-		return this.balloon.hasView(this.actionView);
+	isFormInContent(form) {
+		return this.panelView.content.get(
+			this.panelView.content.getIndex(form)
+		);
 	}
 
-	areUIsVisible() {
-		const visibleView = this.balloon.visibleView;
-
-		return visibleView == this.formView || this.areActionsVisible;
-	}
-
-	areActionsVisible() {
-		return this.balloon.visibleView === this.actionView;
+	isPanelEmpty(viewCollection) {
+		return viewCollection.length === 0;
 	}
 }

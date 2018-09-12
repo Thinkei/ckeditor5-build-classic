@@ -133,3 +133,35 @@ export class AddBlockCommand extends Command {
 		});
 	}
 }
+
+export class BlockGroupCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute(blockGroupValue) {
+		const editor = this.editor;
+		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
+
+		selectedBlockElement && blockGroupValue !== ''
+			? this.editBlockGroup(selectedBlockElement, blockGroupValue)
+			: null;
+	}
+
+	editBlockGroup(selectedBlockElement, blockGroupValue) {
+		editor.model.change(modelWriter => {
+			modelWriter.setAttribute(
+				'block_group',
+				blockGroupValue,
+				selectedBlockElement
+			);
+		});
+		editor.editing.view.change(viewWriter => {
+			viewWriter.setAttribute(
+				'block_group',
+				blockGroupValue,
+				this.editor.editing.mapper.toViewElement(selectedBlockElement)
+			);
+		});
+	}
+}
