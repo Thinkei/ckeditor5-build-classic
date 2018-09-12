@@ -133,3 +133,13 @@ export class AddBlockCommand extends Command {
 		});
 	}
 }
+
+export class BlockGroupCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute(blockGroupValue) {
+		console.log('value', blockGroupValue);
+	}
+}
