@@ -5,7 +5,7 @@ import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsid
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
 
-import { ToggleCommand } from './contractblockcommand';
+import { ToggleCommand, BlockGroupCommand } from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
 import BlockFormView from './ui/formview';
 import { getSelectedBlockElement } from './utils';
@@ -16,9 +16,7 @@ export default class BlockUI extends Plugin {
 	}
 	init() {
 		const editor = this.editor;
-
 		this.balloon = editor.plugins.get(ContextualBalloon);
-
 		this.actionsView = this.createActionsView();
 		this.formView = this.createFormView();
 		this.createToolbarBlockButton();
@@ -63,8 +61,7 @@ export default class BlockUI extends Plugin {
 	// create form view
 	createFormView() {
 		const editor = this.editor;
-		// TODO: define edit block group command
-		const editBlockGroupCommand = new BlockGroupCommand(editor);
+		const editBlockGroupCommand = editor.commands.get('editBlockGroup');
 		const blockFormView = new BlockFormView(editor.locale);
 
 		blockFormView.inputView
@@ -91,7 +88,7 @@ export default class BlockUI extends Plugin {
 			cancel();
 		});
 
-		return formView;
+		return blockFormView;
 	}
 
 	// create actions view
@@ -103,6 +100,10 @@ export default class BlockUI extends Plugin {
 
 		this.listenTo(blockActionView, 'toggle', () => {
 			editor.execute('toggle');
+		});
+
+		this.listenTo(blockActionView, 'editGroup', () => {
+			this.addFormView();
 		});
 
 		return blockActionView;
@@ -177,6 +178,18 @@ export default class BlockUI extends Plugin {
 				this.balloon.updatePosition(balloonPosition);
 			}
 			prevSelectedBlock = selectedBlock;
+		});
+	}
+
+	// add form view
+	addFormView() {
+		if (this.balloon.hasView(this.formView)) {
+			return;
+		}
+
+		this.balloon.add({
+			view: this.formView,
+			position: this.getBalloonPositionData()
 		});
 	}
 
