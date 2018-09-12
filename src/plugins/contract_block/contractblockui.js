@@ -154,6 +154,9 @@ export default class BlockUI extends Plugin {
 		// update ui
 		this.stopListening(editor.ui, 'update');
 		// remove toolbars
+		if (this.balloon.hasView(this.formView)) {
+			this.balloon.remove(this.formView);
+		}
 		this.balloon.remove(this.actionsView);
 		// remove highlight class by executing PostFixers loop
 		view.change(writer => {
