@@ -1,0 +1,86 @@
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import LabeledInputView from '@ckeditor/ckeditor5-ui/src/labeledinput/labeledinputview';
+import InputTextView from '@ckeditor/ckeditor5-ui/src/inputtext/inputtextview';
+import submitHandler from '@ckeditor/ckeditor5-ui/src/bindings/submithandler';
+import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
+import checkIcon from '@ckeditor/ckeditor5-core/theme/icons/check.svg';
+import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
+
+export default class BlockFormView extends View {
+	constructor(locale) {
+		super(locale);
+		const t = locale.t;
+
+		this.inputView = this.createInput();
+
+		this.saveButtonView = this.createButton(
+			t('Save'),
+			checkIcon,
+			'ck-button-save'
+		);
+		this.saveButtonView.type = 'submit';
+
+		this.cancelButtonView = this.createButton(
+			t('Cancel'),
+			cancelIcon,
+			'ck-button-cancel',
+			'cancel'
+		);
+
+		this.setTemplate({
+			tag: 'form',
+			attributes: {
+				class: ['ck', 'ck-link-form'],
+				tabindex: '-1'
+			},
+			children: [
+				this.inputView,
+				this.saveButtonView,
+				this.cancelButtonView
+			]
+		});
+
+		this.keystrokes = new KeystrokeHandler();
+	}
+
+	render() {
+		super.render();
+
+		submitHandler({
+			view: this
+		});
+
+		this.keystrokes.listenTo(this.element);
+	}
+
+	createInput() {
+		const t = this.t;
+
+		const labeledInput = new LabeledInputView(this.locale, InputTextView);
+		labeledInput.label = t('Block Group');
+
+		return labeledInput;
+	}
+
+	createButton(label, icon, className, eventName) {
+		const button = new ButtonView(this.locale);
+
+		button.set({
+			label,
+			icon,
+			tooltip: true
+		});
+
+		button.extendTemplate({
+			attributes: {
+				class: className
+			}
+		});
+
+		if (eventName) {
+			button.delegate('execute').to(this, eventName);
+		}
+
+		return button;
+	}
+}
