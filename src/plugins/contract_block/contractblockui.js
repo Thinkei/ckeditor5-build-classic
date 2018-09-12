@@ -66,6 +66,32 @@ export default class BlockUI extends Plugin {
 		// TODO: define edit block group command
 		const editBlockGroupCommand = new BlockGroupCommand(editor);
 		const blockFormView = new BlockFormView(editor.locale);
+
+		blockFormView.inputView
+			.bind('isReadOnly')
+			.to(editBlockGroupCommand, 'isEnabled', value => !value);
+		blockFormView.saveButtonView
+			.bind('isEnabled')
+			.to(editBlockGroupCommand, 'isEnabled');
+
+		this.listenTo(blockFormView, 'submit', () => {
+			editor.execute(
+				'editBlockGroup',
+				blockFormView.inputView.inputView.element.value
+			);
+			this.hideToolbar();
+		});
+
+		this.listenTo(blockFormView, 'cancel', () => {
+			this.hideToolbar();
+		});
+
+		blockFormView.keystrokes.set('Esc', (data, cancel) => {
+			this.hideToolbar();
+			cancel();
+		});
+
+		return formView;
 	}
 
 	// create actions view
