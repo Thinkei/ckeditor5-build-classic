@@ -2,6 +2,7 @@ import View from '@ckeditor/ckeditor5-ui/src/view';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
+import linkIcon from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
 
 export default class BlockActionView extends View {
 	constructor(locale) {
@@ -14,13 +15,19 @@ export default class BlockActionView extends View {
 			'toggle'
 		);
 
+		this.editGroupView = this.createButton(
+			t('Edit Block Group'),
+			linkIcon,
+			'editGroup'
+		);
+
 		this.setTemplate({
 			tag: 'div',
 			attributes: {
 				class: ['ck', 'ck-link-actions'],
 				tabindex: '-1'
 			},
-			children: [this.toggleButtonView]
+			children: [this.toggleButtonView, this.editGroupView]
 		});
 
 		this.keystrokes = new KeystrokeHandler();

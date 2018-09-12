@@ -4,7 +4,6 @@ import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextu
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
-import linkIcon from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
 
 import FormView from './ui/formview';
 import { SectionActionView } from './ui/actionsview';
