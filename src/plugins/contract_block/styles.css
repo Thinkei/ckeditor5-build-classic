@@ -3,6 +3,10 @@
 	border-radius: 5px;
 }
 
+.contract-block:before {
+	content: attr(block_group);
+}
+
 .contract-block-dotted {
 	border: 2px solid black;
 	border-radius: 5px;
