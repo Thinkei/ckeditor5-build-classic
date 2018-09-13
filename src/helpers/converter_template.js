@@ -5,7 +5,7 @@ import {
 	createBlockElement,
 	createSectionElement,
 	createSectionTitleElement,
-	createVarStringElement,
+	createViewVariableElement,
 	mapModelToHTML
 } from './utils';
 
@@ -69,10 +69,26 @@ export const converterHelperTemplate = (editor, htmlTagName) => {
 						);
 					}
 					case 'variable_string': {
-						return createVarStringElement(
+						return createViewVariableElement(
 							viewWriter,
 							modelElement,
 							htmlTagName
+						);
+					}
+					case 'variable_select': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName,
+							'fas fa-sort-down'
+						);
+					}
+					case 'variable_date': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName,
+							'fas fa-calendar-alt'
 						);
 					}
 					default: {
