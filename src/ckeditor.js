@@ -23,6 +23,7 @@ import ContractBlock from './plugins/contract_block';
 import ContractSection from './plugins/contract_section';
 import VariableString from './plugins/variable_string';
 import VariableSelect from './plugins/variable_select';
+import VariableDate from './plugins/variable_date';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -47,7 +48,8 @@ ClassicEditor.builtinPlugins = [
 	ContractBlock,
 	ContractSection,
 	VariableString,
-	VariableSelect
+	VariableSelect,
+	VariableDate
 ];
 
 // Editor configuration.
@@ -67,7 +69,8 @@ ClassicEditor.defaultConfig = {
 			'redo',
 			'addBlock',
 			'addVarString',
-			'addVarSelect'
+			'addVarSelect',
+			'addVarDate'
 		]
 	},
 	image: {
