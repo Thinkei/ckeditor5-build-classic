@@ -1,5 +1,6 @@
+import ViewPosition from '@ckeditor/ckeditor5-engine/src/view/position';
+import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import { toBool } from '../plugins/contract_block/utils';
-import { toVariableWidget } from '../plugins/utils';
 
 export const mapModelToHTML = {
 	contract_section: 'section',
@@ -14,6 +15,10 @@ export const mapModelToHTML = {
 	tbody: 'tbody',
 	tr: 'tr',
 	td: 'td'
+};
+
+const toVariableWidget = (viewElement, viewWriter) => {
+	return toWidget(viewElement, viewWriter);
 };
 
 const blockElementSymbol = 'blockElement';
@@ -58,14 +63,26 @@ export const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
 	return sectionElement;
 };
 
-export const createVarStringElement = (
+// create view variable element
+export const createViewVariableElement = (
 	viewWriter,
 	modelElement,
-	htmlTagName
+	htmlTagName,
+	iconClassName
 ) => {
+	console.log('model', modelElement);
 	const viewElement = viewWriter.createContainerElement(
 		mapModelToHTML[htmlTagName],
 		modelElement._attrs
 	);
+	if (viewElement)
+		if (iconClassName) {
+			const position = ViewPosition.createAt(viewElement, 'end');
+			const iconElement = viewWriter.createEmptyElement('i', {
+				class: iconClassName
+			});
+			viewWriter.insert(position, iconElement);
+		}
+
 	return toVariableWidget(viewElement, viewWriter);
 };
