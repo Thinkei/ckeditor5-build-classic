@@ -93,6 +93,7 @@ ClassicEditor.create(document.querySelector('#editor'))
 				<p>
 				<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
 					variable_type="Image">logo</variable_image>
+				This text is just for testing
 			</p>
 			<contract_block block_group="" id="2000928" optional="true" probation="false" visible="true">
 			<p>
