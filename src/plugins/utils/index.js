@@ -35,9 +35,36 @@ const createVarStringModelElement = (modelWriter, position, type) => {
 	modelWriter.setSelection(Range.createOn(variableTag));
 };
 
+// TODO: define case for each 'type' when add new varible
 export const addVariable = (type, editor) => {
 	switch (type) {
 		case 'String': {
+			editor.model.change(modelWriter => {
+				const selection = editor.model.document.selection;
+				if (selection.isCollapsed) {
+					createVarStringModelElement(
+						modelWriter,
+						selection.getFirstPosition(),
+						type
+					);
+				} else {
+					const ranges = editor.model.schema.getValidRanges(
+						selection.getRanges(),
+						'variable'
+					);
+					for (const range of ranges) {
+						const position = ModelPosition.createAt(range.start);
+						modelWriter.remove(range);
+						createVarStringModelElement(
+							modelWriter,
+							position,
+							type
+						);
+					}
+				}
+			});
+		}
+		case 'Select': {
 			editor.model.change(modelWriter => {
 				const selection = editor.model.document.selection;
 				if (selection.isCollapsed) {
