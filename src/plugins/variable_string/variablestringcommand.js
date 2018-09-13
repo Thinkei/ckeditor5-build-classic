@@ -8,6 +8,6 @@ export class AddVarStringCommand extends Command {
 	}
 
 	execute() {
-		addVariable('String', this.editor);
+		addVariable('string', this.editor);
 	}
 }

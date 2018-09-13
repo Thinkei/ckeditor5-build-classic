@@ -8,6 +8,6 @@ export class AddVarSelectCommand extends Command {
 	}
 
 	execute() {
-		addVariable('Select', this.editor);
+		addVariable('select', this.editor);
 	}
 }
