@@ -22,6 +22,7 @@ import { addConverterHelpers } from './helpers';
 import ContractBlock from './plugins/contract_block';
 import ContractSection from './plugins/contract_section';
 import VariableString from './plugins/variable_string';
+import VariableSelect from './plugins/variable_select';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -45,7 +46,8 @@ ClassicEditor.builtinPlugins = [
 	Paragraph,
 	ContractBlock,
 	ContractSection,
-	VariableString
+	VariableString,
+	VariableSelect
 ];
 
 // Editor configuration.
@@ -64,7 +66,8 @@ ClassicEditor.defaultConfig = {
 			'undo',
 			'redo',
 			'addBlock',
-			'addVarString'
+			'addVarString',
+			'addVarSelect'
 		]
 	},
 	image: {
