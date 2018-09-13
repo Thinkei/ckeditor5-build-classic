@@ -1,3 +1,6 @@
+import toMap from '@ckeditor/ckeditor5-utils/src/tomap';
+import ModelPosition from '@ckeditor/ckeditor5-engine/src/model/position';
+
 export const variableStringAttributes = {
 	auto_populate: 'organisation_name',
 	id: Math.random(),
@@ -22,15 +25,39 @@ export const addVariable = (type, editor) => {
 		case 'String': {
 			editor.model.change(modelWriter => {
 				const selection = editor.model.document.selection;
-				const variableTag = modelWriter.createElement(
-					'variable_string',
-					genVariableAttribute(type)
-				);
-				modelWriter.append(
-					modelWriter.createText(`Variable-${type}`),
-					variableTag
-				);
-				modelWriter.insert(variableTag, selection.getFirstPosition());
+				if (selection.isCollapsed) {
+					const variableTag = modelWriter.createElement(
+						'variable_string',
+						genVariableAttribute(type)
+					);
+					modelWriter.append(
+						modelWriter.createText(`Variable-${type}`),
+						variableTag
+					);
+					modelWriter.insert(
+						variableTag,
+						selection.getFirstPosition()
+					);
+				} else {
+					const ranges = editor.model.schema.getValidRanges(
+						selection.getRanges(),
+						'variable'
+					);
+
+					for (const range of ranges) {
+						const position = ModelPosition.createAt(range.start);
+						modelWriter.remove(range);
+						const variableTag = modelWriter.createElement(
+							'variable_string',
+							genVariableAttribute(type)
+						);
+						modelWriter.append(
+							modelWriter.createText(`Variable-${type}`),
+							variableTag
+						);
+						modelWriter.insert(variableTag, position);
+					}
+				}
 			});
 		}
 	}
