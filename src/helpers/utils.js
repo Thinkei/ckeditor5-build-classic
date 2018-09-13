@@ -1,5 +1,5 @@
 import { toBool } from '../plugins/contract_block/utils';
-import { toVariableWidget } from '../plugins/variable_string/utils';
+import { toVariableWidget } from '../plugins/utils';
 
 export const mapModelToHTML = {
 	contract_section: 'section',
