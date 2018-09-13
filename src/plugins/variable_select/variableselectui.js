@@ -2,7 +2,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 
-export default class VariableStringUI extends Plugin {
+export default class VariableSelectUI extends Plugin {
 	init() {
 		this.createVariableSelectToolbarButton();
 	}

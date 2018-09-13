@@ -1,6 +1,7 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import VariableSelectEditing from './variableselectediting';
 import VariableSelectUI from './variableselectui';
+import './styles.css';
 
 export default class VariableSelect extends Plugin {
 	static get requires() {
