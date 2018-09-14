@@ -75,6 +75,10 @@ export const createViewVariableElement = (
 		modelElement._attrs
 	);
 
+	if (!viewElement.hasClass(modelElement.name)) {
+		viewElement._addClass(modelElement.name);
+	}
+
 	if (iconClassName) {
 		const position = ViewPosition.createAt(viewElement, 'end');
 		const iconElement = viewWriter.createEmptyElement('i', {
