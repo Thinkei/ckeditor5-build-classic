@@ -1,6 +1,6 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import boldIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/bold.svg';
+import underlineIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/underline.svg';
 
 export default class VariableImageUI extends Plugin {
 	init() {
@@ -19,7 +19,7 @@ export default class VariableImageUI extends Plugin {
 			button.set({
 				isEnabled: true,
 				label: t('Add Variable Image'),
-				icon: boldIcon,
+				icon: underlineIcon,
 				tooltip: true
 			});
 

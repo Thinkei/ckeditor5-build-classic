@@ -1,6 +1,6 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import boldIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/bold.svg';
+import strikethroughIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/strikethrough.svg';
 
 export default class VariableSignatureUI extends Plugin {
 	init() {
@@ -19,7 +19,7 @@ export default class VariableSignatureUI extends Plugin {
 			button.set({
 				isEnabled: true,
 				label: t('Add Variable Signature'),
-				icon: boldIcon,
+				icon: strikethroughIcon,
 				tooltip: true
 			});
 
