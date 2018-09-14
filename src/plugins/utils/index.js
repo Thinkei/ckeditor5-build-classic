@@ -1,5 +1,6 @@
 import ModelPosition from '@ckeditor/ckeditor5-engine/src/model/position';
 import Range from '@ckeditor/ckeditor5-engine/src/model/range';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 
 export const variableStringAttributes = {
 	auto_populate: 'organisation_name',
@@ -60,5 +61,34 @@ export const addVariable = (type, editor) => {
 				);
 			}
 		}
+	});
+};
+
+export const createVariableToolbarButton = (
+	editor,
+	plugin,
+	{ commandName, buttonName, buttonLabel, icon }
+) => {
+	const addVariableCommand = editor.commands.get(commandName);
+	const t = editor.t;
+
+	// button
+	editor.ui.componentFactory.add(buttonName, locale => {
+		const button = new ButtonView(locale);
+
+		button.set({
+			isEnabled: true,
+			label: t(buttonLabel),
+			icon,
+			tooltip: true
+		});
+
+		plugin.listenTo(button, 'execute', () => {
+			editor.execute(commandName);
+		});
+
+		button.bind('isEnabled').to(addVariableCommand, 'isEnabled');
+
+		return button;
 	});
 };
