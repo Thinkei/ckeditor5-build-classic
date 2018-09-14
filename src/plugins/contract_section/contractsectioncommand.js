@@ -64,7 +64,6 @@ export class HideTitleCommand extends Command {
 	}
 
 	insertTitleNode(modelWriter, sectionElement) {
-		console.log('title', sectionElement.getAttribute('title'));
 		const titleHTMLTag = modelWriter.createElement('section_title', {
 			id: sectionElement.getAttribute('id'),
 			section_title: true

@@ -6,7 +6,7 @@ import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsid
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
 
-import { ToggleCommand, BlockGroupCommand } from './contractblockcommand';
+import { ToggleCommand } from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
 import BlockFormView from './ui/formview';
 import { getSelectedBlockElement } from './utils';

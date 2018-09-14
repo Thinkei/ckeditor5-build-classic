@@ -79,7 +79,12 @@ export default class SectionUI extends Plugin {
 
 			clickOutsideHandler({
 				emitter: this.sectionActionView,
-				activator: () => this.isActionInContent(this.sectionActionView),
+				activator: () => {
+					return (
+						this.isActionInContent(this.sectionActionView) ||
+						this.isFormInContent(this.formView)
+					);
+				},
 				contextElements: [this.panelView.element],
 				callback: () => this.hideSectionUI()
 			});

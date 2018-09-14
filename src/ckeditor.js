@@ -21,6 +21,11 @@ import { defineSchema } from './schema';
 import { addConverterHelpers } from './helpers';
 import ContractBlock from './plugins/contract_block';
 import ContractSection from './plugins/contract_section';
+import VariableString from './plugins/variable_string';
+import VariableSelect from './plugins/variable_select';
+import VariableDate from './plugins/variable_date';
+import VariableSignature from './plugins/variable_signature_pad';
+import VariableImage from './plugins/variable_image';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -43,7 +48,12 @@ ClassicEditor.builtinPlugins = [
 	List,
 	Paragraph,
 	ContractBlock,
-	ContractSection
+	ContractSection,
+	VariableString,
+	VariableSelect,
+	VariableDate,
+	VariableSignature,
+	VariableImage
 ];
 
 // Editor configuration.
@@ -61,8 +71,12 @@ ClassicEditor.defaultConfig = {
 			'blockQuote',
 			'undo',
 			'redo',
-			'addBlock'
-			// 'hideTitle'
+			'addBlock',
+			'addVarString',
+			'addVarSelect',
+			'addVarDate',
+			'addVarSignature',
+			'addVarImage'
 		]
 	},
 	image: {
@@ -91,6 +105,7 @@ ClassicEditor.create(document.querySelector('#editor'))
 				<p>
 				<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
 					variable_type="Image">logo</variable_image>
+				This text is just for testing
 			</p>
 			<contract_block block_group="" id="2000928" optional="true" probation="false" visible="true">
 			<p>
