@@ -70,19 +70,17 @@ export const createViewVariableElement = (
 	htmlTagName,
 	iconClassName
 ) => {
-	console.log('model', modelElement);
 	const viewElement = viewWriter.createContainerElement(
 		mapModelToHTML[htmlTagName],
 		modelElement._attrs
 	);
-	if (viewElement)
-		if (iconClassName) {
-			const position = ViewPosition.createAt(viewElement, 'end');
-			const iconElement = viewWriter.createEmptyElement('i', {
-				class: iconClassName
-			});
-			viewWriter.insert(position, iconElement);
-		}
 
+	if (iconClassName) {
+		const position = ViewPosition.createAt(viewElement, 'end');
+		const iconElement = viewWriter.createEmptyElement('i', {
+			class: iconClassName
+		});
+		viewWriter.insert(position, iconElement);
+	}
 	return toVariableWidget(viewElement, viewWriter);
 };
