@@ -91,6 +91,20 @@ export const converterHelperTemplate = (editor, htmlTagName) => {
 							'fas fa-calendar-alt'
 						);
 					}
+					case 'variable_signature_pad': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
+					case 'variable_image': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
 					default: {
 						return viewWriter.createContainerElement(
 							mapModelToHTML[htmlTagName],
