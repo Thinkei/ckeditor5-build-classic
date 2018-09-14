@@ -9,7 +9,7 @@ export const variableStringAttributes = {
 	initial_value: 'init value of string',
 	required: false,
 	variable_name: 'hello',
-	variable_type: 'String',
+	variable_type: '',
 	class: ''
 };
 
@@ -26,7 +26,7 @@ const createVariableElement = (modelWriter, position, type, className) => {
 		`variable_${type}`,
 		genVariableAttributes(type, className)
 	);
-	modelWriter.append(modelWriter.createText(`variable-${type}`), variableTag);
+	modelWriter.append(modelWriter.createText(`variable_${type}`), variableTag);
 	modelWriter.insert(variableTag, position);
 	modelWriter.setSelection(Range.createOn(variableTag));
 };
@@ -96,6 +96,64 @@ export const addVariable = (type, editor) => {
 			return;
 		}
 		case 'date': {
+			editor.model.change(modelWriter => {
+				const selection = editor.model.document.selection;
+				if (selection.isCollapsed) {
+					createVariableElement(
+						modelWriter,
+						selection.getFirstPosition(),
+						type,
+						`variable_${type}`
+					);
+				} else {
+					const ranges = editor.model.schema.getValidRanges(
+						selection.getRanges(),
+						'variable'
+					);
+					for (const range of ranges) {
+						const position = ModelPosition.createAt(range.start);
+						modelWriter.remove(range);
+						createVariableElement(
+							modelWriter,
+							position,
+							type,
+							`variable_${type}`
+						);
+					}
+				}
+			});
+			return;
+		}
+		case 'signature_pad': {
+			editor.model.change(modelWriter => {
+				const selection = editor.model.document.selection;
+				if (selection.isCollapsed) {
+					createVariableElement(
+						modelWriter,
+						selection.getFirstPosition(),
+						type,
+						`variable_${type}`
+					);
+				} else {
+					const ranges = editor.model.schema.getValidRanges(
+						selection.getRanges(),
+						'variable'
+					);
+					for (const range of ranges) {
+						const position = ModelPosition.createAt(range.start);
+						modelWriter.remove(range);
+						createVariableElement(
+							modelWriter,
+							position,
+							type,
+							`variable_${type}`
+						);
+					}
+				}
+			});
+			return;
+		}
+		case 'image': {
 			editor.model.change(modelWriter => {
 				const selection = editor.model.document.selection;
 				if (selection.isCollapsed) {
