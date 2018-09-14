@@ -32,155 +32,33 @@ const createVariableElement = (modelWriter, position, type, className) => {
 };
 
 // Add variable element to model
-// TODO: define case for each 'type' when add new varible
 // TODO: refactor code here (abtract function for changing model)
 // TODO: re-define css for this class
 export const addVariable = (type, editor) => {
-	switch (type) {
-		case 'string': {
-			editor.model.change(modelWriter => {
-				const selection = editor.model.document.selection;
-				if (selection.isCollapsed) {
-					createVariableElement(
-						modelWriter,
-						selection.getFirstPosition(),
-						type,
-						`variable_${type}`
-					);
-				} else {
-					const ranges = editor.model.schema.getValidRanges(
-						selection.getRanges(),
-						'variable'
-					);
-					for (const range of ranges) {
-						const position = ModelPosition.createAt(range.start);
-						modelWriter.remove(range);
-						createVariableElement(
-							modelWriter,
-							position,
-							type,
-							`variable_${type}`
-						);
-					}
-				}
-			});
-			return;
+	editor.model.change(modelWriter => {
+		const selection = editor.model.document.selection;
+		if (selection.isCollapsed) {
+			createVariableElement(
+				modelWriter,
+				selection.getFirstPosition(),
+				type,
+				`variable_${type}`
+			);
+		} else {
+			const ranges = editor.model.schema.getValidRanges(
+				selection.getRanges(),
+				'variable'
+			);
+			for (const range of ranges) {
+				const position = ModelPosition.createAt(range.start);
+				modelWriter.remove(range);
+				createVariableElement(
+					modelWriter,
+					position,
+					type,
+					`variable_${type}`
+				);
+			}
 		}
-		case 'select': {
-			editor.model.change(modelWriter => {
-				const selection = editor.model.document.selection;
-				if (selection.isCollapsed) {
-					createVariableElement(
-						modelWriter,
-						selection.getFirstPosition(),
-						type,
-						`variable_${type}`
-					);
-				} else {
-					const ranges = editor.model.schema.getValidRanges(
-						selection.getRanges(),
-						'variable'
-					);
-					for (const range of ranges) {
-						const position = ModelPosition.createAt(range.start);
-						modelWriter.remove(range);
-						createVariableElement(
-							modelWriter,
-							position,
-							type,
-							`variable_${type}`
-						);
-					}
-				}
-			});
-			return;
-		}
-		case 'date': {
-			editor.model.change(modelWriter => {
-				const selection = editor.model.document.selection;
-				if (selection.isCollapsed) {
-					createVariableElement(
-						modelWriter,
-						selection.getFirstPosition(),
-						type,
-						`variable_${type}`
-					);
-				} else {
-					const ranges = editor.model.schema.getValidRanges(
-						selection.getRanges(),
-						'variable'
-					);
-					for (const range of ranges) {
-						const position = ModelPosition.createAt(range.start);
-						modelWriter.remove(range);
-						createVariableElement(
-							modelWriter,
-							position,
-							type,
-							`variable_${type}`
-						);
-					}
-				}
-			});
-			return;
-		}
-		case 'signature_pad': {
-			editor.model.change(modelWriter => {
-				const selection = editor.model.document.selection;
-				if (selection.isCollapsed) {
-					createVariableElement(
-						modelWriter,
-						selection.getFirstPosition(),
-						type,
-						`variable_${type}`
-					);
-				} else {
-					const ranges = editor.model.schema.getValidRanges(
-						selection.getRanges(),
-						'variable'
-					);
-					for (const range of ranges) {
-						const position = ModelPosition.createAt(range.start);
-						modelWriter.remove(range);
-						createVariableElement(
-							modelWriter,
-							position,
-							type,
-							`variable_${type}`
-						);
-					}
-				}
-			});
-			return;
-		}
-		case 'image': {
-			editor.model.change(modelWriter => {
-				const selection = editor.model.document.selection;
-				if (selection.isCollapsed) {
-					createVariableElement(
-						modelWriter,
-						selection.getFirstPosition(),
-						type,
-						`variable_${type}`
-					);
-				} else {
-					const ranges = editor.model.schema.getValidRanges(
-						selection.getRanges(),
-						'variable'
-					);
-					for (const range of ranges) {
-						const position = ModelPosition.createAt(range.start);
-						modelWriter.remove(range);
-						createVariableElement(
-							modelWriter,
-							position,
-							type,
-							`variable_${type}`
-						);
-					}
-				}
-			});
-			return;
-		}
-	}
+	});
 };
