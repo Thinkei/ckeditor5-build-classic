@@ -41,7 +41,7 @@ ClassicEditor.builtinPlugins = [
 	ImageCaption,
 	ImageStyle,
 	ImageUpload,
-	// Link,
+	Link,
 	List,
 	Paragraph,
 	ContractBlock,
