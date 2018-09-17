@@ -15,7 +15,7 @@ import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import Link from '../ckeditor5-link/src/link';
+import Link from '@ckeditor/ckeditor5-link/src/link';
 
 import { defineSchema } from './schema';
 import { addConverterHelpers } from './helpers';
@@ -44,7 +44,7 @@ ClassicEditor.builtinPlugins = [
 	ImageCaption,
 	ImageStyle,
 	ImageUpload,
-	// Link,
+	Link,
 	List,
 	Paragraph,
 	ContractBlock,
@@ -64,7 +64,7 @@ ClassicEditor.defaultConfig = {
 			'|',
 			'bold',
 			'italic',
-			// 'link',
+			'link',
 			'bulletedList',
 			'numberedList',
 			'imageUpload',
