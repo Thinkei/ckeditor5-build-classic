@@ -1,28 +1,29 @@
 // The editor creator to use.
-import ClassicEditorBase from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
-import Essentials from "@ckeditor/ckeditor5-essentials/src/essentials";
-import UploadAdapter from "@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter";
-import Autoformat from "@ckeditor/ckeditor5-autoformat/src/autoformat";
-import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
-import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
-import BlockQuote from "@ckeditor/ckeditor5-block-quote/src/blockquote";
-import EasyImage from "@ckeditor/ckeditor5-easy-image/src/easyimage";
-import Heading from "@ckeditor/ckeditor5-heading/src/heading";
-import Image from "@ckeditor/ckeditor5-image/src/image";
-import ImageToolbar from "@ckeditor/ckeditor5-image/src/imagetoolbar";
-import ImageCaption from "@ckeditor/ckeditor5-image/src/imagecaption";
-import ImageStyle from "@ckeditor/ckeditor5-image/src/imagestyle";
-import ImageUpload from "@ckeditor/ckeditor5-image/src/imageupload";
-import List from "@ckeditor/ckeditor5-list/src/list";
-import Paragraph from "@ckeditor/ckeditor5-paragraph/src/paragraph";
+import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
+import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
+import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
+import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
+import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
+import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
+import Heading from '@ckeditor/ckeditor5-heading/src/heading';
+import Image from '@ckeditor/ckeditor5-image/src/image';
+import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
+import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
+import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
+import Link from '@ckeditor/ckeditor5-link/src/link';
+import List from '@ckeditor/ckeditor5-list/src/list';
+import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
-import ContractBlock from "./plugins/contract_block";
-import ContractSection from "./plugins/contract_section";
-import VariableString from "./plugins/variable_string";
-import VariableSelect from "./plugins/variable_select";
-import VariableDate from "./plugins/variable_date";
-import VariableSignature from "./plugins/variable_signature_pad";
-import VariableImage from "./plugins/variable_image";
+import ContractBlock from './plugins/contract_block';
+import ContractSection from './plugins/contract_section';
+import VariableSelect from './plugins/variable_select';
+import VariableDate from './plugins/variable_date';
+import VariableSignature from './plugins/variable_signature_pad';
+import VariableImage from './plugins/variable_image';
+import VariableString from './plugins/variable_string';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -46,44 +47,52 @@ ClassicEditor.builtinPlugins = [
 	Paragraph,
 	ContractBlock,
 	ContractSection,
-	VariableString,
 	VariableSelect,
 	VariableDate,
 	VariableSignature,
-	VariableImage
+	VariableImage,
+	VariableString
 ];
 
 // Editor configuration.
 ClassicEditor.defaultConfig = {
 	toolbar: {
 		items: [
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			// 'link',
-			"bulletedList",
-			"numberedList",
-			"imageUpload",
-			"blockQuote",
-			"undo",
-			"redo",
-			"addBlock",
-			"addVarString",
-			"addVarSelect",
-			"addVarDate",
-			"addVarSignature",
-			"addVarImage"
+			'heading',
+			'|',
+			'bold',
+			'italic',
+			'link',
+			'bulletedList',
+			'numberedList',
+			'imageUpload',
+			'blockQuote',
+			'undo',
+			'redo',
+			'addBlock',
+			'addVarSelect',
+			'addVarDate',
+			'addVarSignature',
+			'addVarImage',
+			'addVarString'
 		]
 	},
 	image: {
 		toolbar: [
-			"imageStyle:full",
-			"imageStyle:side",
-			"|",
-			"imageTextAlternative"
+			'imageStyle:full',
+			'imageStyle:side',
+			'|',
+			'imageTextAlternative'
 		]
 	},
 	// This value must be kept in sync with the language defined in webpack.config.js.
-	language: "en"
+	language: 'en'
 };
+
+ClassicEditor.create(document.querySelector('#editor'))
+	.then(editor => {
+		window.editor = editor;
+	})
+	.catch(error => {
+		console.error(error.stack);
+	});
