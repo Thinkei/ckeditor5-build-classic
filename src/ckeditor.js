@@ -17,17 +17,6 @@ import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
-import Mapper from '@ckeditor/ckeditor5-engine/src/conversion/mapper';
-import DowncastDispatcher from '@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher';
-import ViewDocumentFragment from '@ckeditor/ckeditor5-engine/src/view/documentfragment';
-import ViewDocument from '@ckeditor/ckeditor5-engine/src/view/document';
-import ViewWriter from '@ckeditor/ckeditor5-engine/src/view/writer';
-import ModelRange from '@ckeditor/ckeditor5-engine/src/model/range';
-import {
-	insertElement,
-	insertText
-} from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
-
 import ContractBlock from './plugins/contract_block';
 import ContractSection from './plugins/contract_section';
 import VariableSelect from './plugins/variable_select';
@@ -60,8 +49,8 @@ ClassicEditor.builtinPlugins = [
 	List,
 	Paragraph,
 	ContractSection,
-	ContractBlock
-	// VariableString
+	ContractBlock,
+	VariableString
 	// VariableImage
 	// VariableSelect,
 	// VariableDate,
@@ -83,8 +72,8 @@ ClassicEditor.defaultConfig = {
 			'blockQuote',
 			'undo',
 			'redo',
-			'addBlock'
-			// 'addVarString'
+			'addBlock',
+			'addVarString'
 			// 'addVarImage'
 			// 'addVarSelect',
 			// 'addVarDate',
@@ -103,156 +92,12 @@ ClassicEditor.defaultConfig = {
 	language: 'en'
 };
 
-// ClassicEditor.create(document.querySelector('#editor'))
-// 	.then(editor => {
-// 		window.editor = editor;
-// 		defineSchema(editor);
-// 		addConverterHelpers(editor);
-// 		editor.setData(
-// 			`
-// 			<contract_section hide_title="false" hide_title_in_document="false" id="818206" is_show="true" optional="false" premium="false"
-// 			title="Logo">
-// 				<contract_block block_group="" id="2000928" optional="false" probation="false" visible="true">
-// 				<p>
-// 				<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
-// 					variable_type="Image">logo</variable_image>
-// 				This text is just for testing
-// 			</p>
-// 			<contract_block block_group="" id="2000928" optional="true" probation="false" visible="true">
-// 			<p>
-// 			<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
-// 				variable_type="Image">logo</variable_image>
-// 		</p>
-// 		&nbsp;
-// 		<p>
-// 			<variable_date auto_populate="" block_options="[]" help_text="" id="171568" initial_value="Date of Letter" required="false"
-// 				variable_name="letter_date" variable_type="Date">letter_date</variable_date>
-// 		</p>
-// 		&nbsp;
-// 		<p>
-// 			<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
-// 				required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
-// 			<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
-// 				id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
-// 			<br />
-// 			<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
-// 				required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
-// 			<br />
-// 			<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
-// 				required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
-// 			<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
-// 				initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
-// 			<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
-// 				id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
-// 		</p>
-// 			</contract_block>
-// 			&nbsp;
-// 			<p>
-// 				<variable_date auto_populate="" block_options="[]" help_text="" id="171568" initial_value="Date of Letter" required="false"
-// 					variable_name="letter_date" variable_type="Date">letter_date</variable_date>
-// 			</p>
-// 			&nbsp;
-// 			<p>
-// 				<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
-// 					required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
-// 				<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
-// 					id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
-// 				<br />
-// 				<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
-// 					required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
-// 				<br />
-// 				<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
-// 					required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
-// 				<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
-// 					initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
-// 				<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
-// 					id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
-// 			</p>
-// 				</contract_block>
-// 				<contract_block block_group="" id="2000928" optional="false" probation="false" visible="true">
-// 				<p>
-// 				<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
-// 					variable_type="Image">logo</variable_image>
-// 			</p>
-// 			&nbsp;
-// 			<p>
-// 				<variable_date auto_populate="" block_options="[]" help_text="" id="171568" initial_value="Date of Letter" required="false"
-// 					variable_name="letter_date" variable_type="Date">letter_date</variable_date>
-// 			</p>
-// 			&nbsp;
-// 			<p>
-// 				<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
-// 					required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
-// 				<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
-// 					id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
-// 				<br />
-// 				<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
-// 					required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
-// 				<br />
-// 				<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
-// 					required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
-// 				<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
-// 					initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
-// 				<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
-// 					id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
-// 			</p>
-// 				</contract_block>
-// 			</contract_section>
-// 			<contract_section hide_title="false" hide_title_in_document="false" id="811996" is_show="true" optional="false" premium="false"
-// 			title="Early Bird">
-// 			</contract_section>
-// 			`
-// 		);
-// 		// const mapper = new Mapper();
-
-// 		// const downcastDispatcher = new DowncastDispatcher({
-// 		// 	mapper
-// 		// });
-
-// 		// downcastDispatcher.on('insert:$text', insertText(), {
-// 		// 	priority: 'highest'
-// 		// });
-
-// 		// downcastDispatcher.on(
-// 		// 	'insert',
-// 		// 	insertElement((modelElement, viewWriter) => {
-// 		// 		switch (modelElement.name) {
-// 		// 			case 'paragraph':
-// 		// 				return viewWriter.createContainerElement(
-// 		// 					'p',
-// 		// 					modelElement._attrs
-// 		// 				);
-// 		// 			default:
-// 		// 				return viewWriter.createContainerElement(
-// 		// 					modelElement.name,
-// 		// 					modelElement._attrs
-// 		// 				);
-// 		// 		}
-// 		// 	}),
-// 		// 	{
-// 		// 		priority: 'high'
-// 		// 	}
-// 		// );
-
-// 		// const get = () => {
-// 		// 	const viewFragment = toView(
-// 		// 		editor.data.model.document.getRoot('main')
-// 		// 	);
-// 		// 	return editor.data.processor.toData(viewFragment);
-// 		// };
-
-// 		// const toView = modelRoot => {
-// 		// 	const modelRange = ModelRange.createIn(modelRoot);
-// 		// 	const viewDocumentFragment = new ViewDocumentFragment();
-// 		// 	const viewWriter = new ViewWriter(new ViewDocument());
-// 		// 	mapper.bindElements(modelRoot, viewDocumentFragment);
-// 		// 	downcastDispatcher.convertInsert(modelRange, viewWriter);
-// 		// 	mapper.clearBindings();
-// 		// 	return viewDocumentFragment;
-// 		// };
-// 		// get();
-// 		// console.log('get', get());
-// 	})
-// 	.catch(error => {
-// 		console.error(error.stack);
-// 	});
+ClassicEditor.create(document.querySelector('#editor'))
+	.then(editor => {
+		window.editor = editor;
+		defineSchema(editor);
+		addConverterHelpers(editor);
+	})
+	.catch(error => {
+		console.error(error.stack);
+	});
