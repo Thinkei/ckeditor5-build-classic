@@ -1,4 +1,4 @@
-export const contractBlockSchema = editor => {
+export function contractBlockSchema(editor) {
 	editor.model.schema.register('contract_block', {
 		isBlock: true,
 		isLimit: true,
@@ -11,4 +11,4 @@ export const contractBlockSchema = editor => {
 			'visible'
 		]
 	});
-};
+}

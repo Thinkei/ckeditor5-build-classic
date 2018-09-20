@@ -1,6 +1,4 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { contractBlockConverterHelper } from '../../helpers/contract_block';
-import { contractBlockSchema } from '../../schema/contractBlock';
 import {
 	ToggleCommand,
 	AddBlockCommand,
@@ -14,8 +12,6 @@ const BLOCK_ELEMENT = 'blockElement';
 export default class BlockEditing extends Plugin {
 	init() {
 		const editor = this.editor;
-		contractBlockConverterHelper(editor);
-		contractBlockSchema(editor);
 
 		// create commands for block
 		editor.commands.add('toggle', new ToggleCommand(editor));

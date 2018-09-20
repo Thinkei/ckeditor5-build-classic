@@ -6,14 +6,16 @@ import { variableSignaturePadConverterHelper } from './variable_signature_pad';
 import { variableSelectConverterHelper } from './variable_select';
 import { tableConverterHelper } from './table';
 import { sectionTitleConverterHelper } from './section_title';
+import { contractBlockConverterHelper } from './contract_block';
 
 export const addConverterHelpers = editor => {
-	contractSectionConverterHelper(editor);
-	variableStringConverterHelper(editor);
-	variableImageConverterHelper(editor);
-	variableDateConverterHelper(editor);
-	variableSignaturePadConverterHelper(editor);
-	variableSelectConverterHelper(editor);
-	tableConverterHelper(editor);
-	sectionTitleConverterHelper(editor);
+	contractBlockConverterHelper(editor);
+	// contractSectionConverterHelper(editor);
+	// variableStringConverterHelper(editor);
+	// variableImageConverterHelper(editor);
+	// variableDateConverterHelper(editor);
+	// variableSignaturePadConverterHelper(editor);
+	// variableSelectConverterHelper(editor);
+	// tableConverterHelper(editor);
+	// sectionTitleConverterHelper(editor);
 };

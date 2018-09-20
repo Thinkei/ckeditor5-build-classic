@@ -8,16 +8,18 @@ import { textSchema } from './text';
 import { paragraphSchema } from './paragraph';
 import { tableSchema } from './table';
 import { sectionTitleSchema } from './sectionTitle';
+import { contractBlockSchema } from './contractBlock';
 
-export const defineSchema = editor => {
-	paragraphSchema(editor);
-	contractSectionSchema(editor);
-	variableImageSchema(editor);
-	variableDateSchema(editor);
-	variableStringSchema(editor);
-	variableSignaturePadSchema(editor);
-	variableSelectSchema(editor);
-	textSchema(editor);
-	tableSchema(editor);
-	sectionTitleSchema(editor);
-};
+export function defineSchema(editor) {
+	contractBlockSchema(editor);
+	// paragraphSchema(editor);
+	// contractSectionSchema(editor);
+	// variableImageSchema(editor);
+	// variableDateSchema(editor);
+	// variableStringSchema(editor);
+	// variableSignaturePadSchema(editor);
+	// variableSelectSchema(editor);
+	// textSchema(editor);
+	// tableSchema(editor);
+	// sectionTitleSchema(editor);
+}
