@@ -54,57 +54,57 @@ export function converterHelperTemplate(editor, htmlTagName) {
 							htmlTagName
 						);
 					}
-					// case 'section_title': {
-					// 	return createSectionTitleElement(
-					// 		viewWriter,
-					// 		modelElement,
-					// 		htmlTagName
-					// 	);
-					// }
-					// case 'contract_section': {
-					// 	return createSectionElement(
-					// 		viewWriter,
-					// 		modelElement,
-					// 		htmlTagName
-					// 	);
-					// }
-					// case 'variable_string': {
-					// 	return createViewVariableElement(
-					// 		viewWriter,
-					// 		modelElement,
-					// 		htmlTagName
-					// 	);
-					// }
-					// case 'variable_select': {
-					// 	return createViewVariableElement(
-					// 		viewWriter,
-					// 		modelElement,
-					// 		htmlTagName,
-					// 		'fas fa-sort-down'
-					// 	);
-					// }
-					// case 'variable_date': {
-					// 	return createViewVariableElement(
-					// 		viewWriter,
-					// 		modelElement,
-					// 		htmlTagName,
-					// 		'fas fa-calendar-alt'
-					// 	);
-					// }
-					// case 'variable_signature_pad': {
-					// 	return createViewVariableElement(
-					// 		viewWriter,
-					// 		modelElement,
-					// 		htmlTagName
-					// 	);
-					// }
-					// case 'variable_image': {
-					// 	return createViewVariableElement(
-					// 		viewWriter,
-					// 		modelElement,
-					// 		htmlTagName
-					// 	);
-					// }
+					case 'section_title': {
+						return createSectionTitleElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
+					case 'contract_section': {
+						return createSectionElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
+					case 'variable_string': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
+					case 'variable_select': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName,
+							'fas fa-sort-down'
+						);
+					}
+					case 'variable_date': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName,
+							'fas fa-calendar-alt'
+						);
+					}
+					case 'variable_signature_pad': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
+					case 'variable_image': {
+						return createViewVariableElement(
+							viewWriter,
+							modelElement,
+							htmlTagName
+						);
+					}
 					default: {
 						return viewWriter.createContainerElement(
 							mapModelToHTML[htmlTagName],
@@ -113,7 +113,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					}
 				}
 			},
-			converterPriority: 'highest'
+			converterPriority: 'high'
 		})
 	);
 }

@@ -12,14 +12,14 @@ import { contractBlockSchema } from './contractBlock';
 
 export function defineSchema(editor) {
 	contractBlockSchema(editor);
-	// paragraphSchema(editor);
-	// contractSectionSchema(editor);
-	// variableImageSchema(editor);
-	// variableDateSchema(editor);
-	// variableStringSchema(editor);
-	// variableSignaturePadSchema(editor);
-	// variableSelectSchema(editor);
-	// textSchema(editor);
-	// tableSchema(editor);
-	// sectionTitleSchema(editor);
+	paragraphSchema(editor);
+	contractSectionSchema(editor);
+	variableImageSchema(editor);
+	variableDateSchema(editor);
+	variableStringSchema(editor);
+	variableSignaturePadSchema(editor);
+	variableSelectSchema(editor);
+	textSchema(editor);
+	tableSchema(editor);
+	sectionTitleSchema(editor);
 }

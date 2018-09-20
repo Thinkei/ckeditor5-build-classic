@@ -1,6 +1,6 @@
 {
 	"name": "eh-ckeditor",
-	"version": "11.0.1-21",
+	"version": "11.0.1-61",
 	"description": "The classic editor build of CKEditor 5 – the best browser-based rich text editor.",
 	"keywords": [
 		"ckeditor5-build",
@@ -44,6 +44,7 @@
 		"@ckeditor/ckeditor5-theme-lark": "^11.0.0",
 		"@ckeditor/ckeditor5-upload": "^10.0.2",
 		"babel-loader": "^8.0.2",
+		"babel-preset-es2015-node5": "^1.2.0",
 		"postcss-loader": "^2.1.5",
 		"raw-loader": "^0.5.1",
 		"serve": "^9.4.0",

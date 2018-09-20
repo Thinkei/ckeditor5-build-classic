@@ -10,12 +10,12 @@ import { contractBlockConverterHelper } from './contract_block';
 
 export const addConverterHelpers = editor => {
 	contractBlockConverterHelper(editor);
-	// contractSectionConverterHelper(editor);
-	// variableStringConverterHelper(editor);
-	// variableImageConverterHelper(editor);
-	// variableDateConverterHelper(editor);
-	// variableSignaturePadConverterHelper(editor);
-	// variableSelectConverterHelper(editor);
-	// tableConverterHelper(editor);
-	// sectionTitleConverterHelper(editor);
+	contractSectionConverterHelper(editor);
+	variableStringConverterHelper(editor);
+	variableImageConverterHelper(editor);
+	variableDateConverterHelper(editor);
+	variableSignaturePadConverterHelper(editor);
+	variableSelectConverterHelper(editor);
+	tableConverterHelper(editor);
+	sectionTitleConverterHelper(editor);
 };

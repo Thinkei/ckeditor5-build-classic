@@ -21,7 +21,7 @@ const toVariableWidget = (viewElement, viewWriter) => {
 	return toWidget(viewElement, viewWriter);
 };
 
-const blockElementSymbol = 'blockElement';
+const BLOCK_ELEMENT = 'blockElement';
 const SECTION_TITLE = 'sectionTitle';
 const SECTION_ELEMENT = 'sectionElement';
 
@@ -31,7 +31,7 @@ export function createBlockElement(viewWriter, modelElement, htmlTagName) {
 		modelElement._attrs
 	);
 
-	viewWriter.setCustomProperty(blockElementSymbol, true, blockElement);
+	viewWriter.setCustomProperty(BLOCK_ELEMENT, true, blockElement);
 	if (toBool(blockElement.getAttribute('optional')))
 		viewWriter.addClass('contract-block', blockElement);
 	else viewWriter.addClass('contract-block-dotted', blockElement);
@@ -39,52 +39,52 @@ export function createBlockElement(viewWriter, modelElement, htmlTagName) {
 	return blockElement;
 }
 
-// export const createSectionTitleElement = (
-// 	viewWriter,
-// 	modelElement,
-// 	htmlTagName
-// ) => {
-// 	const sectionTitleElement = viewWriter.createContainerElement(
-// 		mapModelToHTML[htmlTagName],
-// 		modelElement._attrs
-// 	);
+export const createSectionTitleElement = (
+	viewWriter,
+	modelElement,
+	htmlTagName
+) => {
+	const sectionTitleElement = viewWriter.createContainerElement(
+		mapModelToHTML[htmlTagName],
+		modelElement._attrs
+	);
 
-// 	viewWriter.setCustomProperty(SECTION_TITLE, true, sectionTitleElement);
-// 	return sectionTitleElement;
-// };
+	viewWriter.setCustomProperty(SECTION_TITLE, true, sectionTitleElement);
+	return sectionTitleElement;
+};
 
-// export const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
-// 	const sectionElement = viewWriter.createContainerElement(
-// 		mapModelToHTML[htmlTagName],
-// 		modelElement._attrs
-// 	);
+export const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
+	const sectionElement = viewWriter.createContainerElement(
+		mapModelToHTML[htmlTagName],
+		modelElement._attrs
+	);
 
-// 	viewWriter.setCustomProperty(SECTION_ELEMENT, true, sectionElement);
-// 	return sectionElement;
-// };
+	viewWriter.setCustomProperty(SECTION_ELEMENT, true, sectionElement);
+	return sectionElement;
+};
 
-// // create view variable element
-// export const createViewVariableElement = (
-// 	viewWriter,
-// 	modelElement,
-// 	htmlTagName,
-// 	iconClassName
-// ) => {
-// 	const viewElement = viewWriter.createContainerElement(
-// 		mapModelToHTML[htmlTagName],
-// 		modelElement._attrs
-// 	);
+// create view variable element
+export const createViewVariableElement = (
+	viewWriter,
+	modelElement,
+	htmlTagName,
+	iconClassName
+) => {
+	const viewElement = viewWriter.createContainerElement(
+		mapModelToHTML[htmlTagName],
+		modelElement._attrs
+	);
 
-// 	if (!viewElement.hasClass(modelElement.name)) {
-// 		viewElement._addClass(modelElement.name);
-// 	}
+	if (!viewElement.hasClass(modelElement.name)) {
+		viewElement._addClass(modelElement.name);
+	}
 
-// 	if (iconClassName) {
-// 		const position = ViewPosition.createAt(viewElement, 'end');
-// 		const iconElement = viewWriter.createEmptyElement('i', {
-// 			class: iconClassName
-// 		});
-// 		viewWriter.insert(position, iconElement);
-// 	}
-// 	return toVariableWidget(viewElement, viewWriter);
-// };
+	if (iconClassName) {
+		const position = ViewPosition.createAt(viewElement, 'end');
+		const iconElement = viewWriter.createEmptyElement('i', {
+			class: iconClassName
+		});
+		viewWriter.insert(position, iconElement);
+	}
+	return toVariableWidget(viewElement, viewWriter);
+};

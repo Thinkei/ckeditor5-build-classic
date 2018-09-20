@@ -27,38 +27,6 @@ export default class BlockUI extends Plugin {
 		this.enableUserBallonInteractions();
 	}
 
-	enableUserBallonInteractions() {
-		const editor = this.editor;
-		const viewDocument = editor.editing.view.document;
-		// BlockUI listen to 'click' event of View Document
-		this.listenTo(viewDocument, 'click', () => {
-			const selectedBlockElement = getSelectedBlockElement(
-				editor,
-				'view'
-			);
-
-			// show toolbar
-			if (selectedBlockElement) {
-				this.showToolbar();
-			}
-		});
-
-		// Close the panel on the Esc key press when the editable has focus and the balloon is visible.
-		this.editor.keystrokes.set('Esc', (data, cancel) => {
-			if (this.isToolbarVisible) {
-				this.hideToolbar();
-				cancel();
-			}
-		});
-		// Close on click outside of balloon panel element.
-		clickOutsideHandler({
-			emitter: this.actionsView,
-			activator: () => this.isToolbarVisible,
-			contextElements: [this.balloon.view.element],
-			callback: () => this.hideToolbar()
-		});
-	}
-
 	// create form view
 	createFormView() {
 		const editor = this.editor;
@@ -132,6 +100,38 @@ export default class BlockUI extends Plugin {
 			});
 
 			return button;
+		});
+	}
+
+	enableUserBallonInteractions() {
+		const editor = this.editor;
+		const viewDocument = editor.editing.view.document;
+		// BlockUI listen to 'click' event of View Document
+		this.listenTo(viewDocument, 'click', () => {
+			const selectedBlockElement = getSelectedBlockElement(
+				editor,
+				'view'
+			);
+
+			// show toolbar
+			if (selectedBlockElement) {
+				this.showToolbar();
+			}
+		});
+
+		// Close the panel on the Esc key press when the editable has focus and the balloon is visible.
+		this.editor.keystrokes.set('Esc', (data, cancel) => {
+			if (this.isToolbarVisible) {
+				this.hideToolbar();
+				cancel();
+			}
+		});
+		// Close on click outside of balloon panel element.
+		clickOutsideHandler({
+			emitter: this.actionsView,
+			activator: () => this.isToolbarVisible,
+			contextElements: [this.balloon.view.element],
+			callback: () => this.hideToolbar()
 		});
 	}
 
@@ -232,7 +232,7 @@ export default class BlockUI extends Plugin {
 	}
 
 	// check if actions view already exists
-	get isToolbarVisible() {
+	isToolbarVisible() {
 		return this.balloon.visibleView === this.actionsView;
 	}
 }
