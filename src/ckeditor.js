@@ -59,12 +59,12 @@ ClassicEditor.builtinPlugins = [
 	// Link,
 	// List,
 	// Paragraph,
-	// ContractSection,
 	// VariableSelect,
 	// VariableDate,
 	// VariableSignature,
 	// VariableImage,
 	// VariableString,
+	ContractSection,
 	ContractBlock
 ];
 
