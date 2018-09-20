@@ -14,7 +14,7 @@ const variableStringAttributes = {
 	class: ''
 };
 
-function createVariableElement(modelWriter, position, type, className) {
+const createVariableElement = (modelWriter, position, type, className) => {
 	const elementName = `variable_${type}`;
 	const variableTag = modelWriter.createElement(
 		elementName,
@@ -26,11 +26,11 @@ function createVariableElement(modelWriter, position, type, className) {
 	modelWriter.append(modelWriter.createText(elementName), variableTag);
 	modelWriter.insert(variableTag, position);
 	modelWriter.setSelection(Range.createOn(variableTag));
-}
+};
 
 // Add variable element to model
-export function addVariable(type, editor) {
-	editor.model.change(function(modelWriter) {
+export const addVariable = (type, editor) => {
+	editor.model.change(modelWriter => {
 		const selection = editor.model.document.selection;
 		if (selection.isCollapsed) {
 			createVariableElement(
@@ -56,18 +56,18 @@ export function addVariable(type, editor) {
 			}
 		}
 	});
-}
+};
 
-export function createVariableToolbarButton(
+export const createVariableToolbarButton = (
 	editor,
 	plugin,
 	{ commandName, buttonName, buttonLabel, icon }
-) {
+) => {
 	const addVariableCommand = editor.commands.get(commandName);
 	const t = editor.t;
 
 	// button
-	editor.ui.componentFactory.add(buttonName, function(locale) {
+	editor.ui.componentFactory.add(buttonName, locale => {
 		const button = new ButtonView(locale);
 
 		button.set({
@@ -85,4 +85,4 @@ export function createVariableToolbarButton(
 
 		return button;
 	});
-}
+};
