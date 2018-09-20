@@ -49,8 +49,8 @@ ClassicEditor.builtinPlugins = [
 	List,
 	Paragraph,
 	ContractSection,
-	ContractBlock,
-	VariableString
+	ContractBlock
+	// VariableString
 	// VariableImage,
 	// VariableSelect,
 	// VariableDate,
@@ -72,8 +72,8 @@ ClassicEditor.defaultConfig = {
 			'blockQuote',
 			'undo',
 			'redo',
-			'addBlock',
-			'addVarString'
+			'addBlock'
+			// 'addVarString'
 			// 'addVarImage',
 			// 'addVarSelect',
 			// 'addVarDate',
