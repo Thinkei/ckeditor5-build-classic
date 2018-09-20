@@ -204,7 +204,7 @@ export default class BlockUI extends Plugin {
 	// add toolbar to balloon's stack
 	addToolbars() {
 		// toolbar already exist then returns
-		if (this.isToolbarVisible) {
+		if (this.balloon.hasView(this.actionsView)) {
 			return;
 		}
 		// add toolbar
@@ -231,10 +231,5 @@ export default class BlockUI extends Plugin {
 				positions.southWestArrowNorthWest
 			]
 		};
-	}
-
-	// check if actions view already exists
-	isToolbarVisible() {
-		return this.balloon.visibleView === this.actionsView;
 	}
 }

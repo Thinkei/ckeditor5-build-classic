@@ -15,9 +15,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 		upcastElementToElement({
 			view: viewElement => {
 				if (viewElement.name === htmlTagName) {
-					return {
-						...viewElement
-					};
+					return Object.assign({}, viewElement);
 				}
 				return null;
 			},
