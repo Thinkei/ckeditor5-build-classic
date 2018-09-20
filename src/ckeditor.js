@@ -59,11 +59,11 @@ ClassicEditor.builtinPlugins = [
 	Link,
 	List,
 	Paragraph,
-	// VariableSelect,
-	// VariableDate,
-	// VariableSignature,
-	// VariableImage,
-	// VariableString,
+	VariableSelect,
+	VariableDate,
+	VariableSignature,
+	VariableImage,
+	VariableString,
 	ContractSection,
 	ContractBlock
 ];
@@ -83,11 +83,11 @@ ClassicEditor.defaultConfig = {
 			'blockQuote',
 			'undo',
 			'redo',
-			// 'addVarSelect',
-			// 'addVarDate',
-			// 'addVarSignature',
-			// 'addVarImage',
-			// 'addVarString',
+			'addVarSelect',
+			'addVarDate',
+			'addVarSignature',
+			'addVarImage',
+			'addVarString',
 			'addBlock'
 		]
 	},
