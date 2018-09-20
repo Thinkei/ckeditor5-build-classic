@@ -157,7 +157,9 @@ export default class BlockUI extends Plugin {
 		if (this.balloon.hasView(this.formView)) {
 			this.balloon.remove(this.formView);
 		}
-		this.balloon.remove(this.actionsView);
+		if (this.balloon.hasView(this.actionsView)) {
+			this.balloon.remove(this.actionsView);
+		}
 		// remove highlight class by executing PostFixers loop
 		view.change(writer => {
 			view.document._callPostFixers(writer);
