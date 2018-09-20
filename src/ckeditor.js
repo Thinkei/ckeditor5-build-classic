@@ -61,11 +61,11 @@ ClassicEditor.builtinPlugins = [
 	Paragraph,
 	ContractSection,
 	ContractBlock,
+	VariableString,
+	VariableImage
 	// VariableSelect,
 	// VariableDate,
 	// VariableSignature,
-	VariableImage,
-	VariableString
 ];
 
 // Editor configuration.
@@ -84,11 +84,11 @@ ClassicEditor.defaultConfig = {
 			'undo',
 			'redo',
 			'addBlock',
+			'addVarString',
+			'addVarImage'
 			// 'addVarSelect',
 			// 'addVarDate',
 			// 'addVarSignature',
-			'addVarImage',
-			'addVarString'
 		]
 	},
 	image: {
