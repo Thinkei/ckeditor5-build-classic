@@ -43,52 +43,52 @@ export default class ClassicEditor extends ClassicEditorBase {}
 
 // Plugins to include in the build.
 ClassicEditor.builtinPlugins = [
-	// Essentials,
-	// UploadAdapter,
-	// Autoformat,
-	// Bold,
-	// Italic,
-	// BlockQuote,
-	// EasyImage,
-	// Heading,
-	// Image,
-	// ImageToolbar,
-	// ImageCaption,
-	// ImageStyle,
-	// ImageUpload,
-	// Link,
-	// List,
-	// Paragraph,
-	ContractBlock
-	// ContractSection,
-	// VariableSelect,
-	// VariableDate,
-	// VariableSignature,
-	// VariableImage,
-	// VariableString
+	Essentials,
+	UploadAdapter,
+	Autoformat,
+	Bold,
+	Italic,
+	BlockQuote,
+	EasyImage,
+	Heading,
+	Image,
+	ImageToolbar,
+	ImageCaption,
+	ImageStyle,
+	ImageUpload,
+	Link,
+	List,
+	Paragraph,
+	ContractBlock,
+	ContractSection,
+	VariableSelect,
+	VariableDate,
+	VariableSignature,
+	VariableImage,
+	VariableString
 ];
 
 // Editor configuration.
 ClassicEditor.defaultConfig = {
 	toolbar: {
 		items: [
-			// 'heading',
-			// '|',
-			// 'bold',
-			// 'italic',
-			// 'link',
-			// 'bulletedList',
-			// 'numberedList',
-			// 'imageUpload',
-			// 'blockQuote',
-			// 'undo',
-			// 'redo',
-			// 'addBlock'
-			// 'addVarSelect',
-			// 'addVarDate',
-			// 'addVarSignature',
-			// 'addVarImage',
-			// 'addVarString'
+			'heading',
+			'|',
+			'bold',
+			'italic',
+			'link',
+			'bulletedList',
+			'numberedList',
+			'imageUpload',
+			'blockQuote',
+			'undo',
+			'redo',
+			'addBlock',
+			'addVarSelect',
+			'addVarDate',
+			'addVarSignature',
+			'addVarImage',
+			'addVarString'
 		]
 	},
 	image: {
