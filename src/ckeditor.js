@@ -47,9 +47,9 @@ ClassicEditor.builtinPlugins = [
 	ImageUpload,
 	Link,
 	List,
-	Paragraph
-	// ContractSection,
-	// ContractBlock
+	Paragraph,
+	ContractSection,
+	ContractBlock
 	// VariableString
 	// VariableImage,
 	// VariableSelect,
@@ -71,8 +71,8 @@ ClassicEditor.defaultConfig = {
 			'imageUpload',
 			'blockQuote',
 			'undo',
-			'redo'
-			// 'addBlock'
+			'redo',
+			'addBlock'
 			// 'addVarString'
 			// 'addVarImage',
 			// 'addVarSelect',
