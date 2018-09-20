@@ -47,9 +47,9 @@ ClassicEditor.builtinPlugins = [
 	ImageUpload,
 	Link,
 	List,
-	Paragraph,
-	ContractSection,
-	ContractBlock
+	Paragraph
+	// ContractSection,
+	// ContractBlock
 	// VariableString
 	// VariableImage,
 	// VariableSelect,
@@ -71,8 +71,8 @@ ClassicEditor.defaultConfig = {
 			'imageUpload',
 			'blockQuote',
 			'undo',
-			'redo',
-			'addBlock'
+			'redo'
+			// 'addBlock'
 			// 'addVarString'
 			// 'addVarImage',
 			// 'addVarSelect',
@@ -92,12 +92,12 @@ ClassicEditor.defaultConfig = {
 	language: 'en'
 };
 
-ClassicEditor.create(document.querySelector('#editor'))
-	.then(editor => {
-		window.editor = editor;
-		defineSchema(editor);
-		addConverterHelpers(editor);
-	})
-	.catch(error => {
-		console.error(error.stack);
-	});
+// ClassicEditor.create(document.querySelector('#editor'))
+// 	.then(editor => {
+// 		window.editor = editor;
+// 		defineSchema(editor);
+// 		addConverterHelpers(editor);
+// 	})
+// 	.catch(error => {
+// 		console.error(error.stack);
+// 	});
