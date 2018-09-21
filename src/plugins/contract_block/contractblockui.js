@@ -227,7 +227,6 @@ export default class BlockUI extends Plugin {
 		const target = targetBlock
 			? view.domConverter.mapViewToDom(targetBlock)
 			: null;
-
 		return {
 			target,
 			positions: [
