@@ -135,6 +135,10 @@ export default class BlockUI extends Plugin {
 		});
 	}
 
+	isToolbarVisible() {
+		return this.balloon.hasView(this.actionsView);
+	}
+
 	// show Toolbar
 	showToolbar() {
 		// no block selected then returns
