@@ -228,6 +228,7 @@ export default class BlockUI extends Plugin {
 			? view.domConverter.mapViewToDom(targetBlock)
 			: null;
 		return {
+			element: this.balloon.view.element,
 			target,
 			positions: [
 				positions.northWestArrowSouthWest,
