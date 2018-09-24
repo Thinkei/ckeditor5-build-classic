@@ -85,6 +85,14 @@ export class ToggleCommand extends Command {
 	}
 }
 
+const findBlockParentElement = element => {
+	if (!element) return;
+	if (isBlockElement(element, 'model')) {
+		return true;
+	}
+	return findBlockParentElement(element.parent);
+};
+
 export class AddBlockCommand extends Command {
 	refresh() {
 		this.isEnabled = true;
@@ -94,7 +102,7 @@ export class AddBlockCommand extends Command {
 		const editor = this.editor;
 		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
 		if (selectedBlockElement) {
-			if (isBlockElement(selectedBlockElement.parent, 'model')) {
+			if (findBlockParentElement(selectedBlockElement.parent)) {
 				return;
 			}
 			this.insertContractBlockElement();
@@ -110,14 +118,18 @@ export class AddBlockCommand extends Command {
 			const selection = editor.model.document.selection;
 			if (selection.isCollapsed) {
 				const position = selection.getFirstPosition();
+				const paragraph = modelWriter.createElement('paragraph');
+				modelWriter.insertText('\u200b', paragraph);
 				const blockElement = modelWriter.createElement(
 					'contract_block',
 					blockElementAttribute
 				);
+				modelWriter.append(paragraph, blockElement);
 				modelWriter.insert(blockElement, position);
 			} else {
 				const range = selection.getFirstRange();
 				const commonAncestor = range.getCommonAncestor();
+				const paragraph = modelWriter.createElement('paragraph');
 				const blockElement = modelWriter.createElement(
 					'contract_block',
 					blockElementAttribute
@@ -126,6 +138,7 @@ export class AddBlockCommand extends Command {
 					commonAncestor,
 					'before'
 				);
+				modelWriter.append(paragraph, blockElement);
 				modelWriter.remove(range.getCommonAncestor());
 				modelWriter.insert(blockElement, position);
 				modelWriter.append(commonAncestor, blockElement);
