@@ -1,6 +1,4 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
-import Mapper from '@ckeditor/ckeditor5-engine/src/conversion/mapper';
-import DowncastDispatcher from '@ckeditor/ckeditor5-engine/src/conversion/downcastdispatcher';
 import ViewDocumentFragment from '@ckeditor/ckeditor5-engine/src/view/documentfragment';
 import ViewDocument from '@ckeditor/ckeditor5-engine/src/view/document';
 import ViewWriter from '@ckeditor/ckeditor5-engine/src/view/writer';
