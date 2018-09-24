@@ -1,7 +1,5 @@
 export const contractSectionSchema = editor => {
 	editor.model.schema.register('contract_section', {
-		isBlock: true,
-		isLimit: true,
 		allowIn: '$root',
 		allowAttributes: [
 			'hide_title',
