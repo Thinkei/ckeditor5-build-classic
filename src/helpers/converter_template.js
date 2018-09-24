@@ -110,8 +110,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 						);
 					}
 				}
-			},
-			converterPriority: 'high'
+			}
 		})
 	);
 }

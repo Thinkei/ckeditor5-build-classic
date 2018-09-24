@@ -10,12 +10,10 @@ import {
 	insertText
 } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
-const toView = modelRoot => {
-	const mapper = new Mapper();
+const toView = (modelRoot, editor) => {
+	const mapper = editor.data.mapper;
 
-	const downcastDispatcher = new DowncastDispatcher({
-		mapper
-	});
+	const downcastDispatcher = editor.data.downcastDispatcher;
 
 	downcastDispatcher.on('insert:$text', insertText(), {
 		priority: 'highest'
@@ -25,22 +23,25 @@ const toView = modelRoot => {
 		'insert',
 		insertElement((modelElement, viewWriter) => {
 			switch (modelElement.name) {
-				case 'paragraph':
-					return viewWriter.createContainerElement(
-						'p',
-						modelElement._attrs
-					);
-				default:
+				case 'contract_section':
+				case 'contract_block':
+				case 'variable_string':
+				case 'variable_select':
+				case 'variable_date':
+				case 'variable_signature_pad':
+				case 'variable_image': {
 					return viewWriter.createContainerElement(
 						modelElement.name,
 						modelElement._attrs
 					);
+				}
 			}
 		}),
 		{
-			priority: 'high'
+			priority: 'highest'
 		}
 	);
+
 	const modelRange = ModelRange.createIn(modelRoot);
 	const viewDocumentFragment = new ViewDocumentFragment();
 	const viewWriter = new ViewWriter(new ViewDocument());
@@ -50,8 +51,8 @@ const toView = modelRoot => {
 	return viewDocumentFragment;
 };
 
-const getData = () => {
-	const viewFragment = toView(editor.data.model.document.getRoot());
+const getData = editor => {
+	const viewFragment = toView(editor.data.model.document.getRoot(), editor);
 	return editor.data.processor.toData(viewFragment);
 };
 
@@ -61,6 +62,7 @@ export class OnSaveCommamnd extends Command {
 	}
 
 	execute() {
-		getData();
+		getData(this.editor);
+		console.log('data', getData(this.editor));
 	}
 }
