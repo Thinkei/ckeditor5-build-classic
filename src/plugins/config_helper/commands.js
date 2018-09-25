@@ -1,0 +1,66 @@
+import Command from '@ckeditor/ckeditor5-core/src/command';
+import ViewDocumentFragment from '@ckeditor/ckeditor5-engine/src/view/documentfragment';
+import ViewDocument from '@ckeditor/ckeditor5-engine/src/view/document';
+import ViewWriter from '@ckeditor/ckeditor5-engine/src/view/writer';
+import ModelRange from '@ckeditor/ckeditor5-engine/src/model/range';
+import {
+	insertElement,
+	insertText
+} from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
+
+const toView = (modelRoot, editor) => {
+	const mapper = editor.data.mapper;
+
+	const downcastDispatcher = editor.data.downcastDispatcher;
+
+	downcastDispatcher.on('insert:$text', insertText(), {
+		priority: 'highest'
+	});
+
+	downcastDispatcher.on(
+		'insert',
+		insertElement((modelElement, viewWriter) => {
+			switch (modelElement.name) {
+				case 'contract_section':
+				case 'contract_block':
+				case 'variable_string':
+				case 'variable_select':
+				case 'variable_date':
+				case 'variable_signature_pad':
+				case 'variable_image': {
+					return viewWriter.createContainerElement(
+						modelElement.name,
+						modelElement._attrs
+					);
+				}
+			}
+		}),
+		{
+			priority: 'highest'
+		}
+	);
+
+	const modelRange = ModelRange.createIn(modelRoot);
+	const viewDocumentFragment = new ViewDocumentFragment();
+	const viewWriter = new ViewWriter(new ViewDocument());
+	mapper.bindElements(modelRoot, viewDocumentFragment);
+	downcastDispatcher.convertInsert(modelRange, viewWriter);
+	mapper.clearBindings();
+	return viewDocumentFragment;
+};
+
+const getData = editor => {
+	const viewFragment = toView(editor.data.model.document.getRoot(), editor);
+	return editor.data.processor.toData(viewFragment);
+};
+
+export class OnSaveCommamnd extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute() {
+		getData(this.editor);
+		console.log('data', getData(this.editor));
+	}
+}
