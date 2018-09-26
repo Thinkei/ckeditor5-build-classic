@@ -60,6 +60,6 @@ export class OnSaveCommamnd extends Command {
 	}
 
 	execute() {
-		getData(this.editor);
+		this.value = getData(this.editor);
 	}
 }
