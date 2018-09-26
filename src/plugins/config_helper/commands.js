@@ -55,11 +55,19 @@ const getData = editor => {
 };
 
 export class OnSaveCommamnd extends Command {
-	refresh() {
-		this.isEnabled = true;
+	constructor(editor) {
+		super(editor);
+		this.value = null;
 	}
 
+	refresh() {
+		this.isEnabled = true;
+		this.value = this.value;
+	}
+
+	// only execute when user press "ctrl+s"
 	execute() {
+		this.fire('save');
 		this.value = getData(this.editor);
 	}
 }
