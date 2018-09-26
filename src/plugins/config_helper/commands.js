@@ -67,7 +67,7 @@ export class OnSaveCommamnd extends Command {
 
 	// only execute when user press "ctrl+s"
 	execute() {
-		this.fire('save');
+		this.editor.fire('save');
 		this.value = getData(this.editor);
 	}
 }
