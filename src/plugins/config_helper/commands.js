@@ -61,6 +61,5 @@ export class OnSaveCommamnd extends Command {
 
 	execute() {
 		getData(this.editor);
-		console.log('data', getData(this.editor));
 	}
 }
