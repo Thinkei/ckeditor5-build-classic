@@ -221,7 +221,7 @@ export default class BlockUI extends Plugin {
 	// get position for inserting toolbar by mapping selected block from View to DOM
 	getBalloonPositionData() {
 		const view = this.editor.editing.view;
-		const targetBlock = getSelectedBlockElement(editor, 'view');
+		const targetBlock = getSelectedBlockElement(this.editor, 'view');
 		const positions = BalloonPanelView.defaultPositions;
 
 		const target = targetBlock
