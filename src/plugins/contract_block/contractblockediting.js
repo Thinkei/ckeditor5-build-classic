@@ -32,7 +32,7 @@ export default class BlockEditing extends Plugin {
 				'model'
 			);
 			if (currentSelectedBlockElement && view.document.isFocused) {
-				this.addHighLightClass(writer, highlightedBlocks);
+				this.addHighLightClass(writer, highlightedBlocks, editor);
 			}
 			if (!view.document.isFocused) {
 				this.removeHighlightClass(writer, highlightedBlocks);
@@ -65,7 +65,7 @@ export default class BlockEditing extends Plugin {
 		});
 	}
 
-	addHighLightClass(writer, highlightedBlocks) {
+	addHighLightClass(writer, highlightedBlocks, editor) {
 		let currentSelectedBlockElement = getSelectedBlockElement(
 			editor,
 			'model'
