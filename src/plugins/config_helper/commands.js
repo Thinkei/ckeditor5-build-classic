@@ -36,7 +36,7 @@ const toView = (modelRoot, editor) => {
 			}
 		}),
 		{
-			priority: 'highest'
+			priority: 'high'
 		}
 	);
 
@@ -67,6 +67,7 @@ export class OnSaveCommamnd extends Command {
 
 	execute() {
 		this.value = getData(this.editor);
+		console.log('data', getData(this.editor));
 		setTimeout(this.editor.fire('save'), 1000);
 	}
 }
