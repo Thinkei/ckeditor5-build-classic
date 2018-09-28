@@ -18,9 +18,5 @@ export default class CustomConfig extends Plugin {
 		addConverterHelpers(editor);
 
 		editor.commands.add('onSave', new OnSaveCommamnd(editor));
-
-		editor.keystrokes.set(ON_SAVE_KEYSTROKES, () => {
-			editor.execute('onSave');
-		});
 	}
 }
