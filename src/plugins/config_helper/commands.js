@@ -55,12 +55,18 @@ const getData = editor => {
 };
 
 export class OnSaveCommamnd extends Command {
+	constructor(editor) {
+		super(editor);
+		this.value = null;
+	}
+
 	refresh() {
 		this.isEnabled = true;
+		this.value = this.value;
 	}
 
 	execute() {
-		getData(this.editor);
-		console.log('data', getData(this.editor));
+		this.value = getData(this.editor);
+		setTimeout(this.editor.fire('save'), 1000);
 	}
 }
