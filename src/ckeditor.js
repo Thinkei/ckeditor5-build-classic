@@ -91,104 +91,104 @@ ClassicEditor.defaultConfig = {
 	language: 'en'
 };
 
-ClassicEditor.create(document.querySelector('#editor'))
-	.then(editor => {
-		window.editor = editor;
-		editor.keystrokes.set('Ctrl+S', (evt, cancel) => {
-			editor.execute('onSave');
-			cancel();
-		});
-		editor.setData(
-			`
-			<contract_section hide_title="false" hide_title_in_document="false" id="818206" is_show="true" optional="false" premium="false"
-			title="Logo">
-				<contract_block block_group="" id="2000928" optional="false" probation="false" visible="true">
-				<p>
-				<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
-					variable_type="Image">logo</variable_image>
-				This text is just for testing
-			</p>
-			<contract_block block_group="" id="2000928" optional="true" probation="false" visible="true">
-			<p>
-			<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
-				variable_type="Image">logo</variable_image>
-		</p>
-		&nbsp;
-		<p>
-			<variable_date auto_populate="" block_options="[]" help_text="" id="171568" initial_value="Date of Letter" required="false"
-				variable_name="letter_date" variable_type="Date">letter_date</variable_date>
-		</p>
-		&nbsp;
-		<p>
-			<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
-				required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
-			<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
-				id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
-			<br />
-			<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
-				required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
-			<br />
-			<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
-				required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
-			<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
-				initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
-			<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
-				id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
-		</p>
+// ClassicEditor.create(document.querySelector('#editor'))
+// 	.then(editor => {
+// 		window.editor = editor;
+// 		editor.keystrokes.set('Ctrl+S', (evt, cancel) => {
+// 			editor.execute('onSave');
+// 			cancel();
+// 		});
+// 		editor.setData(
+// 			`
+// 			<contract_section hide_title="false" hide_title_in_document="false" id="818206" is_show="true" optional="false" premium="false"
+// 			title="Logo">
+// 				<contract_block block_group="" id="2000928" optional="false" probation="false" visible="true">
+// 				<p>
+// 				<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
+// 					variable_type="Image">logo</variable_image>
+// 				This text is just for testing
+// 			</p>
+// 			<contract_block block_group="" id="2000928" optional="true" probation="false" visible="true">
+// 			<p>
+// 			<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
+// 				variable_type="Image">logo</variable_image>
+// 		</p>
+// 		&nbsp;
+// 		<p>
+// 			<variable_date auto_populate="" block_options="[]" help_text="" id="171568" initial_value="Date of Letter" required="false"
+// 				variable_name="letter_date" variable_type="Date">letter_date</variable_date>
+// 		</p>
+// 		&nbsp;
+// 		<p>
+// 			<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
+// 				required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
+// 			<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
+// 				id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
+// 			<br />
+// 			<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
+// 				required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
+// 			<br />
+// 			<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
+// 				required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
+// 			<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
+// 				initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
+// 			<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
+// 				id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
+// 		</p>
 
-		&nbsp;
-		<p>
-			<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
-				required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
-			<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
-				id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
-			<br />
-			<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
-				required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
-			<br />
-			<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
-				required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
-			<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
-				initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
-			<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
-				id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
-		</p>
-			</contract_block>
-			<contract_block block_group="" id="2000928" optional="false" probation="false" visible="true">
-			<p>
-			<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
-				variable_type="Image">logo</variable_image>
-		</p>
-		&nbsp;
-		<p>
-			<variable_date auto_populate="" block_options="[]" help_text="" id="171568" initial_value="Date of Letter" required="false"
-				variable_name="letter_date" variable_type="Date">letter_date</variable_date>
-		</p>
-		&nbsp;
-			<p>
-				<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
-					required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
-				<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
-					id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
-				<br />
-				<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
-					required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
-				<br />
-				<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
-					required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
-				<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
-					initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
-				<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
-					id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
-			</p>
-				</contract_block>
-			</contract_section>
-			<contract_section hide_title="false" hide_title_in_document="false" id="811996" is_show="true" optional="false" premium="false"
-			title="Early Bird">
-			</contract_section>
-			`
-		);
-	})
-	.catch(error => {
-		console.error(error.stack);
-	});
+// 		&nbsp;
+// 		<p>
+// 			<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
+// 				required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
+// 			<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
+// 				id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
+// 			<br />
+// 			<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
+// 				required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
+// 			<br />
+// 			<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
+// 				required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
+// 			<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
+// 				initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
+// 			<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
+// 				id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
+// 		</p>
+// 			</contract_block>
+// 			<contract_block block_group="" id="2000928" optional="false" probation="false" visible="true">
+// 			<p>
+// 			<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
+// 				variable_type="Image">logo</variable_image>
+// 		</p>
+// 		&nbsp;
+// 		<p>
+// 			<variable_date auto_populate="" block_options="[]" help_text="" id="171568" initial_value="Date of Letter" required="false"
+// 				variable_name="letter_date" variable_type="Date">letter_date</variable_date>
+// 		</p>
+// 		&nbsp;
+// 			<p>
+// 				<variable_string auto_populate="recipient_first_name" block_options="[]" help_text="" id="171548" initial_value="Recipient first name"
+// 					required="true" variable_name="recipient_first_name" variable_type="String">recipient_first_name</variable_string>
+// 				<variable_string auto_populate="recipient_last_name" block_options="[]" help_text=""
+// 					id="171549" initial_value="Recipient last name" required="true" variable_name="recipient_last_name" variable_type="String">recipient_last_name</variable_string>
+// 				<br />
+// 				<variable_string auto_populate="recipient_address_line_1" block_options="[]" help_text="" id="171554" initial_value="Recipient address one"
+// 					required="true" variable_name="recipient_address_one" variable_type="String">recipient_address_one</variable_string>
+// 				<br />
+// 				<variable_string auto_populate="recipient_address_city" block_options="[]" help_text="" id="171565" initial_value="Suburb"
+// 					required="false" variable_name="suburb" variable_type="String">suburb</variable_string>
+// 				<variable_string auto_populate="recipient_address_state" block_options="[]" help_text="" id="171566"
+// 					initial_value="State" required="false" variable_name="State" variable_type="String">State</variable_string>
+// 				<variable_string auto_populate="recipient_address_postcode" block_options="[]" help_text=""
+// 					id="171567" initial_value="Postcode" required="false" variable_name="postcode" variable_type="String">postcode</variable_string>
+// 			</p>
+// 				</contract_block>
+// 			</contract_section>
+// 			<contract_section hide_title="false" hide_title_in_document="false" id="811996" is_show="true" optional="false" premium="false"
+// 			title="Early Bird">
+// 			</contract_section>
+// 			`
+// 		);
+// 	})
+// 	.catch(error => {
+// 		console.error(error.stack);
+// 	});
