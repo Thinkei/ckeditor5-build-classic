@@ -58,7 +58,7 @@ export const addVariable = (type, editor) => {
 	});
 };
 
-export const createVariableToolbarButton = (
+export const createToolbarButton = (
 	editor,
 	plugin,
 	{ commandName, buttonName, buttonLabel, icon }
