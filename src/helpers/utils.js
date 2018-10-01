@@ -88,3 +88,22 @@ export const createViewVariableElement = (
 	}
 	return toVariableWidget(viewElement, viewWriter);
 };
+
+export const createModelElement = (viewElement, modelWriter) => {
+	if (!viewElement.getChild(0).is('text')) {
+		if (viewElement.getAttribute('variable_name')) {
+			const modelElement = modelWriter.createElement(
+				viewElement.name,
+				viewElement._attrs
+			);
+			modelWriter.insertText(
+				viewElement.getAttribute('variable_name'),
+				modelElement,
+				'end'
+			);
+			return modelElement;
+		}
+	} else {
+		return modelWriter.createElement(viewElement.name, viewElement._attrs);
+	}
+};
