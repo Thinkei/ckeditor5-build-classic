@@ -2,7 +2,11 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 
 import { createToolbarButton } from '../utils';
-import { OnSaveCommamnd, OpenEditContractCommand } from './commands';
+import {
+	OnSaveCommamnd,
+	OpenEditContractCommand,
+	OpenVariableManagerCommand
+} from './commands';
 import { isCommandExist } from './utils';
 
 export default class AdditionalUI extends Plugin {
@@ -41,6 +45,26 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openEditContractCommand',
 				buttonName: 'openEditContractModal',
 				buttonLabel: 'Open Edit Contract',
+				icon: codeIcon
+			});
+		}
+
+		if (isCommandExist(editor, 'openVariableManagerCommand')) {
+			createToolbarButton(editor, this, {
+				commandName: 'openVariableManagerCommand',
+				buttonName: 'openVariableManagerSidebar',
+				buttonLabel: 'Open Variable Manager',
+				icon: codeIcon
+			});
+		} else {
+			editor.commands.add(
+				'openVariableManagerCommand',
+				new OpenVariableManagerCommand(editor)
+			);
+			createToolbarButton(editor, this, {
+				commandName: 'openVariableManagerCommand',
+				buttonName: 'openVariableManagerSidebar',
+				buttonLabel: 'Open Variable Manager',
 				icon: codeIcon
 			});
 		}

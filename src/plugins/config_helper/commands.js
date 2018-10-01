@@ -80,3 +80,12 @@ export class OpenEditContractCommand extends Command {
 		this.editor.fire('openEditContract');
 	}
 }
+
+export class OpenVariableManagerCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+	execute() {
+		this.editor.fire('openVariableManager');
+	}
+}
