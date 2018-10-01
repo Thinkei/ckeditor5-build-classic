@@ -74,6 +74,7 @@ ClassicEditor.defaultConfig = {
 			'|',
 			'save',
 			'openEditContractModal',
+			'openVariableManagerSidebar',
 			'|',
 			'addBlock',
 			'addVarString',
