@@ -90,7 +90,7 @@ export const createViewVariableElement = (
 };
 
 export const createModelElement = (viewElement, modelWriter) => {
-	if (!viewElement.getChild(0).is('text')) {
+	if (!viewElement.getChild(0)) {
 		if (viewElement.getAttribute('variable_name')) {
 			const modelElement = modelWriter.createElement(
 				viewElement.name,
