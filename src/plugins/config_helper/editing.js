@@ -2,7 +2,8 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
 import { defineSchema } from '../../schema';
 import { addConverterHelpers } from '../../helpers';
-import { OnSaveCommamnd } from './commands';
+import { OnSaveCommamnd, OpenEditContractCommand } from './commands';
+import { isCommandExist } from './utils';
 
 export default class AditionalEditing extends Plugin {
 	init() {
@@ -10,7 +11,13 @@ export default class AditionalEditing extends Plugin {
 		defineSchema(editor);
 		addConverterHelpers(editor);
 
-		if (!editor.commands.get('onSave'))
-			this.editor.commands.add('onSave', new OnSaveCommamnd(editor));
+		if (!isCommandExist(editor, 'openEditContractCommand'))
+			editor.commands.add(
+				'openEditContractCommand',
+				new OpenEditContractCommand(editor)
+			);
+
+		if (!isCommandExist(editor, 'onSave'))
+			editor.commands.add('onSave', new OnSaveCommamnd(editor));
 	}
 }

@@ -70,3 +70,13 @@ export class OnSaveCommamnd extends Command {
 		setTimeout(this.editor.fire('save'), 1000);
 	}
 }
+
+export class OpenEditContractCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+	execute() {
+		// fire event for front-end's listening
+		this.editor.fire('openEditContract');
+	}
+}

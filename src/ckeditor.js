@@ -73,6 +73,8 @@ ClassicEditor.defaultConfig = {
 			'redo',
 			'|',
 			'save',
+			'openEditContractModal',
+			'|',
 			'addBlock',
 			'addVarString',
 			'addVarImage',
