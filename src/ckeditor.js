@@ -92,11 +92,3 @@ ClassicEditor.defaultConfig = {
 	// This value must be kept in sync with the language defined in webpack.config.js.
 	language: 'en'
 };
-
-ClassicEditor.create(document.querySelector('#editor'))
-	.then(editor => {
-		window.editor = editor;
-	})
-	.catch(error => {
-		console.error(error.stack);
-	});
