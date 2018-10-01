@@ -1,5 +1,6 @@
 export const textSchema = editor => {
 	editor.model.schema.extend('$text', {
+		allowAttributes: ['variable'],
 		allowIn: [
 			'paragraph',
 			'variable_string',
