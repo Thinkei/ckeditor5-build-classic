@@ -11,7 +11,7 @@ export default class AdditionalUI extends Plugin {
 			createToolbarButton(editor, this, {
 				commandName: 'onSave',
 				buttonName: 'save',
-				buttonLabel: 'Ctrl + S',
+				buttonLabel: 'Save (Ctrl + S)',
 				icon: codeIcon
 			});
 		} else {
@@ -19,7 +19,7 @@ export default class AdditionalUI extends Plugin {
 			createToolbarButton(editor, this, {
 				commandName: 'onSave',
 				buttonName: 'save',
-				buttonLabel: 'Ctrl + S',
+				buttonLabel: 'Save (Ctrl + S)',
 				icon: codeIcon
 			});
 		}
