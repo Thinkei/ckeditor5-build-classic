@@ -100,27 +100,35 @@ export class ChangeTitleCommand extends Command {
 	// TODO: update value of title element to this.value
 	refresh() {
 		// model side
-		const selection = this.editor.model.document.selection;
-		if (selection) {
-			const selectedSectionElement = selection
-				.getFirstPosition()
-				.getAncestors()
-				.reverse()
-				.find(ancestor => {
-					return ancestor.is('element', 'section_title');
-				});
+		// const selection = this.editor.model.document.selection;
+		// if (selection) {
+		// 	const selectedSectionElement = selection
+		// 		.getFirstPosition()
+		// 		.getAncestors()
+		// 		.reverse()
+		// 		.find(ancestor => {
+		// 			return ancestor.is('element', 'section_title');
+		// 		});
 
-			if (selectedSectionElement) {
-				this.titleSectionChildrenNode = selectedSectionElement.getChildren();
-				for (const node of this.titleSectionChildrenNode) {
-					if (
-						node.is('text') &&
-						node.getAttribute('section_title_value')
-					) {
-						this.value = node.getAttribute('section_title_value');
-					}
-				}
-			}
+		// 	if (selectedSectionElement) {
+		// 		this.titleSectionChildrenNode = selectedSectionElement.getChildren();
+		// 		for (const node of this.titleSectionChildrenNode) {
+		// 			if (
+		// 				node.is('text') &&
+		// 				node.getAttribute('section_title_value')
+		// 			) {
+		// 				this.value = node.getAttribute('section_title_value');
+		// 			}
+		// 		}
+		// 	}
+		// }
+		const editor = this.editor;
+		const selection = editor.model.document.selection;
+		const selectedSectionElement = getSelectedSectionElement(
+			selection.getFirstPosition()
+		);
+		if (selectedSectionElement) {
+			this.value = selectedSectionElement.getAttribute('title');
 		}
 		this.isEnabled = true;
 	}
