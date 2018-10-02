@@ -1,24 +1,18 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 
 import FormView from './ui/formview';
 import { SectionActionView } from './ui/actionsview';
+import { EhPanel } from '../../components/panel';
 
 export default class SectionUI extends Plugin {
-	static get requires() {
-		return [ContextualBalloon];
-	}
-
 	init() {
 		const editor = this.editor;
-		this.formView = this.createFormView();
+		this.sectionFormView = this.createFormView();
 		this.sectionActionView = this.createSectionActionView();
-		this.panelView = new BalloonPanelView(editor.locale);
-		this.balloon = editor.plugins.get(ContextualBalloon);
+		this.EhBalloon = new EhPanel(editor);
 		editor.editing.view.addObserver(ClickObserver);
 
 		this.enableUserSectionInteraction();
@@ -34,6 +28,18 @@ export default class SectionUI extends Plugin {
 			if (selectedSectionElelemt) {
 				this.showSectionUI();
 			}
+		});
+
+		clickOutsideHandler({
+			emitter: this.sectionActionView,
+			activator: () => {
+				return (
+					this.EhBalloon.hasView(this.sectionActionView) ||
+					this.EhBalloon.hasView(this.sectionFormView)
+				);
+			},
+			contextElements: [this.EhBalloon.panel.element],
+			callback: () => this.hideSectionUI()
 		});
 
 		this.editor.keystrokes.set('Esc', (data, cancel) => {
@@ -65,37 +71,32 @@ export default class SectionUI extends Plugin {
 
 	showSectionUI() {
 		this.addSectionActionView();
+		this.startUpdatingSectionUI();
 	}
 
 	hideSectionUI() {
-		this.panelView.content.clear();
-		this.panelView.hide();
+		const editor = this.editor;
+		// update ui
+		this.stopListening(editor.ui, 'update');
+		// remove toolbars
+		if (this.EhBalloon.hasView(this.sectionActionView)) {
+			this.EhBalloon.remove(this.sectionActionView);
+		}
+		if (this.EhBalloon.hasView(this.sectionFormView)) {
+			this.EhBalloon.remove(this.sectionFormView);
+		}
+		// make sure the focus always gets back to the main editable in case the focus is in another editable
+		editor.editing.view.focus();
 	}
 
 	addSectionActionView() {
-		if (!this.isPanelInViewBody(this.panelView)) {
-			this.editor.ui.view.body.add(this.panelView);
-			this.editor.ui.focusTracker.add(this.panelView.element);
-
-			clickOutsideHandler({
-				emitter: this.sectionActionView,
-				activator: () => {
-					return (
-						this.isActionInContent(this.sectionActionView) ||
-						this.isFormInContent(this.formView)
-					);
-				},
-				contextElements: [this.panelView.element],
-				callback: () => this.hideSectionUI()
-			});
+		if (this.EhBalloon.hasView(this.sectionActionView)) {
+			return;
 		}
-
-		this.isPanelEmpty(this.panelView.content) &&
-		!this.isActionInContent(this.sectionActionView)
-			? this.panelView.content.add(this.sectionActionView)
-			: null;
-
-		this.panelView.pin(this.getSectionBalloonPositionData());
+		this.EhBalloon.add({
+			view: this.sectionActionView,
+			position: this.getSectionBalloonPositionData()
+		});
 	}
 
 	getSectionBalloonPositionData() {
@@ -164,7 +165,9 @@ export default class SectionUI extends Plugin {
 		});
 
 		this.listenTo(formView, 'cancel', () => {
-			this.hideSectionUI();
+			if (this.EhBalloon.hasView(this.sectionFormView)) {
+				this.EhBalloon.remove(this.sectionFormView);
+			}
 		});
 
 		formView.keystrokes.set('Esc', (data, cancel) => {
@@ -176,17 +179,19 @@ export default class SectionUI extends Plugin {
 	}
 
 	addFormView() {
-		if (this.isFormInContent(this.formView)) {
+		if (this.EhBalloon.hasView(this.sectionFormView)) {
 			return;
 		}
 		const editor = this.editor;
 		const changeTitleCommand = editor.commands.get('changeTitle');
 
-		this.panelView.content.remove(this.sectionActionView);
-		this.panelView.content.add(this.formView);
-		this.panelView.pin(this.getSectionBalloonPositionData());
-		this.formView.titleInputView.select();
-		this.formView.titleInputView.element.value =
+		this.EhBalloon.add({
+			view: this.sectionFormView,
+			position: this.getSectionBalloonPositionData()
+		});
+
+		this.sectionFormView.titleInputView.select();
+		this.sectionFormView.titleInputView.element.value =
 			changeTitleCommand.value || '';
 	}
 
@@ -200,32 +205,10 @@ export default class SectionUI extends Plugin {
 			if (prevSelectedSection && !selectedSectionElelemt) {
 				this.hideSectionUI();
 			} else {
-				this.balloon.updatePosition(
+				this.EhBalloon.updatePosition(
 					this.getSectionBalloonPositionData()
 				);
 			}
 		});
-	}
-
-	isPanelInViewBody(panelView) {
-		return this.editor.ui.view.body.get(
-			this.editor.ui.view.body.getIndex(panelView)
-		);
-	}
-
-	isActionInContent(view) {
-		return this.panelView.content.get(
-			this.panelView.content.getIndex(view)
-		);
-	}
-
-	isFormInContent(form) {
-		return this.panelView.content.get(
-			this.panelView.content.getIndex(form)
-		);
-	}
-
-	isPanelEmpty(viewCollection) {
-		return viewCollection.length === 0;
 	}
 }
