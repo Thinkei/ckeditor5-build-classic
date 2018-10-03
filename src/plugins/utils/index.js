@@ -14,30 +14,29 @@ const variableStringAttributes = {
 	class: ''
 };
 
-const createVariableElement = (modelWriter, position, type, className) => {
-	const elementName = `variable_${type}`;
+const createVariableElement = (modelWriter, position, variableAttributes) => {
+	const elementName = `variable_${variableAttributes.variable_type.toLowerCase()}`;
 	const variableTag = modelWriter.createElement(
 		elementName,
-		Object.assign(variableStringAttributes, {
-			variable_type: type,
-			class: className
-		})
+		variableAttributes
 	);
-	modelWriter.append(modelWriter.createText(elementName), variableTag);
+	modelWriter.append(
+		modelWriter.createText(variableAttributes.variable_name),
+		variableTag
+	);
 	modelWriter.insert(variableTag, position);
 	modelWriter.setSelection(Range.createOn(variableTag));
 };
 
 // Add variable element to model
-export const addVariable = (type, editor) => {
+export const addVariable = (variableAttributes, editor) => {
 	editor.model.change(modelWriter => {
 		const selection = editor.model.document.selection;
 		if (selection.isCollapsed) {
 			createVariableElement(
 				modelWriter,
 				selection.getFirstPosition(),
-				type,
-				`variable_${type}`
+				variableAttributes
 			);
 		} else {
 			const ranges = editor.model.schema.getValidRanges(
@@ -50,8 +49,7 @@ export const addVariable = (type, editor) => {
 				createVariableElement(
 					modelWriter,
 					position,
-					type,
-					`variable_${type}`
+					variableAttributes
 				);
 			}
 		}
