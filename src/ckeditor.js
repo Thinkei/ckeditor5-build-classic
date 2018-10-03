@@ -20,11 +20,6 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import CustomConfig from './plugins/config_helper';
 import ContractBlock from './plugins/contract_block';
 import ContractSection from './plugins/contract_section';
-import VariableSelect from './plugins/variable_select';
-import VariableDate from './plugins/variable_date';
-import VariableSignature from './plugins/variable_signature_pad';
-import VariableImage from './plugins/variable_image';
-import VariableString from './plugins/variable_string';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -48,12 +43,7 @@ ClassicEditor.builtinPlugins = [
 	Paragraph,
 	CustomConfig,
 	ContractSection,
-	ContractBlock,
-	VariableString,
-	VariableImage,
-	VariableSelect,
-	VariableDate,
-	VariableSignature
+	ContractBlock
 ];
 
 // Editor configuration.
@@ -77,12 +67,7 @@ ClassicEditor.defaultConfig = {
 			'openVariableManagerSidebar',
 			'openTutorialScreen',
 			'|',
-			'addBlock',
-			'addVarString',
-			'addVarImage',
-			'addVarSelect',
-			'addVarDate',
-			'addVarSignature'
+			'addBlock'
 		]
 	},
 	image: {
