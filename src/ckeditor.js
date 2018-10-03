@@ -20,6 +20,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import CustomConfig from './plugins/config_helper';
 import ContractBlock from './plugins/contract_block';
 import ContractSection from './plugins/contract_section';
+import './styles.css';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
