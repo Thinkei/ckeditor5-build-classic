@@ -6,7 +6,8 @@ import {
 	OnSaveCommamnd,
 	OpenEditContractCommand,
 	OpenVariableManagerCommand,
-	OpenTutorialScreen
+	OpenTutorialScreen,
+	UseVariableCommand
 } from './commands';
 import { isCommandExist } from './utils';
 
@@ -15,6 +16,8 @@ export default class AditionalEditing extends Plugin {
 		const editor = this.editor;
 		defineSchema(editor);
 		addConverterHelpers(editor);
+
+		editor.commands.add('useVariable', new UseVariableCommand(editor));
 
 		if (!isCommandExist(editor, 'openEditContractCommand'))
 			editor.commands.add(
