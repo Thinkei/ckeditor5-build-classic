@@ -8,6 +8,8 @@ import {
 	insertText
 } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
+import { addVariable } from '../utils';
+
 const toView = (modelRoot, editor) => {
 	const mapper = editor.data.mapper;
 
@@ -97,5 +99,15 @@ export class OpenTutorialScreen extends Command {
 
 	execute() {
 		this.editor.fire('openTutorialScreen');
+	}
+}
+
+export class UseVariableCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute(variableAttributes) {
+		addVariable(variableAttributes, this.editor);
 	}
 }
