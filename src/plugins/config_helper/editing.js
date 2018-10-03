@@ -5,7 +5,8 @@ import { addConverterHelpers } from '../../helpers';
 import {
 	OnSaveCommamnd,
 	OpenEditContractCommand,
-	OpenVariableManagerCommand
+	OpenVariableManagerCommand,
+	OpenTutorialScreen
 } from './commands';
 import { isCommandExist } from './utils';
 
@@ -28,6 +29,12 @@ export default class AditionalEditing extends Plugin {
 			editor.commands.add(
 				'openVariableManagerCommand',
 				new OpenVariableManagerCommand(editor)
+			);
+
+		if (!isCommandExist(editor, 'openTutorialScreen'))
+			editor.commands.add(
+				'openTutorialScreen',
+				new OpenTutorialScreen(editor)
 			);
 	}
 }

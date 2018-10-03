@@ -5,7 +5,8 @@ import { createToolbarButton } from '../utils';
 import {
 	OnSaveCommamnd,
 	OpenEditContractCommand,
-	OpenVariableManagerCommand
+	OpenVariableManagerCommand,
+	OpenTutorialScreen
 } from './commands';
 import { isCommandExist } from './utils';
 
@@ -65,6 +66,26 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openVariableManagerCommand',
 				buttonName: 'openVariableManagerSidebar',
 				buttonLabel: 'Open Variable Manager',
+				icon: codeIcon
+			});
+		}
+
+		if (isCommandExist(editor, 'openTutorialScreen')) {
+			createToolbarButton(editor, this, {
+				commandName: 'openTutorialScreen',
+				buttonName: 'openTutorialScreen',
+				buttonLabel: 'Open Tutorial Screen',
+				icon: codeIcon
+			});
+		} else {
+			editor.commands.add(
+				'openTutorialScreen',
+				new OpenTutorialScreen(editor)
+			);
+			createToolbarButton(editor, this, {
+				commandName: 'openTutorialScreen',
+				buttonName: 'openTutorialScreen',
+				buttonLabel: 'Open Tutorial Screen',
 				icon: codeIcon
 			});
 		}

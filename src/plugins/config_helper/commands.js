@@ -89,3 +89,13 @@ export class OpenVariableManagerCommand extends Command {
 		this.editor.fire('openVariableManager');
 	}
 }
+
+export class OpenTutorialScreen extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute() {
+		this.editor.fire('openTutorialScreen');
+	}
+}
