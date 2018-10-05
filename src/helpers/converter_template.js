@@ -6,6 +6,7 @@ import {
 	createSectionElement,
 	createSectionTitleElement,
 	createViewVariableElement,
+	createModelElement,
 	mapModelToHTML
 } from './utils';
 
@@ -20,10 +21,19 @@ export function converterHelperTemplate(editor, htmlTagName) {
 				return null;
 			},
 			model: (viewElement, modelWriter) => {
-				return modelWriter.createElement(
-					viewElement.name,
-					viewElement._attrs
-				);
+				switch (viewElement.name) {
+					case 'variable_string':
+					case 'variable_select':
+					case 'variable_date':
+					case 'variable_signature_pad':
+					case 'variable_image':
+						return createModelElement(viewElement, modelWriter);
+					default:
+						return modelWriter.createElement(
+							viewElement.name,
+							viewElement._attrs
+						);
+				}
 			}
 		})
 	);
@@ -66,13 +76,14 @@ export function converterHelperTemplate(editor, htmlTagName) {
 							htmlTagName
 						);
 					}
-					case 'variable_string': {
+					case 'variable_string':
+					case 'variable_signature_pad':
+					case 'variable_image':
 						return createViewVariableElement(
 							viewWriter,
 							modelElement,
 							htmlTagName
 						);
-					}
 					case 'variable_select': {
 						return createViewVariableElement(
 							viewWriter,
@@ -89,20 +100,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 							'fas fa-calendar-alt'
 						);
 					}
-					case 'variable_signature_pad': {
-						return createViewVariableElement(
-							viewWriter,
-							modelElement,
-							htmlTagName
-						);
-					}
-					case 'variable_image': {
-						return createViewVariableElement(
-							viewWriter,
-							modelElement,
-							htmlTagName
-						);
-					}
+
 					default: {
 						return viewWriter.createContainerElement(
 							mapModelToHTML[htmlTagName],

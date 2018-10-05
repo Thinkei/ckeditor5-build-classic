@@ -8,6 +8,8 @@ import {
 	insertText
 } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
+import { addVariable } from '../utils';
+
 const toView = (modelRoot, editor) => {
 	const mapper = editor.data.mapper;
 
@@ -36,7 +38,7 @@ const toView = (modelRoot, editor) => {
 			}
 		}),
 		{
-			priority: 'highest'
+			priority: 'high'
 		}
 	);
 
@@ -68,5 +70,44 @@ export class OnSaveCommamnd extends Command {
 	execute() {
 		this.value = getData(this.editor);
 		setTimeout(this.editor.fire('save'), 1000);
+	}
+}
+
+export class OpenEditContractCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+	execute() {
+		// fire event for front-end's listening
+		this.editor.fire('openEditContract');
+	}
+}
+
+export class OpenVariableManagerCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+	execute() {
+		this.editor.fire('openVariableManager');
+	}
+}
+
+export class OpenTutorialScreen extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute() {
+		this.editor.fire('openTutorialScreen');
+	}
+}
+
+export class UseVariableCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute(variableAttributes) {
+		addVariable(variableAttributes, this.editor);
 	}
 }

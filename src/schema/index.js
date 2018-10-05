@@ -5,14 +5,14 @@ import { variableStringSchema } from './variableString';
 import { variableSignaturePadSchema } from './variableSignaturePad';
 import { variableSelectSchema } from './variableSelect';
 import { textSchema } from './text';
-import { paragraphSchema } from './paragraph';
-import { tableSchema } from './table';
+import { headingSchema } from './heading';
 import { sectionTitleSchema } from './sectionTitle';
 import { contractBlockSchema } from './contractBlock';
+import { tableSchema } from './table';
 
 export function defineSchema(editor) {
 	contractBlockSchema(editor);
-	paragraphSchema(editor);
+	headingSchema(editor);
 	contractSectionSchema(editor);
 	variableImageSchema(editor);
 	variableDateSchema(editor);
@@ -20,6 +20,6 @@ export function defineSchema(editor) {
 	variableSignaturePadSchema(editor);
 	variableSelectSchema(editor);
 	textSchema(editor);
-	tableSchema(editor);
 	sectionTitleSchema(editor);
+	tableSchema(editor);
 }

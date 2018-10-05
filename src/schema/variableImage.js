@@ -1,6 +1,6 @@
 export const variableImageSchema = editor => {
 	editor.model.schema.register('variable_image', {
-		allowIn: ['paragraph', 'contract_block'],
+		allowIn: ['paragraph'],
 		allowAttributes: [
 			'auto_populate',
 			'block_options',

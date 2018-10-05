@@ -2,42 +2,31 @@ import ModelPosition from '@ckeditor/ckeditor5-engine/src/model/position';
 import Range from '@ckeditor/ckeditor5-engine/src/model/range';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 
-const variableStringAttributes = {
-	auto_populate: 'organisation_name',
-	id: Math.random(),
-	block_options: [],
-	help_text: '',
-	initial_value: 'init value of string',
-	required: false,
-	variable_name: 'hello',
-	variable_type: '',
-	class: ''
-};
-
-const createVariableElement = (modelWriter, position, type, className) => {
-	const elementName = `variable_${type}`;
+const createVariableElement = (modelWriter, position, variableAttributes) => {
+	const elementName = `variable_${variableAttributes.variable_type
+		.replace(' ', '_')
+		.toLowerCase()}`;
 	const variableTag = modelWriter.createElement(
 		elementName,
-		Object.assign(variableStringAttributes, {
-			variable_type: type,
-			class: className
-		})
+		variableAttributes
 	);
-	modelWriter.append(modelWriter.createText(elementName), variableTag);
+	modelWriter.append(
+		modelWriter.createText(variableAttributes.variable_name),
+		variableTag
+	);
 	modelWriter.insert(variableTag, position);
 	modelWriter.setSelection(Range.createOn(variableTag));
 };
 
 // Add variable element to model
-export const addVariable = (type, editor) => {
+export const addVariable = (variableAttributes, editor) => {
 	editor.model.change(modelWriter => {
 		const selection = editor.model.document.selection;
 		if (selection.isCollapsed) {
 			createVariableElement(
 				modelWriter,
 				selection.getFirstPosition(),
-				type,
-				`variable_${type}`
+				variableAttributes
 			);
 		} else {
 			const ranges = editor.model.schema.getValidRanges(
@@ -50,15 +39,14 @@ export const addVariable = (type, editor) => {
 				createVariableElement(
 					modelWriter,
 					position,
-					type,
-					`variable_${type}`
+					variableAttributes
 				);
 			}
 		}
 	});
 };
 
-export const createVariableToolbarButton = (
+export const createToolbarButton = (
 	editor,
 	plugin,
 	{ commandName, buttonName, buttonLabel, icon }
