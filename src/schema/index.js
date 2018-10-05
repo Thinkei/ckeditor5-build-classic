@@ -8,6 +8,7 @@ import { textSchema } from './text';
 import { headingSchema } from './heading';
 import { sectionTitleSchema } from './sectionTitle';
 import { contractBlockSchema } from './contractBlock';
+import { tableSchema } from './table';
 
 export function defineSchema(editor) {
 	contractBlockSchema(editor);
@@ -20,4 +21,5 @@ export function defineSchema(editor) {
 	variableSelectSchema(editor);
 	textSchema(editor);
 	sectionTitleSchema(editor);
+	tableSchema(editor);
 }
