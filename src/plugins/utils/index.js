@@ -15,7 +15,6 @@ const createVariableElement = (modelWriter, position, variableAttributes) => {
 		variableTag
 	);
 	modelWriter.insert(variableTag, position);
-	modelWriter.setSelection(Range.createOn(variableTag));
 	modelWriter.setSelectionFocus(variableTag, 'after');
 };
 
