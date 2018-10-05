@@ -6,7 +6,6 @@ import { variableSignaturePadSchema } from './variableSignaturePad';
 import { variableSelectSchema } from './variableSelect';
 import { textSchema } from './text';
 import { headingSchema } from './heading';
-import { tableSchema } from './table';
 import { sectionTitleSchema } from './sectionTitle';
 import { contractBlockSchema } from './contractBlock';
 
@@ -20,6 +19,5 @@ export function defineSchema(editor) {
 	variableSignaturePadSchema(editor);
 	variableSelectSchema(editor);
 	textSchema(editor);
-	tableSchema(editor);
 	sectionTitleSchema(editor);
 }
