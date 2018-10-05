@@ -1,5 +1,6 @@
 export const variableDateSchema = editor => {
 	editor.model.schema.register('variable_date', {
+		isObject: true,
 		allowIn: ['paragraph'],
 		allowAttributes: [
 			'auto_populate',

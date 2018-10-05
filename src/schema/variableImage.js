@@ -1,5 +1,6 @@
 export const variableImageSchema = editor => {
 	editor.model.schema.register('variable_image', {
+		isObject: true,
 		allowIn: ['paragraph'],
 		allowAttributes: [
 			'auto_populate',
