@@ -16,6 +16,8 @@ import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
+import Table from '@ckeditor/ckeditor5-table/src/table';
+import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 
 import CustomConfig from './plugins/config_helper';
 import ContractBlock from './plugins/contract_block';
@@ -42,6 +44,8 @@ ClassicEditor.builtinPlugins = [
 	Link,
 	List,
 	Paragraph,
+	Table,
+	TableToolbar,
 	CustomConfig,
 	ContractSection,
 	ContractBlock
@@ -59,6 +63,7 @@ ClassicEditor.defaultConfig = {
 			'bulletedList',
 			'numberedList',
 			'imageUpload',
+			'insertTable',
 			'blockQuote',
 			'undo',
 			'redo',
@@ -78,6 +83,9 @@ ClassicEditor.defaultConfig = {
 			'|',
 			'imageTextAlternative'
 		]
+	},
+	table: {
+		toolbar: ['tableColumn', 'tableRow', '|', 'mergeTableCells']
 	},
 	// This value must be kept in sync with the language defined in webpack.config.js.
 	language: 'en'

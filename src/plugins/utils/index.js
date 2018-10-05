@@ -30,6 +30,7 @@ const createVariableElement = (modelWriter, position, variableAttributes) => {
 
 // Add variable element to model
 export const addVariable = (variableAttributes, editor) => {
+	console.log('add variable', variableAttributes);
 	editor.model.change(modelWriter => {
 		const selection = editor.model.document.selection;
 		if (selection.isCollapsed) {
