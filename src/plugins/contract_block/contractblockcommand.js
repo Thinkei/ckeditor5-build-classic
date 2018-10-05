@@ -156,7 +156,7 @@ export class BlockGroupCommand extends Command {
 		const editor = this.editor;
 		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
 
-		selectedBlockElement && blockGroupValue !== ''
+		selectedBlockElement
 			? this.editBlockGroup(editor, selectedBlockElement, blockGroupValue)
 			: null;
 	}
