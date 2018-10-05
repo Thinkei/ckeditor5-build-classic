@@ -157,11 +157,11 @@ export class BlockGroupCommand extends Command {
 		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
 
 		selectedBlockElement && blockGroupValue !== ''
-			? this.editBlockGroup(selectedBlockElement, blockGroupValue)
+			? this.editBlockGroup(editor, selectedBlockElement, blockGroupValue)
 			: null;
 	}
 
-	editBlockGroup(selectedBlockElement, blockGroupValue) {
+	editBlockGroup(editor, selectedBlockElement, blockGroupValue) {
 		editor.model.change(modelWriter => {
 			modelWriter.setAttribute(
 				'block_group',
