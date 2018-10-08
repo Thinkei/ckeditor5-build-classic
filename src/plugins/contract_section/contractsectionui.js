@@ -154,6 +154,8 @@ export default class SectionUI extends Plugin {
 		formView.titleInputView
 			.bind('isReadOnly')
 			.to(changeTitleCommand, 'isEnabled', value => !value);
+		formView.titleInputView.bind('value').to(changeTitleCommand, 'value');
+
 		formView.saveButtonView.bind('isEnabled').to(changeTitleCommand);
 
 		this.listenTo(formView, 'submit', () => {

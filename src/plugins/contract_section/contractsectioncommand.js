@@ -59,33 +59,46 @@ export class HideTitleCommand extends Command {
 	toggleHideTitle(modelWriter, attributes, element, isHide) {
 		modelWriter.setAttributes(attributes, element);
 		isHide
-			? this.insertTitleNode(modelWriter, element)
-			: this.removeTitleNode(modelWriter, element);
+			? this.insertTitleNode(attributes, element)
+			: this.removeTitleNode(attributes, element);
 	}
 
-	insertTitleNode(modelWriter, sectionElement) {
-		const titleHTMLTag = modelWriter.createElement('section_title', {
-			id: sectionElement.getAttribute('id'),
-			section_title: true
-		});
-
-		modelWriter.append(
-			modelWriter.createText(sectionElement.getAttribute('title'), {
-				section_title_value: true
-			}),
-			titleHTMLTag
+	insertTitleNode(attributes, sectionElement) {
+		const viewElement = this.editor.editing.mapper.toViewElement(
+			sectionElement
 		);
-		modelWriter.insert(titleHTMLTag, sectionElement, 'before');
-		this.insertedNodes.add(titleHTMLTag);
+		this.editor.editing.view.change(viewWriter => {
+			viewWriter.setAttribute(
+				'hide_title',
+				attributes.hide_title,
+				viewElement
+			);
+			viewWriter.setAttribute(
+				'hide_title_in_document',
+				attributes.hide_title_in_document,
+				viewElement
+			);
+			viewWriter.addClass('section-title', viewElement);
+		});
 	}
 
-	removeTitleNode(modelWriter, sectionElement) {
-		for (const node of this.insertedNodes) {
-			if (node.getAttribute('id') === sectionElement.getAttribute('id')) {
-				modelWriter.remove(node);
-				this.insertedNodes.delete(node);
-			}
-		}
+	removeTitleNode(attributes, sectionElement) {
+		const viewElement = this.editor.editing.mapper.toViewElement(
+			sectionElement
+		);
+		this.editor.editing.view.change(viewWriter => {
+			viewWriter.setAttribute(
+				'hide_title',
+				attributes.hide_title,
+				viewElement
+			);
+			viewWriter.setAttribute(
+				'hide_title_in_document',
+				attributes.hide_title_in_document,
+				viewElement
+			);
+			viewWriter.removeClass('section-title', viewElement);
+		});
 	}
 }
 
@@ -99,29 +112,6 @@ export class ChangeTitleCommand extends Command {
 
 	// TODO: update value of title element to this.value
 	refresh() {
-		// model side
-		// const selection = this.editor.model.document.selection;
-		// if (selection) {
-		// 	const selectedSectionElement = selection
-		// 		.getFirstPosition()
-		// 		.getAncestors()
-		// 		.reverse()
-		// 		.find(ancestor => {
-		// 			return ancestor.is('element', 'section_title');
-		// 		});
-
-		// 	if (selectedSectionElement) {
-		// 		this.titleSectionChildrenNode = selectedSectionElement.getChildren();
-		// 		for (const node of this.titleSectionChildrenNode) {
-		// 			if (
-		// 				node.is('text') &&
-		// 				node.getAttribute('section_title_value')
-		// 			) {
-		// 				this.value = node.getAttribute('section_title_value');
-		// 			}
-		// 		}
-		// 	}
-		// }
 		const editor = this.editor;
 		const selection = editor.model.document.selection;
 		const selectedSectionElement = getSelectedSectionElement(
@@ -172,8 +162,8 @@ export class ChangeTitleCommand extends Command {
 						sectionTitle.getChild(0)._data = titleFormValue;
 					});
 
-					this.editor.editing.view.change(viewWriter => {
-						viewWriter.setAttribute(
+					this.editor.editing.view.change(modelWriter => {
+						modelWriter.setAttribute(
 							'title',
 							titleFormValue,
 							viewSectionElement
@@ -195,8 +185,8 @@ export class ChangeTitleCommand extends Command {
 					);
 				});
 
-				this.editor.editing.view.change(viewWriter => {
-					viewWriter.setAttribute(
+				this.editor.editing.view.change(modelWriter => {
+					modelWriter.setAttribute(
 						'title',
 						titleFormValue,
 						viewSectionElement
@@ -235,15 +225,18 @@ export class ToggleOptionalCommand extends Command {
 		const selectedSectionElement = this.getSelectedSectionElement();
 
 		if (!toBool(selectedSectionElement.getAttribute('optional'))) {
-			view.change(viewWriter => {
-				viewWriter.setAttribute(
+			view.change(modelWriter => {
+				modelWriter.setAttribute(
 					'optional',
 					`${!toBool(
 						selectedSectionElement.getAttribute('optional')
 					)}`,
 					selectedSectionElement
 				);
-				viewWriter.addClass('contract-section', selectedSectionElement);
+				modelWriter.addClass(
+					'contract-section',
+					selectedSectionElement
+				);
 			});
 
 			const modelElement = this.editor.editing.mapper.toModelElement(
@@ -259,15 +252,15 @@ export class ToggleOptionalCommand extends Command {
 				);
 			});
 		} else {
-			view.change(viewWriter => {
-				viewWriter.setAttribute(
+			view.change(modelWriter => {
+				modelWriter.setAttribute(
 					'optional',
 					`${!toBool(
 						selectedSectionElement.getAttribute('optional')
 					)}`,
 					selectedSectionElement
 				);
-				viewWriter.removeClass(
+				modelWriter.removeClass(
 					'contract-section',
 					selectedSectionElement
 				);
