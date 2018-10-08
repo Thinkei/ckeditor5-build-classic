@@ -4,7 +4,7 @@ import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextu
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
+import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 
 import { ToggleCommand } from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
@@ -89,7 +89,7 @@ export default class BlockUI extends Plugin {
 
 			button.isEnabled = true;
 			button.label = t('Add Block');
-			button.icon = unlinkIcon;
+			button.icon = codeIcon;
 			button.tooltip = true;
 
 			// Bind button to the command
