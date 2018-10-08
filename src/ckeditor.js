@@ -72,7 +72,6 @@ ClassicEditor.defaultConfig = {
 			'openEditContractModal',
 			'openVariableManagerSidebar',
 			'openTutorialScreen',
-			'|',
 			'addBlock'
 		]
 	},
@@ -90,21 +89,3 @@ ClassicEditor.defaultConfig = {
 	// This value must be kept in sync with the language defined in webpack.config.js.
 	language: 'en'
 };
-
-ClassicEditor.create(document.querySelector('#editor'))
-	.then(editor => {
-		window.editor = editor;
-		editor.setData(`
-		<contract_section hide_title="false" hide_title_in_document="false" id="818206" is_show="true" optional="false" premium="false"
-			title="Logo">
-				<contract_block block_group="" id="2000928" optional="false" probation="false" visible="true">
-				<p>
-				<variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
-					variable_type="Image">logo</variable_image>
-				This text is just for testing
-			</p></contract_block>
-		`);
-	})
-	.catch(error => {
-		console.error(error.stack);
-	});
