@@ -46,7 +46,9 @@ export default class BlockUI extends Plugin {
 		});
 
 		this.listenTo(blockFormView, 'cancel', () => {
-			this.hideToolbar();
+			if (this.EhBalloon.visibleView() === this.formView) {
+				this.EhBalloon.remove(this.formView);
+			}
 		});
 
 		blockFormView.keystrokes.set('Esc', (data, cancel) => {

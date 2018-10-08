@@ -167,7 +167,7 @@ export default class SectionUI extends Plugin {
 		});
 
 		this.listenTo(formView, 'cancel', () => {
-			if (this.EhBalloon.hasView(this.sectionFormView)) {
+			if (this.EhBalloon.visibleView() === this.sectionFormView) {
 				this.EhBalloon.remove(this.sectionFormView);
 			}
 		});
