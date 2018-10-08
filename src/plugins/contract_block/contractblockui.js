@@ -33,6 +33,10 @@ export default class BlockUI extends Plugin {
 		blockFormView.inputView
 			.bind('isReadOnly')
 			.to(editBlockGroupCommand, 'isEnabled', value => !value);
+		blockFormView.inputView
+			.bind('value')
+			.to(editBlockGroupCommand, 'value');
+
 		blockFormView.saveButtonView
 			.bind('isEnabled')
 			.to(editBlockGroupCommand, 'isEnabled');

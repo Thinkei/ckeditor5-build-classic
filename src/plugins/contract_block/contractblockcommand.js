@@ -149,6 +149,11 @@ export class AddBlockCommand extends Command {
 
 export class BlockGroupCommand extends Command {
 	refresh() {
+		const editor = this.editor;
+		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
+		if (selectedBlockElement) {
+			this.value = selectedBlockElement.getAttribute('block_group');
+		}
 		this.isEnabled = true;
 	}
 
