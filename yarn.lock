@@ -531,6 +531,14 @@
     "@ckeditor/ckeditor5-core" "^11.0.0"
     "@ckeditor/ckeditor5-upload" "^10.0.2"
 
+"@ckeditor/ckeditor5-alignment@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-alignment/-/ckeditor5-alignment-10.0.2.tgz#13ff314d38cbe0aa17dee94e454cf9e53a767c07"
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^11.0.0"
+    "@ckeditor/ckeditor5-engine" "^10.2.0"
+    "@ckeditor/ckeditor5-ui" "^11.0.0"
+
 "@ckeditor/ckeditor5-autoformat@^10.0.2":
   version "10.0.2"
   resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-autoformat/-/ckeditor5-autoformat-10.0.2.tgz#993f352ef49f0d1861e86a2a695fdcf5c0f09858"
@@ -647,6 +655,15 @@
     "@ckeditor/ckeditor5-enter" "^10.1.1"
     "@ckeditor/ckeditor5-typing" "^11.0.0"
     "@ckeditor/ckeditor5-undo" "^10.0.2"
+
+"@ckeditor/ckeditor5-font@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.npmjs.org/@ckeditor/ckeditor5-font/-/ckeditor5-font-10.0.2.tgz#5aa81808d45b44dfdcf736b566320837e57ad7ae"
+  dependencies:
+    "@ckeditor/ckeditor5-core" "^11.0.0"
+    "@ckeditor/ckeditor5-engine" "^10.2.0"
+    "@ckeditor/ckeditor5-ui" "^11.0.0"
+    "@ckeditor/ckeditor5-utils" "^10.2.0"
 
 "@ckeditor/ckeditor5-heading@^10.0.2":
   version "10.0.2"

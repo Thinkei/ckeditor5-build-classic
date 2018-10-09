@@ -1,6 +1,9 @@
 // The editor creator to use.
 import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
+import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
+import FontSize from '@ckeditor/ckeditor5-font/src/fontsize';
+import FontFamily from '@ckeditor/ckeditor5-font/src/fontfamily';
 import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
@@ -29,6 +32,9 @@ export default class ClassicEditor extends ClassicEditorBase {}
 // Plugins to include in the build.
 ClassicEditor.builtinPlugins = [
 	Essentials,
+	Alignment,
+	FontSize,
+	FontFamily,
 	UploadAdapter,
 	Autoformat,
 	Bold,
@@ -57,13 +63,19 @@ ClassicEditor.defaultConfig = {
 		items: [
 			'heading',
 			'|',
+			'fontsize',
+			'fontfamily',
+			'|',
 			'bold',
 			'italic',
 			'link',
 			'bulletedList',
 			'numberedList',
+			'alignment',
+			'|',
 			'imageUpload',
 			'insertTable',
+			'|',
 			'blockQuote',
 			'undo',
 			'redo',
@@ -89,3 +101,21 @@ ClassicEditor.defaultConfig = {
 	// This value must be kept in sync with the language defined in webpack.config.js.
 	language: 'en'
 };
+
+ClassicEditor.create(document.querySelector('#editor'))
+	.then(editor => {
+		window.editor = editor;
+		editor.setData(`
+        <contract_section hide_title="false" hide_title_in_document="false" id="818206" is_show="true" optional="false" premium="false"
+            title="Logo">
+                <contract_block block_group="" id="2000928" optional="false" probation="false" visible="true">
+                <p>
+                <variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
+                    variable_type="Image">logo</variable_image>
+                This text is just for testing
+            </p></contract_block>
+        `);
+	})
+	.catch(error => {
+		console.error(error.stack);
+	});
