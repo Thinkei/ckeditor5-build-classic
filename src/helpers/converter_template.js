@@ -4,7 +4,6 @@ import { downcastElementToElement } from '@ckeditor/ckeditor5-engine/src/convers
 import {
 	createBlockElement,
 	createSectionElement,
-	createSectionTitleElement,
 	createViewVariableElement,
 	createModelElement,
 	mapModelToHTML
@@ -57,13 +56,6 @@ export function converterHelperTemplate(editor, htmlTagName) {
 				switch (modelElement.name) {
 					case 'contract_block': {
 						return createBlockElement(
-							viewWriter,
-							modelElement,
-							htmlTagName
-						);
-					}
-					case 'section_title': {
-						return createSectionTitleElement(
 							viewWriter,
 							modelElement,
 							htmlTagName

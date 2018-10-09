@@ -22,7 +22,6 @@ const toVariableWidget = (viewElement, viewWriter) => {
 };
 
 const BLOCK_ELEMENT = 'blockElement';
-const SECTION_TITLE = 'sectionTitle';
 const SECTION_ELEMENT = 'sectionElement';
 
 export function createBlockElement(viewWriter, modelElement, htmlTagName) {
@@ -39,25 +38,18 @@ export function createBlockElement(viewWriter, modelElement, htmlTagName) {
 	return blockElement;
 }
 
-export const createSectionTitleElement = (
-	viewWriter,
-	modelElement,
-	htmlTagName
-) => {
-	const sectionTitleElement = viewWriter.createContainerElement(
-		mapModelToHTML[htmlTagName],
-		modelElement._attrs
-	);
-
-	viewWriter.setCustomProperty(SECTION_TITLE, true, sectionTitleElement);
-	return sectionTitleElement;
-};
-
 export const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
 	const sectionElement = viewWriter.createContainerElement(
 		mapModelToHTML[htmlTagName],
 		modelElement._attrs
 	);
+
+	if (
+		!toBool(sectionElement.getAttribute('hide_title')) ||
+		!toBool(sectionElement.getAttribute('hide_title_in_document'))
+	) {
+		viewWriter.addClass('section-title', sectionElement);
+	}
 
 	viewWriter.setCustomProperty(SECTION_ELEMENT, true, sectionElement);
 	return sectionElement;
