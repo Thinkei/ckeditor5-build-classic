@@ -58,7 +58,7 @@ export class HideTitleCommand extends Command {
 
 	toggleHideTitle(modelWriter, attributes, element, isHide) {
 		modelWriter.setAttributes(attributes, element);
-		isHide
+		!isHide
 			? this.insertTitleNode(attributes, element)
 			: this.removeTitleNode(attributes, element);
 	}
