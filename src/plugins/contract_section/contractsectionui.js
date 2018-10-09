@@ -124,12 +124,12 @@ export default class SectionUI extends Plugin {
 		const toggleOptionalCommand = editor.commands.get('toggleOptional');
 
 		sectionActionView.hideTitleButtonView
-			.bind('isEnabled')
-			.to(hideTitleCommand, 'isEnabled');
+			.bind('isEnabled', 'isOn')
+			.to(hideTitleCommand, 'isEnabled', 'value');
 
 		sectionActionView.toggleOptionalButtonView
-			.bind('isEnabled')
-			.to(toggleOptionalCommand, 'isEnabled');
+			.bind('isEnabled', 'isOn')
+			.to(toggleOptionalCommand, 'isEnabled', 'value');
 
 		this.listenTo(sectionActionView, 'hideTitle', () => {
 			editor.execute('hideTitle');

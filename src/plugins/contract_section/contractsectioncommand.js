@@ -10,6 +10,22 @@ export class HideTitleCommand extends Command {
 	}
 
 	refresh() {
+		const editor = this.editor;
+		const selection = editor.model.document.selection;
+		this.modelPosition = selection.getFirstPosition();
+		const selectedSectionElement = getSelectedSectionElement(
+			selection.getFirstPosition()
+		);
+		if (selectedSectionElement) {
+			this.value = !(
+				toBool(selectedSectionElement.getAttribute('hide_title')) ||
+				toBool(
+					selectedSectionElement.getAttribute(
+						'hide_title_in_document'
+					)
+				)
+			);
+		}
 		this.isEnabled = true;
 	}
 
@@ -216,73 +232,61 @@ export class ChangeTitleCommand extends Command {
 
 export class ToggleOptionalCommand extends Command {
 	refresh() {
+		const selection = this.editor.model.document.selection;
+		const selectedSectionElement = this.getSelectedSectionElement(
+			selection
+		);
+		if (selectedSectionElement)
+			this.value = toBool(
+				selectedSectionElement.getAttribute('optional')
+			);
 		this.isEnabled = true;
 	}
 
 	execute() {
 		// view side
 		const view = this.editor.editing.view;
-		const selectedSectionElement = this.getSelectedSectionElement();
+		const selection = this.editor.model.document.selection;
+		const selectedSectionElement = this.getSelectedSectionElement(
+			selection
+		);
+		const viewElement = this.editor.editing.mapper.toViewElement(
+			selectedSectionElement
+		);
 
-		if (!toBool(selectedSectionElement.getAttribute('optional'))) {
-			view.change(modelWriter => {
-				modelWriter.setAttribute(
-					'optional',
-					`${!toBool(
-						selectedSectionElement.getAttribute('optional')
-					)}`,
-					selectedSectionElement
-				);
-				modelWriter.addClass(
-					'contract-section',
-					selectedSectionElement
-				);
-			});
-
-			const modelElement = this.editor.editing.mapper.toModelElement(
+		this.editor.model.change(modelWriter => {
+			modelWriter.setAttribute(
+				'optional',
+				`${!toBool(selectedSectionElement.getAttribute('optional'))}`,
 				selectedSectionElement
 			);
-			this.editor.model.change(modelWriter => {
-				modelWriter.setAttribute(
+		});
+
+		if (toBool(selectedSectionElement.getAttribute('optional'))) {
+			view.change(viewWriter => {
+				viewWriter.setAttribute(
 					'optional',
-					`${!toBool(
-						selectedSectionElement.getAttribute('optional')
-					)}`,
-					modelElement
+					`${!toBool(viewElement.getAttribute('optional'))}`,
+					viewElement
 				);
+				viewWriter.addClass('contract-section', viewElement);
 			});
 		} else {
-			view.change(modelWriter => {
-				modelWriter.setAttribute(
+			view.change(viewWriter => {
+				viewWriter.setAttribute(
 					'optional',
-					`${!toBool(
-						selectedSectionElement.getAttribute('optional')
-					)}`,
-					selectedSectionElement
+					`${!toBool(viewElement.getAttribute('optional'))}`,
+					viewElement
 				);
-				modelWriter.removeClass(
-					'contract-section',
-					selectedSectionElement
-				);
-			});
-			const modelElement = this.editor.editing.mapper.toModelElement(
-				selectedSectionElement
-			);
-			this.editor.model.change(modelWriter => {
-				modelWriter.setAttribute(
-					'optional',
-					`${!toBool(
-						selectedSectionElement.getAttribute('optional')
-					)}`,
-					modelElement
-				);
+				viewWriter.removeClass('contract-section', viewElement);
 			});
 		}
 	}
 
-	getSelectedSectionElement() {
-		const selection = this.editor.editing.view.document.selection;
-		return this.findSectionElement(selection.getFirstPosition());
+	getSelectedSectionElement(selection) {
+		if (selection.getFirstPosition()) {
+			return this.findSectionElement(selection.getFirstPosition());
+		}
 	}
 
 	findSectionElement(position) {
@@ -295,9 +299,6 @@ export class ToggleOptionalCommand extends Command {
 	}
 
 	isSectionElement(node) {
-		return (
-			node.is('containerElement', 'section') &&
-			node.getCustomProperty('sectionElement')
-		);
+		return node.is('element', 'contract_section');
 	}
 }

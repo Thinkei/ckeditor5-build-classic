@@ -13,7 +13,7 @@ export class SectionActionView extends View {
 		this.keystrokes = new KeystrokeHandler();
 
 		this.hideTitleButtonView = this.createButton(
-			t('Hide Title'),
+			t('Hide/Show Title'),
 			cogwheelIcon,
 			'hideTitle'
 		);
