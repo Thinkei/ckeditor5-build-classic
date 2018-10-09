@@ -68,10 +68,16 @@ export default class BlockUI extends Plugin {
 		const editor = this.editor;
 		const toggleCommand = new ToggleCommand(editor);
 		const blockActionView = new BlockActionView(editor.locale);
-		blockActionView.toggleButtonView.bind('isEnabled').to(toggleCommand);
+
+		blockActionView.toggleButtonView
+			.bind('isEnabled')
+			.to(toggleCommand, 'isEnabled');
+		blockActionView.toggleButtonView
+			.bind('isOn')
+			.to(toggleCommand, 'value');
 
 		this.listenTo(blockActionView, 'toggle', () => {
-			editor.execute('toggle');
+			editor.execute('toggle', !!blockActionView.toggleButtonView.isOn);
 		});
 
 		this.listenTo(blockActionView, 'editGroup', () => {

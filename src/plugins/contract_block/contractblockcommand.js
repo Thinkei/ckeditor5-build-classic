@@ -13,6 +13,10 @@ const BLOCK_ELEMENT = 'blockElement';
 
 export class ToggleCommand extends Command {
 	refresh() {
+		const editor = this.editor;
+		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
+		if (selectedBlockElement)
+			this.value = toBool(selectedBlockElement.getAttribute('optional'));
 		this.isEnabled = true;
 	}
 

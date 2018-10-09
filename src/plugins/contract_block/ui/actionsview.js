@@ -10,13 +10,13 @@ export default class BlockActionView extends View {
 		const t = locale.t;
 		// TODO: add our own custom name and icon
 		this.toggleButtonView = this.createButton(
-			t('Toggle'),
+			t('Optional'),
 			preferenceIcon,
 			'toggle'
 		);
 
 		this.editGroupView = this.createButton(
-			t('Edit Block Group'),
+			t('Block Group'),
 			pencelIcon,
 			'editGroup'
 		);
