@@ -66,8 +66,7 @@ export function changeViewElement(
 
 export const blockElementAttribute = {
 	block_group: '',
-	id: Math.random(),
-	optional: false,
+	optional: true,
 	probation: false,
 	visible: true
 };

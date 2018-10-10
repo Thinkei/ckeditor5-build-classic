@@ -113,7 +113,8 @@ ClassicEditor.create(document.querySelector('#editor'))
                 <variable_image auto_populate="" block_options="[]" help_text="" id="171559" initial_value="Logo" required="true" variable_name="logo"
                     variable_type="Image">logo</variable_image>
                 This text is just for testing
-            </p></contract_block>
+						</p></contract_block>
+				</contract_section>
         `);
 	})
 	.catch(error => {

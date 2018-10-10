@@ -97,56 +97,82 @@ const findBlockParentElement = element => {
 	return findBlockParentElement(element.parent);
 };
 
+// check that if there is any block
+const isValidSelection = selection => {
+	const position = selection.getFirstPosition();
+	if (
+		position
+			.getAncestors()
+			.reverse()
+			.find(node => {
+				return node.is('element', 'contract_block');
+			})
+	) {
+		return false;
+	}
+	return true;
+};
+
 export class AddBlockCommand extends Command {
 	refresh() {
 		this.isEnabled = true;
 	}
 
 	execute() {
-		const editor = this.editor;
-		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
-		if (selectedBlockElement) {
-			if (findBlockParentElement(selectedBlockElement.parent)) {
-				return;
-			}
-			this.insertContractBlockElement();
-		} else {
-			this.insertContractBlockElement();
-		}
+		this.insertContractBlockElement();
+		// const editor = this.editor;
+		// const selection = editor.model.document.selection;
+		// if (isValidSelection(selection)) {
+		// }
+
+		// const selectedBlockElement = getSelectedBlockElement(editor, 'model');
+		// if (selectedBlockElement) {
+		// 	if (findBlockParentElement(selectedBlockElement.parent)) {
+		// 		return;
+		// 	}
+		// 	this.insertContractBlockElement();
+		// } else {
+		// 	this.insertContractBlockElement();
+		// }
 	}
 
 	insertContractBlockElement() {
 		const editor = this.editor;
 		const model = editor.model;
+		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
 		model.change(modelWriter => {
-			const selection = editor.model.document.selection;
-			if (selection.isCollapsed) {
-				const position = selection.getFirstPosition();
-				const paragraph = modelWriter.createElement('paragraph');
-				modelWriter.insertText('\u200b', paragraph);
-				const blockElement = modelWriter.createElement(
-					'contract_block',
-					blockElementAttribute
-				);
-				modelWriter.append(paragraph, blockElement);
-				modelWriter.insert(blockElement, position);
-			} else {
-				const range = selection.getFirstRange();
-				const commonAncestor = range.getCommonAncestor();
-				const paragraph = modelWriter.createElement('paragraph');
-				const blockElement = modelWriter.createElement(
-					'contract_block',
-					blockElementAttribute
-				);
-				const position = ModelPosition.createAt(
-					commonAncestor,
-					'before'
-				);
-				modelWriter.append(paragraph, blockElement);
-				modelWriter.remove(range.getCommonAncestor());
-				modelWriter.insert(blockElement, position);
-				modelWriter.append(commonAncestor, blockElement);
-			}
+			const blockElement = modelWriter.createElement(
+				'contract_block',
+				blockElementAttribute
+			);
+			const paragraph = modelWriter.createElement('paragraph');
+			modelWriter.append(paragraph, blockElement);
+			modelWriter.insert(blockElement, selectedBlockElement, 'after');
+
+			// Now we just handle insert block after block, if then we want to add
+			// block nest block we will reuse the blow code
+
+			// const selection = editor.model.document.selection;
+
+			// if (selection.isCollapsed) {
+
+			// } else {
+			// 	const range = selection.getFirstRange();
+			// 	const commonAncestor = range.getCommonAncestor();
+			// 	const paragraph = modelWriter.createElement('paragraph');
+			// 	const blockElement = modelWriter.createElement(
+			// 		'contract_block',
+			// 		blockElementAttribute
+			// 	);
+			// 	const position = ModelPosition.createAt(
+			// 		commonAncestor,
+			// 		'before'
+			// 	);
+			// 	modelWriter.append(paragraph, blockElement);
+			// 	modelWriter.remove(range.getCommonAncestor());
+			// 	modelWriter.insert(blockElement, position);
+			// 	modelWriter.append(commonAncestor, blockElement);
+			// }
 		});
 	}
 }
