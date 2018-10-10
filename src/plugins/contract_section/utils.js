@@ -16,3 +16,12 @@ const isSectionElement = node => {
 export const toBool = value => {
 	return value === 'true';
 };
+
+export const contractSectionAttribute = {
+	title: '',
+	hide_title: true,
+	hide_title_in_document: true,
+	is_show: true,
+	optional: false,
+	premium: false
+};

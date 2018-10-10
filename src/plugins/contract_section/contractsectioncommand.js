@@ -1,7 +1,39 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 
 import { toBool } from './utils';
-import { getSelectedSectionElement } from './utils';
+import { getSelectedSectionElement, contractSectionAttribute } from './utils';
+import { blockElementAttribute } from '../contract_block/utils';
+
+export class AddSectionCommand extends Command {
+	refresh() {
+		this.isEnabled = true;
+	}
+
+	execute() {
+		this.insertContractSectionElement();
+	}
+
+	insertContractSectionElement() {
+		const editor = this.editor;
+		const selection = editor.model.document.selection;
+		const position = selection.getFirstPosition();
+		const selectedSectionElement = getSelectedSectionElement(position);
+		model.change(modelWriter => {
+			const sectionElement = modelWriter.createElement(
+				'contract_section',
+				contractSectionAttribute
+			);
+			// new block
+			const blockElement = modelWriter.createElement(
+				'contract_block',
+				blockElementAttribute
+			);
+			modelWriter.append(blockElement, sectionElement);
+
+			modelWriter.insert(sectionElement, selectedSectionElement, 'after');
+		});
+	}
+}
 
 export class HideTitleCommand extends Command {
 	constructor(editor) {
