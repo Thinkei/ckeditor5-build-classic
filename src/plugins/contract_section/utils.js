@@ -18,10 +18,10 @@ export const toBool = value => {
 };
 
 export const contractSectionAttribute = {
-	title: '',
-	hide_title: true,
-	hide_title_in_document: true,
+	title: 'Section Title',
+	hide_title: false,
+	hide_title_in_document: false,
 	is_show: true,
-	optional: false,
+	optional: true,
 	premium: false
 };

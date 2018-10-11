@@ -2,6 +2,8 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 
 import FormView from './ui/formview';
 import { SectionActionView } from './ui/actionsview';
@@ -10,6 +12,7 @@ import { EhPanel } from '../../components/panel';
 export default class SectionUI extends Plugin {
 	init() {
 		const editor = this.editor;
+		this.createToolbarSectionButton();
 		this.sectionFormView = this.createFormView();
 		this.sectionActionView = this.createSectionActionView();
 		this.EhBalloon = new EhPanel(editor);
@@ -211,6 +214,29 @@ export default class SectionUI extends Plugin {
 					this.getSectionBalloonPositionData()
 				);
 			}
+		});
+	}
+
+	createToolbarSectionButton() {
+		const editor = this.editor;
+		const addSectionCommand = editor.commands.get('addSection');
+		const t = editor.t;
+
+		editor.ui.componentFactory.add('addSection', locale => {
+			const button = new ButtonView(locale);
+
+			button.isEnabled = true;
+			button.label = t('Add Section');
+			button.icon = codeIcon;
+			button.tooltip = true;
+
+			// Bind button to the command
+			button.bind('isEnabled').to(addSectionCommand, 'isEnabled');
+
+			this.listenTo(button, 'execute', () => {
+				editor.execute('addSection');
+			});
+			return button;
 		});
 	}
 }

@@ -3,7 +3,8 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import {
 	HideTitleCommand,
 	ChangeTitleCommand,
-	ToggleOptionalCommand
+	ToggleOptionalCommand,
+	AddSectionCommand
 } from './contractsectioncommand';
 
 export default class SectionEditing extends Plugin {
@@ -17,5 +18,6 @@ export default class SectionEditing extends Plugin {
 			'toggleOptional',
 			new ToggleOptionalCommand(editor)
 		);
+		editor.commands.add('addSection', new AddSectionCommand(editor));
 	}
 }

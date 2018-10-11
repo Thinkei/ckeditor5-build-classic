@@ -15,6 +15,7 @@ export class AddSectionCommand extends Command {
 
 	insertContractSectionElement() {
 		const editor = this.editor;
+		const model = editor.model;
 		const selection = editor.model.document.selection;
 		const position = selection.getFirstPosition();
 		const selectedSectionElement = getSelectedSectionElement(position);
@@ -27,6 +28,10 @@ export class AddSectionCommand extends Command {
 			const blockElement = modelWriter.createElement(
 				'contract_block',
 				blockElementAttribute
+			);
+			modelWriter.append(
+				modelWriter.createElement('paragraph'),
+				blockElement
 			);
 			modelWriter.append(blockElement, sectionElement);
 
