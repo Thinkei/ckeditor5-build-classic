@@ -141,39 +141,218 @@ export class AddBlockCommand extends Command {
 		const model = editor.model;
 		const selectedBlockElement = getSelectedBlockElement(editor, 'model');
 		model.change(modelWriter => {
-			const blockElement = modelWriter.createElement(
-				'contract_block',
-				blockElementAttribute
-			);
-			const paragraph = modelWriter.createElement('paragraph');
-			modelWriter.append(paragraph, blockElement);
-			modelWriter.insert(blockElement, selectedBlockElement, 'after');
-
 			// Now we just handle insert block after block, if then we want to add
 			// block nest block we will reuse the blow code
+			const selection = editor.model.document.selection;
+			if (selection.isCollapsed) {
+				const blockElement = modelWriter.createElement(
+					'contract_block',
+					blockElementAttribute
+				);
+				const paragraph = modelWriter.createElement('paragraph');
+				modelWriter.append(paragraph, blockElement);
+				modelWriter.insert(blockElement, selectedBlockElement, 'after');
+			} else {
+				const range = selection.getFirstRange();
+				const startPos = range.start;
+				const endPos = range.end;
+				const startPosIndex = startPos.parent.index;
+				const endPosIndex = endPos.parent.index;
 
-			// const selection = editor.model.document.selection;
+				if (this.isPositionAtStart(startPos, selectedBlockElement)) {
+					this.handleSeparateBlock(
+						modelWriter,
+						selectedBlockElement,
+						startPosIndex,
+						endPosIndex,
+						'start'
+					);
+				} else if (this.isPositionAtEnd(endPos, selectedBlockElement)) {
+					this.handleSeparateBlock(
+						modelWriter,
+						selectedBlockElement,
+						startPosIndex,
+						endPosIndex,
+						'end'
+					);
+				} else {
+					this.handleSeparateBlock(
+						modelWriter,
+						selectedBlockElement,
+						startPosIndex,
+						endPosIndex,
+						'middle'
+					);
+				}
 
-			// if (selection.isCollapsed) {
+				// const commonAncestor = range.getCommonAncestor();
+				// const position = ModelPosition.createFromParentAndOffset(
+				// 	selectedBlockElement,
+				// 	range.start.offset
+				// );
 
-			// } else {
-			// 	const range = selection.getFirstRange();
-			// 	const commonAncestor = range.getCommonAncestor();
-			// 	const paragraph = modelWriter.createElement('paragraph');
-			// 	const blockElement = modelWriter.createElement(
-			// 		'contract_block',
-			// 		blockElementAttribute
-			// 	);
-			// 	const position = ModelPosition.createAt(
-			// 		commonAncestor,
-			// 		'before'
-			// 	);
-			// 	modelWriter.append(paragraph, blockElement);
-			// 	modelWriter.remove(range.getCommonAncestor());
-			// 	modelWriter.insert(blockElement, position);
-			// 	modelWriter.append(commonAncestor, blockElement);
-			// }
+				// const position = ModelPosition.createAt(
+				// 	commonAncestor,
+				// 	'before'
+				// );
+
+				// const paragraph = modelWriter.createElement('paragraph');
+				// const blockElement = modelWriter.createElement(
+				// 	'contract_block',
+				// 	blockElementAttribute
+				// );
+				// modelWriter.append(paragraph, blockElement);
+				// modelWriter.remove(range.getCommonAncestor());
+				// modelWriter.insert(blockElement, position);
+				// modelWriter.append(commonAncestor, blockElement);
+			}
 		});
+	}
+
+	handleSeparateBlock(
+		modelWriter,
+		sourceBlockElement,
+		startIndex,
+		endIndex,
+		position
+	) {
+		switch (position) {
+			case 'end': {
+				const listBlock = this.listBlockElementCreator(modelWriter, 2);
+				listBlock.forEach(block => {
+					modelWriter.append(block, sourceBlockElement.parent);
+				});
+				this.handleAddBlock(
+					modelWriter,
+					sourceBlockElement,
+					startIndex,
+					endIndex,
+					listBlock,
+					'end'
+				);
+				return;
+			}
+			case 'start': {
+				const listBlock = this.listBlockElementCreator(modelWriter, 2);
+				listBlock.forEach(block => {
+					modelWriter.append(block, sourceBlockElement.parent);
+				});
+				this.handleAddBlock(
+					modelWriter,
+					sourceBlockElement,
+					startIndex,
+					endIndex,
+					listBlock,
+					'start'
+				);
+				return;
+			}
+			case 'middle': {
+				const listBlock = this.listBlockElementCreator(modelWriter, 3);
+				listBlock.forEach(block => {
+					modelWriter.append(block, sourceBlockElement.parent);
+				});
+				this.handleAddBlock(
+					modelWriter,
+					sourceBlockElement,
+					startIndex,
+					endIndex,
+					listBlock,
+					'middle'
+				);
+				return;
+			}
+		}
+	}
+
+	handleAddBlock(
+		modelWriter,
+		sourceBlockElement,
+		startIndex,
+		endIndex,
+		listBlock,
+		type
+	) {
+		const children = [];
+		for (const node of sourceBlockElement.getChildren()) {
+			children.push({
+				node,
+				index: node.index
+			});
+		}
+		if (type === 'middle') {
+			children.forEach(nodeData => {
+				if (nodeData.index < startIndex) {
+					modelWriter.append(nodeData.node, listBlock[0]);
+				} else if (nodeData.index > endIndex) {
+					modelWriter.append(nodeData.node, listBlock[2]);
+				} else {
+					modelWriter.setAttribute('optional', 'true', listBlock[1]);
+					modelWriter.append(nodeData.node, listBlock[1]);
+				}
+			});
+		} else if (type === 'start') {
+			children.forEach(nodeData => {
+				if (
+					startIndex <= nodeData.index &&
+					nodeData.index <= endIndex
+				) {
+					modelWriter.setAttribute('optional', 'true', listBlock[0]);
+					modelWriter.append(nodeData.node, listBlock[0]);
+				} else {
+					modelWriter.append(nodeData.node, listBlock[1]);
+				}
+			});
+		} else {
+			children.forEach(nodeData => {
+				if (
+					startIndex <= nodeData.index &&
+					nodeData.index <= endIndex
+				) {
+					modelWriter.setAttribute('optional', 'true', listBlock[1]);
+					modelWriter.append(nodeData.node, listBlock[1]);
+				} else {
+					modelWriter.append(nodeData.node, listBlock[0]);
+				}
+			});
+		}
+
+		modelWriter.remove(sourceBlockElement);
+	}
+
+	listBlockElementCreator(modelWriter, amount) {
+		const listBlock = [];
+		for (let i = 0; i < amount; i++) {
+			listBlock.push(
+				modelWriter.createElement(
+					'contract_block',
+					blockElementAttribute
+				)
+			);
+		}
+		return listBlock;
+	}
+
+	isPositionAtEnd(position, selectedBlockElement) {
+		const children = [];
+		for (const node of selectedBlockElement.getChildren()) {
+			children.push(node);
+		}
+		if (position.parent.index === children[children.length - 1].index) {
+			return true;
+		}
+		return false;
+	}
+
+	isPositionAtStart(position, selectedBlockElement) {
+		const children = [];
+		for (const node of selectedBlockElement.getChildren()) {
+			children.push(node);
+		}
+		if (position.parent.index === children[0].index) {
+			return true;
+		}
+		return false;
 	}
 }
 
