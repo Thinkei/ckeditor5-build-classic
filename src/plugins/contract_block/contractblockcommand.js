@@ -136,6 +136,14 @@ export class AddBlockCommand extends Command {
 		// }
 	}
 
+	findParagraphParentElement(element) {
+		if (!element) return;
+		if (element.is('element', 'paragraph')) {
+			return element;
+		}
+		return this.findParagraphParentElement(element.parent);
+	}
+
 	insertContractBlockElement() {
 		const editor = this.editor;
 		const model = editor.model;
@@ -154,10 +162,14 @@ export class AddBlockCommand extends Command {
 				modelWriter.insert(blockElement, selectedBlockElement, 'after');
 			} else {
 				const range = selection.getFirstRange();
-				const startPos = range.start;
-				const endPos = range.end;
-				const startPosIndex = startPos.parent.index;
-				const endPosIndex = endPos.parent.index;
+				const startPos = this.findParagraphParentElement(
+					range.start.parent
+				);
+				const endPos = this.findParagraphParentElement(
+					range.end.parent
+				);
+				const startPosIndex = startPos.index;
+				const endPosIndex = endPos.index;
 
 				if (this.isPositionAtStart(startPos, selectedBlockElement)) {
 					this.handleSeparateBlock(
@@ -333,23 +345,23 @@ export class AddBlockCommand extends Command {
 		return listBlock;
 	}
 
-	isPositionAtEnd(position, selectedBlockElement) {
+	isPositionAtEnd(element, selectedBlockElement) {
 		const children = [];
 		for (const node of selectedBlockElement.getChildren()) {
 			children.push(node);
 		}
-		if (position.parent.index === children[children.length - 1].index) {
+		if (element.index === children[children.length - 1].index) {
 			return true;
 		}
 		return false;
 	}
 
-	isPositionAtStart(position, selectedBlockElement) {
+	isPositionAtStart(element, selectedBlockElement) {
 		const children = [];
 		for (const node of selectedBlockElement.getChildren()) {
 			children.push(node);
 		}
-		if (position.parent.index === children[0].index) {
+		if (element.index === children[0].index) {
 			return true;
 		}
 		return false;
