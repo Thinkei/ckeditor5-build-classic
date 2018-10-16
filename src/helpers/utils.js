@@ -11,10 +11,8 @@ export const mapModelToHTML = {
 	variable_date: 'span',
 	variable_signature_pad: 'span',
 	variable_select: 'span',
-	table: 'table',
-	tbody: 'tbody',
-	tr: 'tr',
-	td: 'td'
+	span: 'span',
+	paragraph: 'p'
 };
 
 const toVariableWidget = (viewElement, viewWriter) => {
@@ -98,4 +96,54 @@ export const createModelElement = (viewElement, modelWriter) => {
 	} else {
 		return modelWriter.createElement(viewElement.name, viewElement._attrs);
 	}
+};
+
+export const createParagraphModelElement = (viewElement, modelWriter) => {
+	const paragraph = modelWriter.createElement(
+		'paragraph',
+		viewElement._attrs
+	);
+
+	modelWriter.setAttribute('classes', viewElement._classes, paragraph);
+	modelWriter.setAttribute('styles', viewElement._styles, paragraph);
+
+	return paragraph;
+};
+
+export const createParagraphViewElement = (modelElement, viewWriter) => {
+	const paragraph = viewWriter.createContainerElement('p', null);
+
+	if (modelElement.getAttribute('classes')) {
+		modelElement.getAttribute('classes').forEach((key, value) => {
+			viewWriter.addClass(key, paragraph);
+		});
+	}
+
+	if (modelElement.getAttribute('styles')) {
+		modelElement.getAttribute('styles').forEach((key, value) => {
+			viewWriter.setStyle(key, value, paragraph);
+		});
+	}
+
+	return paragraph;
+};
+
+export const createSpanModelElement = (viewElement, modelWriter) => {
+	const span = modelWriter.createElement('span', viewElement._attrs);
+	modelWriter.setAttribute('classes', viewElement._classes, span);
+	modelWriter.setAttribute('styles', viewElement._styles, span);
+	return span;
+};
+
+export const createSpanViewElement = (modelElement, viewWriter) => {
+	const span = viewWriter.createContainerElement('span', null);
+
+	modelElement.getAttribute('classes').forEach((value, key) => {
+		viewWriter.addClass(value, span);
+	});
+
+	modelElement.getAttribute('styles').forEach((value, key) => {
+		viewWriter.setStyle(key, value, span);
+	});
+	return span;
 };

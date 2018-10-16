@@ -6,6 +6,10 @@ import {
 	createSectionElement,
 	createViewVariableElement,
 	createModelElement,
+	createParagraphModelElement,
+	createParagraphViewElement,
+	createSpanModelElement,
+	createSpanViewElement,
 	mapModelToHTML
 } from './utils';
 
@@ -27,13 +31,22 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					case 'variable_signature_pad':
 					case 'variable_image':
 						return createModelElement(viewElement, modelWriter);
+					case 'span':
+						return createSpanModelElement(viewElement, modelWriter);
+					case 'p': {
+						return createParagraphModelElement(
+							viewElement,
+							modelWriter
+						);
+					}
 					default:
 						return modelWriter.createElement(
 							viewElement.name,
 							viewElement._attrs
 						);
 				}
-			}
+			},
+			converterPriority: 'highest'
 		})
 	);
 	// dataDowncast helper
@@ -45,7 +58,8 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					mapModelToHTML[htmlTagName],
 					modelElement._attrs
 				);
-			}
+			},
+			converterPriority: 'highest'
 		})
 	);
 	// edittingDowncast helper
@@ -92,7 +106,15 @@ export function converterHelperTemplate(editor, htmlTagName) {
 							'fas fa-calendar-alt'
 						);
 					}
-
+					case 'span': {
+						return createSpanViewElement(modelElement, viewWriter);
+					}
+					case 'paragraph': {
+						return createParagraphViewElement(
+							modelElement,
+							viewWriter
+						);
+					}
 					default: {
 						return viewWriter.createContainerElement(
 							mapModelToHTML[htmlTagName],
@@ -100,7 +122,30 @@ export function converterHelperTemplate(editor, htmlTagName) {
 						);
 					}
 				}
-			}
+			},
+			converterPriority: 'highest'
+		})
+	);
+	editor.conversion.for('editingDowncast').add(
+		downcastElementToElement({
+			model: 'paragraph',
+			view: (modelElement, viewWriter) => {
+				switch (modelElement.name) {
+					case 'paragraph': {
+						return createParagraphViewElement(
+							modelElement,
+							viewWriter
+						);
+					}
+					default: {
+						return viewWriter.createContainerElement(
+							mapModelToHTML[htmlTagName],
+							modelElement._attrs
+						);
+					}
+				}
+			},
+			converterPriority: 'highest'
 		})
 	);
 }
