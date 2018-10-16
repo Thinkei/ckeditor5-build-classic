@@ -7,7 +7,8 @@ export const textSchema = editor => {
 			'variable_image',
 			'variable_signature_pad',
 			'variable_select',
-			'section_title'
+			'section_title',
+			'span'
 		]
 	});
 };
