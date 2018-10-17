@@ -7,6 +7,7 @@ import FontFamily from '@ckeditor/ckeditor5-font/src/fontfamily';
 import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
+import UnderLine from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
 import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
@@ -18,6 +19,7 @@ import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
+import EhList from './plugins/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
@@ -39,6 +41,7 @@ ClassicEditor.builtinPlugins = [
 	Autoformat,
 	Bold,
 	Italic,
+	UnderLine,
 	BlockQuote,
 	EasyImage,
 	Heading,
@@ -48,7 +51,8 @@ ClassicEditor.builtinPlugins = [
 	ImageStyle,
 	ImageUpload,
 	Link,
-	List,
+	// List,
+	EhList,
 	Paragraph,
 	Table,
 	TableToolbar,
@@ -68,6 +72,7 @@ ClassicEditor.defaultConfig = {
 			'|',
 			'bold',
 			'italic',
+			'underline',
 			'link',
 			'bulletedList',
 			'numberedList',
