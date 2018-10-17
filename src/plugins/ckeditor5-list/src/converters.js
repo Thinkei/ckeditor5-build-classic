@@ -880,20 +880,28 @@ function generateLiInUl(modelItem, conversionApi) {
 	const parentAttributes = modelItem.getAttribute('parentAttributes');
 
 	// custom 'ol' or 'ul' element
-	parentStyles.forEach((value, key) => {
-		viewWriter.setStyle(key, value, viewList);
-	});
-	parentAttributes.forEach((value, key) => {
-		viewWriter.setAttribute(key, value, viewList);
-	});
+	if (parentStyles) {
+		parentStyles.forEach((value, key) => {
+			viewWriter.setStyle(key, value, viewList);
+		});
+	}
+	if (parentAttributes) {
+		parentAttributes.forEach((value, key) => {
+			viewWriter.setAttribute(key, value, viewList);
+		});
+	}
 
 	// custom 'li' element
-	modelItem.getAttribute('style').forEach((value, key) => {
-		viewWriter.setStyle(key, value, viewList);
-	});
-	modelItem.getAttribute('class').forEach((value, key) => {
-		viewWriter.addClass(value, viewList);
-	});
+	if (modelItem.getAttribute('style')) {
+		modelItem.getAttribute('style').forEach((value, key) => {
+			viewWriter.setStyle(key, value, viewList);
+		});
+	}
+	if (modelItem.getAttribute('class')) {
+		modelItem.getAttribute('class').forEach((value, key) => {
+			viewWriter.addClass(value, viewList);
+		});
+	}
 
 	viewWriter.insert(ViewPosition.createAt(viewList), viewItem);
 
