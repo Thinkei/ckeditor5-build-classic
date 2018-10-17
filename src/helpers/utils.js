@@ -138,12 +138,16 @@ export const createSpanModelElement = (viewElement, modelWriter) => {
 export const createSpanViewElement = (modelElement, viewWriter) => {
 	const span = viewWriter.createContainerElement('span', null);
 
-	modelElement.getAttribute('classes').forEach((value, key) => {
-		viewWriter.addClass(value, span);
-	});
+	if (modelElement.getAttribute('classes')) {
+		modelElement.getAttribute('classes').forEach((value, key) => {
+			viewWriter.addClass(value, span);
+		});
+	}
 
-	modelElement.getAttribute('styles').forEach((value, key) => {
-		viewWriter.setStyle(key, value, span);
-	});
+	if (modelElement.getAttribute('styles')) {
+		modelElement.getAttribute('styles').forEach((value, key) => {
+			viewWriter.setStyle(key, value, span);
+		});
+	}
 	return span;
 };
