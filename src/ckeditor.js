@@ -111,6 +111,10 @@ ClassicEditor.defaultConfig = {
 ClassicEditor.create(document.querySelector('#editor'))
 	.then(editor => {
 		window.editor = editor;
+		editor.keystrokes.set('Ctrl+S', (data, cancel) => {
+			editor.execute('onSave');
+			cancel();
+		});
 		editor.setData(`
 		<contract_section hide_title="true" hide_title_in_document="true" id="1160785" is_show="true" optional="true" premium="false" title="Logo"><contract_block block_group="" id="2837254" optional="false" probation="false" visible="true"><variable_image auto_populate="" block_options="[]" help_text="" id="300875" initial_value="logo" required="false" variable_name="logo" variable_type="Image">logo</variable_image></contract_block></contract_section><contract_section hide_title="true" hide_title_in_document="true" id="1160786" is_show="true" optional="false" premium="false" title="Introduction"><contract_block block_group="" id="2837255" optional="false" probation="false" visible="true">
 		<h3>Employee Wellbeing Policy</h3>
