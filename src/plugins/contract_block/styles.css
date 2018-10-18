@@ -17,13 +17,25 @@
 }
 
 .contract-block:before {
+	display: block;
+	font-size: 20px;
+	color: grey;
+	cursor: not-allowed;
 	content: attr(block_group);
 }
 
 .contract-block-dotted:before {
+	display: block;
+	font-size: 20px;
+	color: grey;
+	cursor: not-allowed;
 	content: attr(block_group);
 }
 
 .contract-block_focused:before {
+	display: block;
+	font-size: 20px;
+	color: grey;
+	cursor: not-allowed;
 	content: attr(block_group);
 }

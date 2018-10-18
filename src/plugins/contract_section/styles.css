@@ -1,3 +1,7 @@
 .section-title:before {
+	display: block;
+	font-size: 20px;
+	color: grey;
+	cursor: not-allowed;
 	content: attr(title);
 }
