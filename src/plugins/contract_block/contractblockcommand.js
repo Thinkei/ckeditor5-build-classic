@@ -232,7 +232,11 @@ export class AddBlockCommand extends Command {
 			case 'end': {
 				const listBlock = this.listBlockElementCreator(modelWriter, 2);
 				listBlock.forEach(block => {
-					modelWriter.append(block, sourceBlockElement.parent);
+					modelWriter.insert(
+						block,
+						sourceBlockElement.parent,
+						sourceBlockElement.index
+					);
 				});
 				this.handleAddBlock(
 					modelWriter,
@@ -247,7 +251,11 @@ export class AddBlockCommand extends Command {
 			case 'start': {
 				const listBlock = this.listBlockElementCreator(modelWriter, 2);
 				listBlock.forEach(block => {
-					modelWriter.append(block, sourceBlockElement.parent);
+					modelWriter.insert(
+						block,
+						sourceBlockElement.parent,
+						sourceBlockElement.index
+					);
 				});
 				this.handleAddBlock(
 					modelWriter,
@@ -262,7 +270,11 @@ export class AddBlockCommand extends Command {
 			case 'middle': {
 				const listBlock = this.listBlockElementCreator(modelWriter, 3);
 				listBlock.forEach(block => {
-					modelWriter.append(block, sourceBlockElement.parent);
+					modelWriter.insert(
+						block,
+						sourceBlockElement.parent,
+						sourceBlockElement.index
+					);
 				});
 				this.handleAddBlock(
 					modelWriter,
