@@ -8,6 +8,7 @@ import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 import FormView from './ui/formview';
 import { SectionActionView } from './ui/actionsview';
 import { EhPanel } from '../../components/panel';
+import { getSelectedSectionElement } from './utils';
 
 export default class SectionUI extends Plugin {
 	init() {
@@ -26,7 +27,10 @@ export default class SectionUI extends Plugin {
 		const viewDocument = editor.editing.view.document;
 
 		this.listenTo(viewDocument, 'click', () => {
-			const selectedSectionElelemt = this.getSelectedSectionElement();
+			const selectedSectionElelemt = getSelectedSectionElement(
+				editor,
+				'view'
+			);
 
 			if (selectedSectionElelemt) {
 				this.showSectionUI();
@@ -49,27 +53,6 @@ export default class SectionUI extends Plugin {
 			this.hideSectionUI();
 			cancel();
 		});
-	}
-
-	getSelectedSectionElement() {
-		const selection = this.editor.editing.view.document.selection;
-		return this.findSectionElement(selection.getFirstPosition());
-	}
-
-	findSectionElement(position) {
-		return position
-			.getAncestors()
-			.reverse()
-			.find(ancestor => {
-				return this.isSectionElement(ancestor);
-			});
-	}
-
-	isSectionElement(node) {
-		return (
-			node.is('containerElement', 'section') &&
-			node.getCustomProperty('sectionElement')
-		);
 	}
 
 	showSectionUI() {
@@ -103,8 +86,8 @@ export default class SectionUI extends Plugin {
 	}
 
 	getSectionBalloonPositionData() {
-		const view = this.editor.editing.view;
-		const targetSection = this.getSelectedSectionElement();
+		const editor = this.editor;
+		const targetSection = getSelectedSectionElement(editor, 'view');
 		const positions = BalloonPanelView.defaultPositions;
 
 		const target = targetSection
@@ -202,10 +185,13 @@ export default class SectionUI extends Plugin {
 
 	startUpdatingSectionUI() {
 		const editor = this.editor;
-		let prevSelectedSection = this.getSelectedSectionElement();
+		let prevSelectedSection = getSelectedSectionElement(editor, 'view');
 
 		this.listenTo(editor.ui, 'update', () => {
-			const selectedSectionElelemt = this.getSelectedSectionElement();
+			const selectedSectionElelemt = getSelectedSectionElement(
+				editor,
+				'view'
+			);
 
 			if (prevSelectedSection && !selectedSectionElelemt) {
 				this.hideSectionUI();

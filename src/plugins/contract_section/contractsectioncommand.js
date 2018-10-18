@@ -16,9 +16,10 @@ export class AddSectionCommand extends Command {
 	insertContractSectionElement() {
 		const editor = this.editor;
 		const model = editor.model;
-		const selection = editor.model.document.selection;
-		const position = selection.getFirstPosition();
-		const selectedSectionElement = getSelectedSectionElement(position);
+		const selectedSectionElement = getSelectedSectionElement(
+			editor,
+			'model'
+		);
 		model.change(modelWriter => {
 			const sectionElement = modelWriter.createElement(
 				'contract_section',
@@ -48,10 +49,9 @@ export class HideTitleCommand extends Command {
 
 	refresh() {
 		const editor = this.editor;
-		const selection = editor.model.document.selection;
-		this.modelPosition = selection.getFirstPosition();
 		const selectedSectionElement = getSelectedSectionElement(
-			selection.getFirstPosition()
+			editor,
+			'model'
 		);
 		if (selectedSectionElement) {
 			this.value = !(
@@ -69,10 +69,9 @@ export class HideTitleCommand extends Command {
 	execute() {
 		// view side
 		const editor = this.editor;
-		const selection = editor.model.document.selection;
-		this.modelPosition = selection.getFirstPosition();
 		const selectedSectionElement = getSelectedSectionElement(
-			selection.getFirstPosition()
+			editor,
+			'model'
 		);
 
 		if (selectedSectionElement) {
@@ -166,9 +165,9 @@ export class ChangeTitleCommand extends Command {
 	// TODO: update value of title element to this.value
 	refresh() {
 		const editor = this.editor;
-		const selection = editor.model.document.selection;
 		const selectedSectionElement = getSelectedSectionElement(
-			selection.getFirstPosition()
+			editor,
+			'model'
 		);
 		if (selectedSectionElement) {
 			this.value = selectedSectionElement.getAttribute('title');
@@ -179,10 +178,7 @@ export class ChangeTitleCommand extends Command {
 	execute(titleFormValue) {
 		// model side
 		const model = this.editor.model;
-		const selection = model.document.selection;
-		const selectedSection = this.getSelectedSection(
-			selection.getFirstPosition()
-		);
+		const selectedSection = this.getSelectedSection(editor, 'model');
 		const contractSectionList = [];
 
 		const root = model.document.getRoot();
@@ -269,9 +265,10 @@ export class ChangeTitleCommand extends Command {
 
 export class ToggleOptionalCommand extends Command {
 	refresh() {
-		const selection = this.editor.model.document.selection;
-		const selectedSectionElement = this.getSelectedSectionElement(
-			selection
+		const editor = this.editor;
+		const selectedSectionElement = getSelectedSectionElement(
+			editor,
+			'model'
 		);
 		if (selectedSectionElement)
 			this.value = toBool(
@@ -283,9 +280,9 @@ export class ToggleOptionalCommand extends Command {
 	execute() {
 		// view side
 		const view = this.editor.editing.view;
-		const selection = this.editor.model.document.selection;
-		const selectedSectionElement = this.getSelectedSectionElement(
-			selection
+		const selectedSectionElement = getSelectedSectionElement(
+			editor,
+			'model'
 		);
 		const viewElement = this.editor.editing.mapper.toViewElement(
 			selectedSectionElement
@@ -318,24 +315,5 @@ export class ToggleOptionalCommand extends Command {
 				viewWriter.removeClass('contract-section', viewElement);
 			});
 		}
-	}
-
-	getSelectedSectionElement(selection) {
-		if (selection.getFirstPosition()) {
-			return this.findSectionElement(selection.getFirstPosition());
-		}
-	}
-
-	findSectionElement(position) {
-		return position
-			.getAncestors()
-			.reverse()
-			.find(ancestor => {
-				return this.isSectionElement(ancestor);
-			});
-	}
-
-	isSectionElement(node) {
-		return node.is('element', 'contract_section');
 	}
 }

@@ -240,7 +240,9 @@ export default class BlockUI extends Plugin {
 			element: this.EhBalloon.panel.element,
 			target,
 			positions: [
+				positions.northArrowSouth,
 				positions.northWestArrowSouthWest,
+				positions.southArrowNorth,
 				positions.southWestArrowNorthWest
 			]
 		};
