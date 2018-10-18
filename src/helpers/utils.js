@@ -42,6 +42,10 @@ export const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
 		modelElement._attrs
 	);
 
+	if (toBool(sectionElement.getAttribute('optional'))) {
+		viewWriter.addClass('contract-section', sectionElement);
+	}
+
 	if (
 		!toBool(sectionElement.getAttribute('hide_title')) ||
 		!toBool(sectionElement.getAttribute('hide_title_in_document'))
