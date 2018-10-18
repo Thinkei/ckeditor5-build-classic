@@ -46,7 +46,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 						);
 				}
 			},
-			converterPriority: 'highest'
+			converterPriority: 'high'
 		})
 	);
 	// dataDowncast helper
@@ -59,7 +59,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					modelElement._attrs
 				);
 			},
-			converterPriority: 'highest'
+			converterPriority: 'high'
 		})
 	);
 	// edittingDowncast helper
@@ -109,12 +109,6 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					case 'span': {
 						return createSpanViewElement(modelElement, viewWriter);
 					}
-					case 'paragraph': {
-						return createParagraphViewElement(
-							modelElement,
-							viewWriter
-						);
-					}
 					default: {
 						return viewWriter.createContainerElement(
 							mapModelToHTML[htmlTagName],
@@ -123,7 +117,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					}
 				}
 			},
-			converterPriority: 'highest'
+			converterPriority: 'high'
 		})
 	);
 	editor.conversion.for('editingDowncast').add(
@@ -145,7 +139,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					}
 				}
 			},
-			converterPriority: 'highest'
+			converterPriority: 'high'
 		})
 	);
 }

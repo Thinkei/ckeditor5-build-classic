@@ -38,7 +38,7 @@ const toView = (modelRoot, editor) => {
 			}
 		}),
 		{
-			priority: 'high'
+			priority: 'highest'
 		}
 	);
 
