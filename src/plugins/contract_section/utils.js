@@ -39,10 +39,6 @@ function findSelectionAncestor(position, flag) {
 		.find(ancestor => isSectionElement(ancestor, flag));
 }
 
-export function toBool(value) {
-	return value === 'true';
-}
-
 export function getSelectedSectionElement(editor, flag) {
 	const selection = getSelection(editor, flag);
 	if (flag === 'view') {
@@ -75,5 +71,3 @@ export function changeViewElement(
 	viewWriter.removeClass(option.class.remove, viewElement);
 	viewWriter.addClass(option.class.add, viewElement);
 }
-
-

@@ -177,7 +177,8 @@ export class ChangeTitleCommand extends Command {
 
 	execute(titleFormValue) {
 		// model side
-		const model = this.editor.model;
+		const editor = this.editor;
+		const model = editor.model;
 		const selectedSection = this.getSelectedSection(editor, 'model');
 		const contractSectionList = [];
 
@@ -279,7 +280,8 @@ export class ToggleOptionalCommand extends Command {
 
 	execute() {
 		// view side
-		const view = this.editor.editing.view;
+		const editor = this.editor;
+		const view = editor.editing.view;
 		const selectedSectionElement = getSelectedSectionElement(
 			editor,
 			'model'

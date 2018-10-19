@@ -91,7 +91,7 @@ export default class SectionUI extends Plugin {
 		const positions = BalloonPanelView.defaultPositions;
 
 		const target = targetSection
-			? view.domConverter.mapViewToDom(targetSection)
+			? editor.editing.view.domConverter.mapViewToDom(targetSection)
 			: null;
 
 		return {
