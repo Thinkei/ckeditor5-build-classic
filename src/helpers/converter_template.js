@@ -4,9 +4,12 @@ import { downcastElementToElement } from '@ckeditor/ckeditor5-engine/src/convers
 import {
 	createBlockElement,
 	createSectionElement,
-	createSectionTitleElement,
 	createViewVariableElement,
 	createModelElement,
+	createParagraphModelElement,
+	createParagraphViewElement,
+	createSpanModelElement,
+	createSpanViewElement,
 	mapModelToHTML
 } from './utils';
 
@@ -28,13 +31,22 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					case 'variable_signature_pad':
 					case 'variable_image':
 						return createModelElement(viewElement, modelWriter);
+					case 'span':
+						return createSpanModelElement(viewElement, modelWriter);
+					case 'p': {
+						return createParagraphModelElement(
+							viewElement,
+							modelWriter
+						);
+					}
 					default:
 						return modelWriter.createElement(
 							viewElement.name,
 							viewElement._attrs
 						);
 				}
-			}
+			},
+			converterPriority: 'high'
 		})
 	);
 	// dataDowncast helper
@@ -46,7 +58,8 @@ export function converterHelperTemplate(editor, htmlTagName) {
 					mapModelToHTML[htmlTagName],
 					modelElement._attrs
 				);
-			}
+			},
+			converterPriority: 'high'
 		})
 	);
 	// edittingDowncast helper
@@ -57,13 +70,6 @@ export function converterHelperTemplate(editor, htmlTagName) {
 				switch (modelElement.name) {
 					case 'contract_block': {
 						return createBlockElement(
-							viewWriter,
-							modelElement,
-							htmlTagName
-						);
-					}
-					case 'section_title': {
-						return createSectionTitleElement(
 							viewWriter,
 							modelElement,
 							htmlTagName
@@ -100,7 +106,9 @@ export function converterHelperTemplate(editor, htmlTagName) {
 							'fas fa-calendar-alt'
 						);
 					}
-
+					case 'span': {
+						return createSpanViewElement(modelElement, viewWriter);
+					}
 					default: {
 						return viewWriter.createContainerElement(
 							mapModelToHTML[htmlTagName],
@@ -108,7 +116,30 @@ export function converterHelperTemplate(editor, htmlTagName) {
 						);
 					}
 				}
-			}
+			},
+			converterPriority: 'high'
+		})
+	);
+	editor.conversion.for('editingDowncast').add(
+		downcastElementToElement({
+			model: 'paragraph',
+			view: (modelElement, viewWriter) => {
+				switch (modelElement.name) {
+					case 'paragraph': {
+						return createParagraphViewElement(
+							modelElement,
+							viewWriter
+						);
+					}
+					default: {
+						return viewWriter.createContainerElement(
+							mapModelToHTML[htmlTagName],
+							modelElement._attrs
+						);
+					}
+				}
+			},
+			converterPriority: 'high'
 		})
 	);
 }

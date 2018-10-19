@@ -1,5 +1,4 @@
 import ModelPosition from '@ckeditor/ckeditor5-engine/src/model/position';
-import Range from '@ckeditor/ckeditor5-engine/src/model/range';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 
 const createVariableElement = (modelWriter, position, variableAttributes) => {
@@ -15,7 +14,8 @@ const createVariableElement = (modelWriter, position, variableAttributes) => {
 		variableTag
 	);
 	modelWriter.insert(variableTag, position);
-	modelWriter.setSelection(Range.createOn(variableTag));
+	modelWriter.setSelection(ModelPosition.createAt(variableTag, 'after'));
+	modelWriter.setSelectionFocus(variableTag, 'after');
 };
 
 // Add variable element to model

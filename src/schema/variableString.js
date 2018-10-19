@@ -1,6 +1,7 @@
 export const variableStringSchema = editor => {
 	editor.model.schema.register('variable_string', {
-		allowIn: ['paragraph'],
+		isObject: true,
+		allowIn: ['paragraph', 'listItem'],
 		allowAttributes: [
 			'auto_populate',
 			'block_options',

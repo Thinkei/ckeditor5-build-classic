@@ -1,6 +1,9 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 
+import noteIcon from '../../theme/icons/notes.svg';
+import pencelIcon from '../../theme/icons/pencil.svg';
+import stackIcon from '../../theme/icons/stack.svg';
+import eyeIcon from '../../theme/icons/eye.svg';
 import { createToolbarButton } from '../utils';
 import {
 	OnSaveCommamnd,
@@ -18,7 +21,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'onSave',
 				buttonName: 'save',
 				buttonLabel: 'Save (Ctrl + S)',
-				icon: codeIcon
+				icon: noteIcon
 			});
 		} else {
 			editor.commands.add('onSave', new OnSaveCommamnd(editor));
@@ -26,7 +29,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'onSave',
 				buttonName: 'save',
 				buttonLabel: 'Save (Ctrl + S)',
-				icon: codeIcon
+				icon: noteIcon
 			});
 		}
 
@@ -35,7 +38,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openEditContractCommand',
 				buttonName: 'openEditContractModal',
 				buttonLabel: 'Open Edit Contract',
-				icon: codeIcon
+				icon: pencelIcon
 			});
 		} else {
 			editor.commands.add(
@@ -46,7 +49,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openEditContractCommand',
 				buttonName: 'openEditContractModal',
 				buttonLabel: 'Open Edit Contract',
-				icon: codeIcon
+				icon: pencelIcon
 			});
 		}
 
@@ -55,7 +58,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openVariableManagerCommand',
 				buttonName: 'openVariableManagerSidebar',
 				buttonLabel: 'Open Variable Manager',
-				icon: codeIcon
+				icon: stackIcon
 			});
 		} else {
 			editor.commands.add(
@@ -66,7 +69,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openVariableManagerCommand',
 				buttonName: 'openVariableManagerSidebar',
 				buttonLabel: 'Open Variable Manager',
-				icon: codeIcon
+				icon: stackIcon
 			});
 		}
 
@@ -75,7 +78,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openTutorialScreen',
 				buttonName: 'openTutorialScreen',
 				buttonLabel: 'Open Tutorial Screen',
-				icon: codeIcon
+				icon: eyeIcon
 			});
 		} else {
 			editor.commands.add(
@@ -86,7 +89,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openTutorialScreen',
 				buttonName: 'openTutorialScreen',
 				buttonLabel: 'Open Tutorial Screen',
-				icon: codeIcon
+				icon: eyeIcon
 			});
 		}
 	}

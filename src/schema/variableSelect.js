@@ -1,6 +1,7 @@
 export const variableSelectSchema = editor => {
 	editor.model.schema.register('variable_select', {
-		allowIn: ['paragraph'],
+		isObject: true,
+		allowIn: ['paragraph', 'listItem'],
 		allowAttributes: [
 			'auto_populate',
 			'block_options',

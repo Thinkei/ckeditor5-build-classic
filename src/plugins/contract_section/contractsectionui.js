@@ -2,14 +2,18 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 
 import FormView from './ui/formview';
 import { SectionActionView } from './ui/actionsview';
 import { EhPanel } from '../../components/panel';
+import { getSelectedSectionElement } from './utils';
 
 export default class SectionUI extends Plugin {
 	init() {
 		const editor = this.editor;
+		this.createToolbarSectionButton();
 		this.sectionFormView = this.createFormView();
 		this.sectionActionView = this.createSectionActionView();
 		this.EhBalloon = new EhPanel(editor);
@@ -23,7 +27,10 @@ export default class SectionUI extends Plugin {
 		const viewDocument = editor.editing.view.document;
 
 		this.listenTo(viewDocument, 'click', () => {
-			const selectedSectionElelemt = this.getSelectedSectionElement();
+			const selectedSectionElelemt = getSelectedSectionElement(
+				editor,
+				'view'
+			);
 
 			if (selectedSectionElelemt) {
 				this.showSectionUI();
@@ -46,27 +53,6 @@ export default class SectionUI extends Plugin {
 			this.hideSectionUI();
 			cancel();
 		});
-	}
-
-	getSelectedSectionElement() {
-		const selection = this.editor.editing.view.document.selection;
-		return this.findSectionElement(selection.getFirstPosition());
-	}
-
-	findSectionElement(position) {
-		return position
-			.getAncestors()
-			.reverse()
-			.find(ancestor => {
-				return this.isSectionElement(ancestor);
-			});
-	}
-
-	isSectionElement(node) {
-		return (
-			node.is('containerElement', 'section') &&
-			node.getCustomProperty('sectionElement')
-		);
 	}
 
 	showSectionUI() {
@@ -100,12 +86,12 @@ export default class SectionUI extends Plugin {
 	}
 
 	getSectionBalloonPositionData() {
-		const view = this.editor.editing.view;
-		const targetSection = this.getSelectedSectionElement();
+		const editor = this.editor;
+		const targetSection = getSelectedSectionElement(editor, 'view');
 		const positions = BalloonPanelView.defaultPositions;
 
 		const target = targetSection
-			? view.domConverter.mapViewToDom(targetSection)
+			? editor.editing.view.domConverter.mapViewToDom(targetSection)
 			: null;
 
 		return {
@@ -124,12 +110,12 @@ export default class SectionUI extends Plugin {
 		const toggleOptionalCommand = editor.commands.get('toggleOptional');
 
 		sectionActionView.hideTitleButtonView
-			.bind('isEnabled')
-			.to(hideTitleCommand, 'isEnabled');
+			.bind('isEnabled', 'isOn')
+			.to(hideTitleCommand, 'isEnabled', 'value');
 
 		sectionActionView.toggleOptionalButtonView
-			.bind('isEnabled')
-			.to(toggleOptionalCommand, 'isEnabled');
+			.bind('isEnabled', 'isOn')
+			.to(toggleOptionalCommand, 'isEnabled', 'value');
 
 		this.listenTo(sectionActionView, 'hideTitle', () => {
 			editor.execute('hideTitle');
@@ -154,6 +140,8 @@ export default class SectionUI extends Plugin {
 		formView.titleInputView
 			.bind('isReadOnly')
 			.to(changeTitleCommand, 'isEnabled', value => !value);
+		formView.titleInputView.bind('value').to(changeTitleCommand, 'value');
+
 		formView.saveButtonView.bind('isEnabled').to(changeTitleCommand);
 
 		this.listenTo(formView, 'submit', () => {
@@ -165,7 +153,7 @@ export default class SectionUI extends Plugin {
 		});
 
 		this.listenTo(formView, 'cancel', () => {
-			if (this.EhBalloon.hasView(this.sectionFormView)) {
+			if (this.EhBalloon.visibleView() === this.sectionFormView) {
 				this.EhBalloon.remove(this.sectionFormView);
 			}
 		});
@@ -197,10 +185,13 @@ export default class SectionUI extends Plugin {
 
 	startUpdatingSectionUI() {
 		const editor = this.editor;
-		let prevSelectedSection = this.getSelectedSectionElement();
+		let prevSelectedSection = getSelectedSectionElement(editor, 'view');
 
 		this.listenTo(editor.ui, 'update', () => {
-			const selectedSectionElelemt = this.getSelectedSectionElement();
+			const selectedSectionElelemt = getSelectedSectionElement(
+				editor,
+				'view'
+			);
 
 			if (prevSelectedSection && !selectedSectionElelemt) {
 				this.hideSectionUI();
@@ -209,6 +200,29 @@ export default class SectionUI extends Plugin {
 					this.getSectionBalloonPositionData()
 				);
 			}
+		});
+	}
+
+	createToolbarSectionButton() {
+		const editor = this.editor;
+		const addSectionCommand = editor.commands.get('addSection');
+		const t = editor.t;
+
+		editor.ui.componentFactory.add('addSection', locale => {
+			const button = new ButtonView(locale);
+
+			button.isEnabled = true;
+			button.label = t('Add Section');
+			button.icon = codeIcon;
+			button.tooltip = true;
+
+			// Bind button to the command
+			button.bind('isEnabled').to(addSectionCommand, 'isEnabled');
+
+			this.listenTo(button, 'execute', () => {
+				editor.execute('addSection');
+			});
+			return button;
 		});
 	}
 }

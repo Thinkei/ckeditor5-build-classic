@@ -1,23 +1,20 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobserver';
-import ContextualBalloon from '@ckeditor/ckeditor5-ui/src/panel/balloon/contextualballoon';
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import unlinkIcon from '@ckeditor/ckeditor5-link/theme/icons/unlink.svg';
+import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 
 import { ToggleCommand } from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
 import BlockFormView from './ui/formview';
 import { getSelectedBlockElement } from './utils';
+import { EhPanel } from '../../components/panel';
 
 export default class BlockUI extends Plugin {
-	static get requires() {
-		return [ContextualBalloon];
-	}
 	init() {
 		const editor = this.editor;
-		this.balloon = editor.plugins.get(ContextualBalloon);
+		this.EhBalloon = new EhPanel(editor);
 		this.actionsView = this.createActionsView();
 		this.formView = this.createFormView();
 		this.createToolbarBlockButton();
@@ -36,6 +33,10 @@ export default class BlockUI extends Plugin {
 		blockFormView.inputView
 			.bind('isReadOnly')
 			.to(editBlockGroupCommand, 'isEnabled', value => !value);
+		blockFormView.inputView
+			.bind('value')
+			.to(editBlockGroupCommand, 'value');
+
 		blockFormView.saveButtonView
 			.bind('isEnabled')
 			.to(editBlockGroupCommand, 'isEnabled');
@@ -49,7 +50,9 @@ export default class BlockUI extends Plugin {
 		});
 
 		this.listenTo(blockFormView, 'cancel', () => {
-			this.hideToolbar();
+			if (this.EhBalloon.visibleView() === this.formView) {
+				this.EhBalloon.remove(this.formView);
+			}
 		});
 
 		blockFormView.keystrokes.set('Esc', (data, cancel) => {
@@ -65,14 +68,20 @@ export default class BlockUI extends Plugin {
 		const editor = this.editor;
 		const toggleCommand = new ToggleCommand(editor);
 		const blockActionView = new BlockActionView(editor.locale);
-		blockActionView.toggleButtonView.bind('isEnabled').to(toggleCommand);
+
+		blockActionView.toggleButtonView
+			.bind('isEnabled')
+			.to(toggleCommand, 'isEnabled');
+		blockActionView.toggleButtonView
+			.bind('isOn')
+			.to(toggleCommand, 'value');
 
 		this.listenTo(blockActionView, 'toggle', () => {
-			editor.execute('toggle');
+			editor.execute('toggle', !!blockActionView.toggleButtonView.isOn);
 		});
 
 		this.listenTo(blockActionView, 'editGroup', () => {
-			this.addFormView();
+			this.addBlockFormView();
 		});
 
 		return blockActionView;
@@ -89,7 +98,7 @@ export default class BlockUI extends Plugin {
 
 			button.isEnabled = true;
 			button.label = t('Add Block');
-			button.icon = unlinkIcon;
+			button.icon = codeIcon;
 			button.tooltip = true;
 
 			// Bind button to the command
@@ -115,7 +124,7 @@ export default class BlockUI extends Plugin {
 
 			// show toolbar
 			if (selectedBlockElement) {
-				this.showToolbar();
+				this.showBlockUI();
 			}
 		});
 
@@ -130,23 +139,23 @@ export default class BlockUI extends Plugin {
 		clickOutsideHandler({
 			emitter: this.actionsView,
 			activator: () => this.isToolbarVisible,
-			contextElements: [this.balloon.view.element],
+			contextElements: [this.EhBalloon.panel.element],
 			callback: () => this.hideToolbar()
 		});
 	}
 
 	isToolbarVisible() {
-		return this.balloon.hasView(this.actionsView);
+		return this.EhBalloon.hasView(this.actionsView);
 	}
 
 	// show Toolbar
-	showToolbar() {
+	showBlockUI() {
 		// no block selected then returns
 		if (!getSelectedBlockElement(this.editor, 'view')) {
 			return null;
 		} else {
 			// add toolbar when there is a selected block
-			this.addToolbars();
+			this.addBlockActionView();
 		}
 		this.startUpdatingUI();
 	}
@@ -158,11 +167,11 @@ export default class BlockUI extends Plugin {
 		// update ui
 		this.stopListening(editor.ui, 'update');
 		// remove toolbars
-		if (this.balloon.hasView(this.formView)) {
-			this.balloon.remove(this.formView);
+		if (this.EhBalloon.hasView(this.formView)) {
+			this.EhBalloon.remove(this.formView);
 		}
-		if (this.balloon.hasView(this.actionsView)) {
-			this.balloon.remove(this.actionsView);
+		if (this.EhBalloon.hasView(this.actionsView)) {
+			this.EhBalloon.remove(this.actionsView);
 		}
 		// remove highlight class by executing PostFixers loop
 		view.change(writer => {
@@ -185,19 +194,19 @@ export default class BlockUI extends Plugin {
 				this.hideToolbar();
 			} else {
 				const balloonPosition = this.getBalloonPositionData();
-				this.balloon.updatePosition(balloonPosition);
+				this.EhBalloon.updatePosition(balloonPosition);
 			}
 			prevSelectedBlock = selectedBlock;
 		});
 	}
 
 	// add form view
-	addFormView() {
-		if (this.balloon.hasView(this.formView)) {
+	addBlockFormView() {
+		if (this.EhBalloon.hasView(this.formView)) {
 			return;
 		}
 
-		this.balloon.add({
+		this.EhBalloon.add({
 			view: this.formView,
 			position: this.getBalloonPositionData()
 		});
@@ -206,13 +215,13 @@ export default class BlockUI extends Plugin {
 	}
 
 	// add toolbar to balloon's stack
-	addToolbars() {
+	addBlockActionView() {
 		// toolbar already exist then returns
-		if (this.balloon.hasView(this.actionsView)) {
+		if (this.EhBalloon.hasView(this.actionsView)) {
 			return;
 		}
 		// add toolbar
-		this.balloon.add({
+		this.EhBalloon.add({
 			view: this.actionsView,
 			position: this.getBalloonPositionData()
 		});
@@ -228,10 +237,12 @@ export default class BlockUI extends Plugin {
 			? view.domConverter.mapViewToDom(targetBlock)
 			: null;
 		return {
-			element: this.balloon.view.element,
+			element: this.EhBalloon.panel.element,
 			target,
 			positions: [
+				positions.northArrowSouth,
 				positions.northWestArrowSouthWest,
+				positions.southArrowNorth,
 				positions.southWestArrowNorthWest
 			]
 		};

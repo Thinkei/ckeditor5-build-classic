@@ -4,9 +4,10 @@ import { variableImageConverterHelper } from './variable_image';
 import { variableDateConverterHelper } from './variable_date';
 import { variableSignaturePadConverterHelper } from './variable_signature_pad';
 import { variableSelectConverterHelper } from './variable_select';
-import { tableConverterHelper } from './table';
 import { sectionTitleConverterHelper } from './section_title';
 import { contractBlockConverterHelper } from './contract_block';
+import { spanConverterHelper } from './span';
+import { paragraphConverterHelper } from './paragraph';
 
 export const addConverterHelpers = editor => {
 	contractBlockConverterHelper(editor);
@@ -16,6 +17,7 @@ export const addConverterHelpers = editor => {
 	variableDateConverterHelper(editor);
 	variableSignaturePadConverterHelper(editor);
 	variableSelectConverterHelper(editor);
-	tableConverterHelper(editor);
 	sectionTitleConverterHelper(editor);
+	spanConverterHelper(editor);
+	paragraphConverterHelper(editor);
 };

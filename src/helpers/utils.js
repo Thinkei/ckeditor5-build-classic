@@ -11,10 +11,8 @@ export const mapModelToHTML = {
 	variable_date: 'span',
 	variable_signature_pad: 'span',
 	variable_select: 'span',
-	table: 'table',
-	tbody: 'tbody',
-	tr: 'tr',
-	td: 'td'
+	span: 'span',
+	paragraph: 'p'
 };
 
 const toVariableWidget = (viewElement, viewWriter) => {
@@ -22,7 +20,6 @@ const toVariableWidget = (viewElement, viewWriter) => {
 };
 
 const BLOCK_ELEMENT = 'blockElement';
-const SECTION_TITLE = 'sectionTitle';
 const SECTION_ELEMENT = 'sectionElement';
 
 export function createBlockElement(viewWriter, modelElement, htmlTagName) {
@@ -39,25 +36,22 @@ export function createBlockElement(viewWriter, modelElement, htmlTagName) {
 	return blockElement;
 }
 
-export const createSectionTitleElement = (
-	viewWriter,
-	modelElement,
-	htmlTagName
-) => {
-	const sectionTitleElement = viewWriter.createContainerElement(
-		mapModelToHTML[htmlTagName],
-		modelElement._attrs
-	);
-
-	viewWriter.setCustomProperty(SECTION_TITLE, true, sectionTitleElement);
-	return sectionTitleElement;
-};
-
 export const createSectionElement = (viewWriter, modelElement, htmlTagName) => {
 	const sectionElement = viewWriter.createContainerElement(
 		mapModelToHTML[htmlTagName],
 		modelElement._attrs
 	);
+
+	if (toBool(sectionElement.getAttribute('optional'))) {
+		viewWriter.addClass('contract-section', sectionElement);
+	}
+
+	if (
+		!toBool(sectionElement.getAttribute('hide_title')) ||
+		!toBool(sectionElement.getAttribute('hide_title_in_document'))
+	) {
+		viewWriter.addClass('section-title', sectionElement);
+	}
 
 	viewWriter.setCustomProperty(SECTION_ELEMENT, true, sectionElement);
 	return sectionElement;
@@ -106,4 +100,58 @@ export const createModelElement = (viewElement, modelWriter) => {
 	} else {
 		return modelWriter.createElement(viewElement.name, viewElement._attrs);
 	}
+};
+
+export const createParagraphModelElement = (viewElement, modelWriter) => {
+	const paragraph = modelWriter.createElement(
+		'paragraph',
+		viewElement._attrs
+	);
+
+	modelWriter.setAttribute('classes', viewElement._classes, paragraph);
+	modelWriter.setAttribute('styles', viewElement._styles, paragraph);
+
+	return paragraph;
+};
+
+export const createParagraphViewElement = (modelElement, viewWriter) => {
+	const paragraph = viewWriter.createContainerElement('p', null);
+
+	if (modelElement.getAttribute('classes')) {
+		modelElement.getAttribute('classes').forEach((key, value) => {
+			viewWriter.addClass(key, paragraph);
+		});
+	}
+
+	if (modelElement.getAttribute('styles')) {
+		modelElement.getAttribute('styles').forEach((key, value) => {
+			viewWriter.setStyle(key, value, paragraph);
+		});
+	}
+
+	return paragraph;
+};
+
+export const createSpanModelElement = (viewElement, modelWriter) => {
+	const span = modelWriter.createElement('span', viewElement._attrs);
+	modelWriter.setAttribute('classes', viewElement._classes, span);
+	modelWriter.setAttribute('styles', viewElement._styles, span);
+	return span;
+};
+
+export const createSpanViewElement = (modelElement, viewWriter) => {
+	const span = viewWriter.createContainerElement('span', null);
+
+	if (modelElement.getAttribute('classes')) {
+		modelElement.getAttribute('classes').forEach((value, key) => {
+			viewWriter.addClass(value, span);
+		});
+	}
+
+	if (modelElement.getAttribute('styles')) {
+		modelElement.getAttribute('styles').forEach((value, key) => {
+			viewWriter.setStyle(key, value, span);
+		});
+	}
+	return span;
 };

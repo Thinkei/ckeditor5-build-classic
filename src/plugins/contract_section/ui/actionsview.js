@@ -1,9 +1,9 @@
 import View from '@ckeditor/ckeditor5-ui/src/view';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
-import bulletedlistIcon from '@ckeditor/ckeditor5-list/theme/icons/bulletedlist.svg';
-import numberedlistIcon from '@ckeditor/ckeditor5-list/theme/icons/numberedlist.svg';
-import linkIcon from '@ckeditor/ckeditor5-link/theme/icons/link.svg';
+import pencelIcon from '../../../theme/icons/pencil.svg';
+import preferenceIcon from '../../../theme/icons/preferences.svg';
+import cogwheelIcon from '../../../theme/icons/cogwheel.svg';
 
 export class SectionActionView extends View {
 	constructor(locale) {
@@ -13,20 +13,20 @@ export class SectionActionView extends View {
 		this.keystrokes = new KeystrokeHandler();
 
 		this.hideTitleButtonView = this.createButton(
-			t('Hide Title'),
-			numberedlistIcon,
+			t('Hide/Show Title'),
+			cogwheelIcon,
 			'hideTitle'
 		);
 
 		this.editTitleButtonView = this.createButton(
 			t('Edit Title'),
-			bulletedlistIcon,
+			pencelIcon,
 			'edit'
 		);
 
 		this.toggleOptionalButtonView = this.createButton(
 			t('Optional'),
-			linkIcon,
+			preferenceIcon,
 			'toggleOptional'
 		);
 
