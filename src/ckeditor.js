@@ -18,11 +18,10 @@ import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import Link from '@ckeditor/ckeditor5-link/src/link';
-import List from '@ckeditor/ckeditor5-list/src/list';
 import EhList from './plugins/ckeditor5-list/src/list';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import Table from '@ckeditor/ckeditor5-table/src/table';
-import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
+import EhTable from './plugins/ckeditor5-table/src/table';
+import EhTableToolbar from './plugins/ckeditor5-table/src/tabletoolbar';
 
 import CustomConfig from './plugins/config_helper';
 import ContractBlock from './plugins/contract_block';
@@ -51,11 +50,10 @@ ClassicEditor.builtinPlugins = [
 	ImageStyle,
 	ImageUpload,
 	Link,
-	// List,
 	EhList,
 	Paragraph,
-	Table,
-	TableToolbar,
+	EhTable,
+	EhTableToolbar,
 	CustomConfig,
 	ContractSection,
 	ContractBlock
