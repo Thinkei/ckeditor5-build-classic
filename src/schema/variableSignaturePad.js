@@ -1,7 +1,7 @@
 export const variableSignaturePadSchema = editor => {
 	editor.model.schema.register('variable_signature_pad', {
 		isObject: true,
-		allowIn: ['paragraph', 'listItem'],
+		allowIn: ['paragraph', 'listItem', 'tableCell'],
 		allowAttributes: [
 			'auto_populate',
 			'block_options',
