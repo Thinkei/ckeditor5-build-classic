@@ -54,14 +54,13 @@ export class HideTitleCommand extends Command {
 			'model'
 		);
 		if (selectedSectionElement) {
-			this.value = !(
-				toBool(selectedSectionElement.getAttribute('hide_title')) ||
-				toBool(
+			this.value =
+				!toBool(selectedSectionElement.getAttribute('hide_title')) ||
+				!toBool(
 					selectedSectionElement.getAttribute(
 						'hide_title_in_document'
 					)
-				)
-			);
+				);
 		}
 		this.isEnabled = true;
 	}
@@ -77,7 +76,7 @@ export class HideTitleCommand extends Command {
 		if (selectedSectionElement) {
 			editor.model.change(modelWriter => {
 				if (
-					toBool(selectedSectionElement.getAttribute('hide_title')) ||
+					toBool(selectedSectionElement.getAttribute('hide_title')) &&
 					toBool(
 						selectedSectionElement.getAttribute(
 							'hide_title_in_document'
@@ -179,7 +178,7 @@ export class ChangeTitleCommand extends Command {
 		// model side
 		const editor = this.editor;
 		const model = editor.model;
-		const selectedSection = this.getSelectedSection(editor, 'model');
+		const selectedSection = getSelectedSectionElement(editor, 'model');
 		const contractSectionList = [];
 
 		const root = model.document.getRoot();
@@ -244,23 +243,6 @@ export class ChangeTitleCommand extends Command {
 				});
 			}
 		}
-	}
-
-	getSelectedSection(position) {
-		return this.findSelectionAncestor(position);
-	}
-
-	findSelectionAncestor(position) {
-		return position
-			.getAncestors()
-			.reverse()
-			.find(ancestor => {
-				return this.isSectionTitle(ancestor);
-			});
-	}
-
-	isSectionTitle(node) {
-		return node.is('element', 'contract_section');
 	}
 }
 
