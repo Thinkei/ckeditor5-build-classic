@@ -1,9 +1,9 @@
 .table {
-	border: 1px solid black;
+	border: 1px solid black !important;
 	border-collapse: collapse;
 }
 
 .table-cell {
-	border: 1px solid black;
-	min-width: 100px;
+	border: 1px solid black !important;
+	min-width: 60px;
 }

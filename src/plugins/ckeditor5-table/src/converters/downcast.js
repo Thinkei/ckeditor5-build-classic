@@ -49,10 +49,12 @@ export function downcastInsertTable(options = {}) {
 				const figureElement = conversionApi.writer.createContainerElement(
 					'figure'
 				);
+
 				const tableElement = conversionApi.writer.createContainerElement(
 					'table',
 					{ class: 'table' }
 				);
+
 				conversionApi.writer.insert(
 					ViewPosition.createAt(figureElement),
 					tableElement
