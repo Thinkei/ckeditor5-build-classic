@@ -97,7 +97,7 @@ export default class SectionUI extends Plugin {
 		return {
 			target,
 			positions: [
-				positions.southEastArrowNorthWest,
+				positions.southEastArrowNorthEast,
 				positions.northEastArrowSouthEast
 			]
 		};
