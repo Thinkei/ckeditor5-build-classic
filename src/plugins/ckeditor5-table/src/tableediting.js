@@ -88,12 +88,36 @@ export default class TableEditing extends Plugin {
 		conversion.for('downcast').add(downcastRemoveRow());
 
 		// Table cell conversion.
-		conversion
-			.for('upcast')
-			.add(upcastElementToElement({ model: 'tableCell', view: 'td' }));
-		conversion
-			.for('upcast')
-			.add(upcastElementToElement({ model: 'tableCell', view: 'th' }));
+		conversion.for('upcast').add(
+			upcastElementToElement({
+				model: (viewElement, modelWriter) => {
+					const tableCell = modelWriter.createElement('tableCell');
+					modelWriter.setAttributes(
+						{
+							styles: viewElement._styles
+						},
+						tableCell
+					);
+					return tableCell;
+				},
+				view: 'td'
+			})
+		);
+		conversion.for('upcast').add(
+			upcastElementToElement({
+				model: (viewElement, modelWriter) => {
+					const tableCell = modelWriter.createElement('tableCell');
+					modelWriter.setAttributes(
+						{
+							styles: viewElement._styles
+						},
+						tableCell
+					);
+					return tableCell;
+				},
+				view: 'th'
+			})
+		);
 
 		conversion
 			.for('editingDowncast')
