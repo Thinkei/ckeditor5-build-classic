@@ -117,12 +117,6 @@ export const createParagraphModelElement = (viewElement, modelWriter) => {
 export const createParagraphViewElement = (modelElement, viewWriter) => {
 	const paragraph = viewWriter.createContainerElement('p', null);
 
-	if (modelElement.getAttribute('classes')) {
-		modelElement.getAttribute('classes').forEach((key, value) => {
-			viewWriter.addClass(key, paragraph);
-		});
-	}
-
 	if (modelElement.getAttribute('styles')) {
 		modelElement.getAttribute('styles').forEach((key, value) => {
 			viewWriter.setStyle(key, value, paragraph);
@@ -141,15 +135,9 @@ export const createSpanModelElement = (viewElement, modelWriter) => {
 
 export const createSpanViewElement = (modelElement, viewWriter) => {
 	const span = viewWriter.createContainerElement('span', null);
-
-	if (modelElement.getAttribute('classes')) {
-		modelElement.getAttribute('classes').forEach((value, key) => {
-			viewWriter.addClass(value, span);
-		});
-	}
-
-	if (modelElement.getAttribute('styles')) {
-		modelElement.getAttribute('styles').forEach((value, key) => {
+	const spanStyles = modelElement.getAttribute('styles');
+	if (spanStyles) {
+		spanStyles.forEach((value, key) => {
 			viewWriter.setStyle(key, value, span);
 		});
 	}

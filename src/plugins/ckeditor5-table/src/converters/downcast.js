@@ -579,7 +579,11 @@ function createViewTableCellElement(
 	conversionApi.writer.addClass('table-cell', cellElement);
 
 	const tableCell = tableWalkerValue.cell;
-
+	if (tableCell.getAttribute('styles')) {
+		tableCell.getAttribute('styles').forEach((value, key) => {
+			conversionApi.writer.setStyle(key, value, cellElement);
+		});
+	}
 	conversionApi.mapper.bindElements(tableCell, cellElement);
 	conversionApi.writer.insert(insertPosition, cellElement);
 }
