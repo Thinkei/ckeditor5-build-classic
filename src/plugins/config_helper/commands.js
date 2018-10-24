@@ -9,6 +9,7 @@ import {
 } from '@ckeditor/ckeditor5-engine/src/conversion/downcast-converters';
 
 import { addVariable } from '../utils';
+import { createSpanViewElement } from '../../helpers/utils';
 
 const toView = (modelRoot, editor) => {
 	const mapper = editor.data.mapper;
@@ -34,6 +35,9 @@ const toView = (modelRoot, editor) => {
 						modelElement.name,
 						modelElement._attrs
 					);
+				}
+				case 'span': {
+					return createSpanViewElement(modelElement, viewWriter);
 				}
 			}
 		}),
@@ -69,6 +73,7 @@ export class OnSaveCommamnd extends Command {
 
 	execute() {
 		this.value = getData(this.editor);
+		console.log('data: ', getData(this.editor));
 		setTimeout(this.editor.fire('save'), 1000);
 	}
 }
