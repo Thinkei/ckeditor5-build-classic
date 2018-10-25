@@ -1,9 +1,9 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
-import noteIcon from '../../theme/icons/notes.svg';
-import pencelIcon from '../../theme/icons/pencil.svg';
-import stackIcon from '../../theme/icons/stack.svg';
-import eyeIcon from '../../theme/icons/eye.svg';
+import saveIcon from '../../theme/icons/floppy-disk.svg';
+import editIcon from '../../theme/icons/d-edit.svg';
+import appIcon from '../../theme/icons/app.svg';
+import questionIcon from '../../theme/icons/question.svg';
 import { createToolbarButton } from '../utils';
 import {
 	OnSaveCommamnd,
@@ -21,7 +21,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'onSave',
 				buttonName: 'save',
 				buttonLabel: 'Save (Ctrl + S)',
-				icon: noteIcon
+				icon: saveIcon
 			});
 		} else {
 			editor.commands.add('onSave', new OnSaveCommamnd(editor));
@@ -29,7 +29,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'onSave',
 				buttonName: 'save',
 				buttonLabel: 'Save (Ctrl + S)',
-				icon: noteIcon
+				icon: saveIcon
 			});
 		}
 
@@ -38,7 +38,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openEditContractCommand',
 				buttonName: 'openEditContractModal',
 				buttonLabel: 'Open Edit Contract',
-				icon: pencelIcon
+				icon: editIcon
 			});
 		} else {
 			editor.commands.add(
@@ -49,7 +49,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openEditContractCommand',
 				buttonName: 'openEditContractModal',
 				buttonLabel: 'Open Edit Contract',
-				icon: pencelIcon
+				icon: editIcon
 			});
 		}
 
@@ -58,7 +58,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openVariableManagerCommand',
 				buttonName: 'openVariableManagerSidebar',
 				buttonLabel: 'Open Variable Manager',
-				icon: stackIcon
+				icon: appIcon
 			});
 		} else {
 			editor.commands.add(
@@ -69,7 +69,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openVariableManagerCommand',
 				buttonName: 'openVariableManagerSidebar',
 				buttonLabel: 'Open Variable Manager',
-				icon: stackIcon
+				icon: appIcon
 			});
 		}
 
@@ -78,7 +78,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openTutorialScreen',
 				buttonName: 'openTutorialScreen',
 				buttonLabel: 'Open Tutorial Screen',
-				icon: eyeIcon
+				icon: questionIcon
 			});
 		} else {
 			editor.commands.add(
@@ -89,7 +89,7 @@ export default class AdditionalUI extends Plugin {
 				commandName: 'openTutorialScreen',
 				buttonName: 'openTutorialScreen',
 				buttonLabel: 'Open Tutorial Screen',
-				icon: eyeIcon
+				icon: questionIcon
 			});
 		}
 	}

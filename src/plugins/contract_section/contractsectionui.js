@@ -9,6 +9,7 @@ import FormView from './ui/formview';
 import { SectionActionView } from './ui/actionsview';
 import { EhPanel } from '../../components/panel';
 import { getSelectedSectionElement } from './utils';
+import sectionIcon from '../../theme/icons/movie-62.svg';
 
 export default class SectionUI extends Plugin {
 	init() {
@@ -213,7 +214,7 @@ export default class SectionUI extends Plugin {
 
 			button.isEnabled = true;
 			button.label = t('Add Section');
-			button.icon = codeIcon;
+			button.icon = sectionIcon;
 			button.tooltip = true;
 
 			// Bind button to the command

@@ -95,7 +95,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 							viewWriter,
 							modelElement,
 							htmlTagName,
-							'fas fa-sort-down'
+							'nc-icon-glyph arrows-1_minimal-down'
 						);
 					}
 					case 'variable_date': {
@@ -103,7 +103,7 @@ export function converterHelperTemplate(editor, htmlTagName) {
 							viewWriter,
 							modelElement,
 							htmlTagName,
-							'fas fa-calendar-alt'
+							'nc-icon-glyph ui-1_calendar-grid-58'
 						);
 					}
 					case 'span': {

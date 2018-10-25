@@ -3,13 +3,13 @@ import ClickObserver from '@ckeditor/ckeditor5-engine/src/view/observer/clickobs
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import codeIcon from '@ckeditor/ckeditor5-basic-styles/theme/icons/code.svg';
 
 import { ToggleCommand } from './contractblockcommand';
 import BlockActionView from './ui/actionsview';
 import BlockFormView from './ui/formview';
 import { getSelectedBlockElement } from './utils';
 import { EhPanel } from '../../components/panel';
+import blockIcon from '../../theme/icons/grid.svg';
 
 export default class BlockUI extends Plugin {
 	init() {
@@ -98,7 +98,7 @@ export default class BlockUI extends Plugin {
 
 			button.isEnabled = true;
 			button.label = t('Add Block');
-			button.icon = codeIcon;
+			button.icon = blockIcon;
 			button.tooltip = true;
 
 			// Bind button to the command

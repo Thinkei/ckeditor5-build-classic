@@ -1,8 +1,8 @@
 import View from '@ckeditor/ckeditor5-ui/src/view';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
-import pencelIcon from '../../../theme/icons/pencil.svg';
-import preferenceIcon from '../../../theme/icons/preferences.svg';
+import editIcon from '../../../theme/icons/d-edit.svg';
+import gearIcon from '../../../theme/icons/gear.svg';
 
 export default class BlockActionView extends View {
 	constructor(locale) {
@@ -11,13 +11,13 @@ export default class BlockActionView extends View {
 		// TODO: add our own custom name and icon
 		this.toggleButtonView = this.createButton(
 			t('Optional'),
-			preferenceIcon,
+			gearIcon,
 			'toggle'
 		);
 
 		this.editGroupView = this.createButton(
 			t('Block Group'),
-			pencelIcon,
+			editIcon,
 			'editGroup'
 		);
 

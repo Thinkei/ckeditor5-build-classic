@@ -1,6 +1,6 @@
 {
 	"name": "eh-ckeditor",
-	"version": "11.0.2-73",
+	"version": "11.0.2-79",
 	"description": "The classic editor build of CKEditor 5 – the best browser-based rich text editor.",
 	"keywords": [
 		"ckeditor5-build",
@@ -76,6 +76,7 @@
 	},
 	"dependencies": {
 		"@ckeditor/ckeditor5-engine": "^10.2.0",
-		"@fortawesome/fontawesome-free": "^5.4.1"
+		"@fortawesome/fontawesome-free": "^5.4.1",
+		"eh-ckeditor": "^11.0.2-73"
 	}
 }

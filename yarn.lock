@@ -1965,6 +1965,13 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
+eh-ckeditor@^11.0.2-73:
+  version "11.0.2-73"
+  resolved "https://registry.npmjs.org/eh-ckeditor/-/eh-ckeditor-11.0.2-73.tgz#faab2ce4f3a5d614b789a249ae594b7751e577bb"
+  dependencies:
+    "@ckeditor/ckeditor5-engine" "^10.2.0"
+    "@fortawesome/fontawesome-free" "^5.4.1"
+
 electron-to-chromium@^1.2.7:
   version "1.3.57"
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.57.tgz#61b2446f16af26fb8873210007a7637ad644c82d"
